@@ -25,12 +25,13 @@
 import db from '../firebase.mjs';
 import { ref, set } from 'firebase/database';
 
-function writeStudentData(studentNum, prefname, pronouns){
-    const reference =ref(db, 'students/' + studentNum);
+function writeStudentData(roomNum, building){
+    const reference =ref(db, 'Rooms/' + roomNum);
     set(reference, {
-        prefname: prefname,
-        pronouns: pronouns
+        "8:10AM-9:30AM": "Embedded Systems",
+        "9:40AM-11:00AM": "User Interfaces",
+        "11:10AM-12:30PM": "Distributed Systems"
     });
 }
 
-writeStudentData("100845237","sAArAnAsh Mohammed", "they/them");
+writeStudentData("UA1350");
