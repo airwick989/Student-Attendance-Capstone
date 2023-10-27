@@ -1,3 +1,17 @@
+const studentList = {
+    "100747897": {
+        prefName: "Ridwan Hossain",
+        pronouns: "He/Him"
+    },
+    "100689142": {
+        prefName: "Saaransh Mohammed",
+        pronouns: "My/Guy"
+    }, 
+}
+
+
+
+
 // // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
@@ -47,6 +61,17 @@ function writeRoomData(roomNum){
 
 
 
+function writeCourseData(courseCode){
 
-writeRoomData("UA1350");
+    const reference =ref(db, 'Courses/' + courseCode);
+    set(reference, {
+        Room: "UA1350",
+        courseName: "Embedded Systems",
+        studentList: studentList
+    });
+}
 
+
+
+
+writeCourseData("SOFE4590")
