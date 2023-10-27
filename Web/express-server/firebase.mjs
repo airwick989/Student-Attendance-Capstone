@@ -18,8 +18,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firebaseapp = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 import { getDatabase } from "firebase/database";
-const db = getDatabase();
+const db = getDatabase(app);
 
 export default db;
