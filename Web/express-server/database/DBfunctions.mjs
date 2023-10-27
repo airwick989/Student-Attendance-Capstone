@@ -37,7 +37,7 @@ const studentList = {
 
 
 import db from '../firebase.mjs';
-import { ref, set } from 'firebase/database';
+import { ref, set, update } from 'firebase/database';
 
 function writeRoomData(roomNum){
     const referenceSchedule =ref(db, 'Rooms/' + roomNum + '/schedule/');
@@ -74,4 +74,21 @@ function writeCourseData(courseCode){
 
 
 
-writeCourseData("SOFE4590")
+function setSeat(roomNum, seatNum, studentNum, prefName, pronouns){
+
+    const mapRef =ref(db, 'Rooms/' + roomNum + '/map/');
+    update(mapRef, {
+        [seatNum]: {
+            studentNum,
+            prefName,
+            pronouns
+        },
+    });
+}
+
+
+//setSeat("UA1350", "4", "100747897", "Ridwan Hossain", "they/them")
+//writeRoomData("UA1350")
+
+
+module.exports = setSeat;
