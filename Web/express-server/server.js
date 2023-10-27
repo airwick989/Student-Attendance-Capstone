@@ -4,6 +4,7 @@ const PORT = process.env.PORT || 3000; // Use the specified port or default to 3
 
 const classroomScan = require("./routes/classroomRoute");
 
+app.use(express.json());
 app.use("/api/classroomScan", classroomScan);
 
 app.listen(PORT, () => {
