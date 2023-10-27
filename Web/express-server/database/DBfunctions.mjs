@@ -25,13 +25,28 @@
 import db from '../firebase.mjs';
 import { ref, set } from 'firebase/database';
 
-function writeStudentData(roomNum, building){
-    const reference =ref(db, 'Rooms/' + roomNum);
-    set(reference, {
-        "8:10AM-9:30AM": "Embedded Systems",
-        "9:40AM-11:00AM": "User Interfaces",
-        "11:10AM-12:30PM": "Distributed Systems"
+function writeRoomData(roomNum){
+    const referenceSchedule =ref(db, 'Rooms/' + roomNum + '/schedule/');
+    set(referenceSchedule, {
+        "8:10AM-9:30AM": "SOFE4590",    //Embedded systems
+        "9:40AM-11:00AM": "SOFE4850",   //User Interfaces
+        "11:10AM-12:30PM": "SOFE4790"    //Distributed Systems
+    });
+
+    const referenceMap =ref(db, 'Rooms/' + roomNum + '/map/');
+    set(referenceMap, {
+        "1": "none",
+        "2": "none",
+        "3": "none",
+        "4": "none",
+        "5": "none",
+        "6": "none"
     });
 }
 
-writeStudentData("UA1350");
+
+
+
+
+writeRoomData("UA1350");
+
