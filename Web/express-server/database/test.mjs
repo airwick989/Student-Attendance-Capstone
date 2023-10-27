@@ -22,7 +22,7 @@
 // const analytics = getAnalytics(app);
 
 
-import db from './firebase';
+import db from '../firebase.mjs';
 import { ref, set } from 'firebase/database';
 
 function writeStudentData(studentNum, prefname, pronouns){
