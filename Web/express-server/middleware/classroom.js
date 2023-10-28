@@ -1,4 +1,4 @@
-const DBfunc = require("../database/DBfunctions.mjs");
+//const DBfunc = require("../database/DBfunctions.mjs");
 
 const studentSignIn = async (req, res) =>{
 
@@ -6,7 +6,14 @@ const studentSignIn = async (req, res) =>{
 
         const {studentID, preferredName, pronouns, seatNumber } = req.body;
 
-        setSeat("UA1350", seatNumber, studentID, preferredName, pronouns);
+        import('../database/DBfunctions.mjs').then(module => {
+            module.Seat("UA1350", seatNumber, studentID, preferredName, pronouns)
+
+        }).catch(err => {
+            console.error("Error importing module:", err);
+        });
+
+        //setSeat("UA1350", seatNumber, studentID, preferredName, pronouns);
         
 
         res.status(200).json(req.body);

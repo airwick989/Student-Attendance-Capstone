@@ -74,7 +74,7 @@ function writeCourseData(courseCode){
 
 
 
-function setSeat(roomNum, seatNum, studentNum, prefName, pronouns){
+const setSeat =(roomNum, seatNum, studentNum, prefName, pronouns) =>{
 
     const mapRef =ref(db, 'Rooms/' + roomNum + '/map/');
     update(mapRef, {
@@ -90,5 +90,4 @@ function setSeat(roomNum, seatNum, studentNum, prefName, pronouns){
 //setSeat("UA1350", "4", "100747897", "Ridwan Hossain", "they/them")
 //writeRoomData("UA1350")
 
-
-module.exports = setSeat;
+export const Seat = setSeat;
