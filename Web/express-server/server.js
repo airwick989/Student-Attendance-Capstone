@@ -1,15 +1,12 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000; // Use the specified port or default to 3000
 
-const classroomScan = require("./routes/classroomRoute");
+const studentRoutes = require("./routes/studentRoutes");
 
 app.use(express.json());
-app.use("/api/classroomScan", classroomScan);
+app.use("/api/studentScan", studentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
