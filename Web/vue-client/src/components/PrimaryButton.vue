@@ -13,6 +13,10 @@
         type: String,
         default: "",
       },
+      btnText: {
+        type: String,
+        required: true,
+      }
     },
   };
   </script>
