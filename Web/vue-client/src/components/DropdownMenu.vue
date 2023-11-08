@@ -1,8 +1,8 @@
 <template>
   <div class="custom-dropdown">
-    <div class="selected-option"><div class="text-wraper">{{title}}</div></div>
-      <div class="drop-down-menu">
-        <div class="option">
+    <div v-on:click="dropDownVisable = true" class="selected-option"><div class="text-wraper">{{title}}</div></div>
+      <div v-if="dropDownVisable" class="drop-down-menu">
+        <div v-on:click="dropDownVisable = !dropDownVisable" class="option">
          {{options}}
         </div>
     </div>
@@ -22,7 +22,10 @@ export default {
         type: Array,
         required: true,
       },
-    }
+    },
+    data: {
+      dropDownVisable: false
+  }
 };
 </script>
                              
