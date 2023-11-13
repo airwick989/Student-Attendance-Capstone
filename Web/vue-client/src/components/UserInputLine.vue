@@ -1,7 +1,8 @@
 <template>
     <div class="user-input-line">
-      <div class="text-wrapper">Email</div>
-      <hr class="email-line"/>
+      <div class="text-wrapper">
+        <input class="input-line" type="text" id="inputLine" name="inputLine" :placeholder="prompt"><br><br>
+      </div>
     </div>
   </template>
   
@@ -9,7 +10,7 @@
   export default {
     name: "UserInputLine",
     props:{
-      propmt:{
+      prompt:{
         type: String,
         default: "",
       },
@@ -28,15 +29,7 @@
     width: 450px;
   }
   
-  .user-input-line .email-line {
-    border: 1px solid;
-    border-color: #ffffff;
-    left: 0;
-    position: relative;
-    width: 450px;
-  }
-  
-  .user-input-line .text-wrapper {
+  /* .user-input-line .text-wrapper {
     color: #ffffff;
     font-family: "Inter-Regular", Helvetica;
     font-size: 32px;
@@ -48,6 +41,24 @@
     white-space: nowrap;
     width: 450px;
     margin-bottom: -12px;
+  } */
+  .user-input-line .text-wrapper .input-line{
+    color: #ffffff;
+    background-color: #313131;
+    border-radius: 5px;
+    border: 0;
+    outline: none;
+    font-family: "Inter-Regular", Helvetica;
+    font-size: 32px;
+    font-weight: 400;
+    left: 0;
+    letter-spacing: 0;
+    line-height: normal;
+    position: relative;
+    white-space: nowrap;
+    width: 450px;
+    margin-bottom: -12px;
+    
   }
   </style>
   

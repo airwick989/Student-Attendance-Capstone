@@ -1,8 +1,10 @@
 
 <template>
+  <div class="button-wrapper">
     <button :class="['slim-btn', className]">
       <div class="text-wrapper">{{btnText}}</div>
     </button>
+  </div>
 </template>
   
   <script>
@@ -22,9 +24,12 @@
   </script>
   
   <style>
+ .button-wrapper :hover{
+        background-color: #61589A;
+      }
   .slim-btn {
-      width: 233px;
-      height: 74px;
+      width: 250px;
+      height: 65px;
       background-color: #8781ad;
       border-radius: 50px;
       border: none;
@@ -35,13 +40,9 @@
     font-family: "Inter-Regular", Helvetica;
     font-size: 32px;
     font-weight: 400;
-    left: 42px;
     letter-spacing: 0;
     line-height: normal;
-    position: absolute;
+    position: relative;
     text-align: center;
-    top: 8px;
-    white-space: nowrap;
-    width: 129px;
   }
   </style>

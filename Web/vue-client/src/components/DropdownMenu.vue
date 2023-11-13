@@ -23,9 +23,11 @@ export default {
         required: true,
       },
     },
-    data: {
+    data: function() {
+return {
       dropDownVisable: false
-  }
+  };
+}
 };
 </script>
                              
