@@ -1,11 +1,11 @@
 <template>
     <div class="full-height">
         <div class="menu-tab">
-            <img src="./assets/LoginMainPopUp.svg" alt="Background Display Widget" class="background-widget">
-            <button class="arrow-button-hover"><img src="./assets/ArrowButtonHover.svg" alt="Hover State Display"></button> 
-            <button class="arrow-button"><img src="./assets/ArrowButton.svg" alt="Switch View Button"></button>
+            <img src="../assets/LoginMainPopUp.svg" alt="Background Display Widget" class="background-widget">
+            <button class="arrow-button-hover"><img src="../assets/ArrowButtonHover.svg" alt="Hover State Display"></button> 
+            <button class="arrow-button"><img src="../assets/ArrowButton.svg" alt="Switch View Button"></button>
             <div class="menu-content">
-                <img src="./assets/Logo.svg" alt="ATTEND-OT Logo" class="logo">
+                <img src="../assets/Logo.svg" alt="ATTEND-OT Logo" class="logo">
                 <PrimaryButton btnText="Home" class="List-button"></PrimaryButton>
                 <PrimaryButton btnText="Lecture View" class="list-button"></PrimaryButton>
                 <PrimaryButton btnText="Attendance" class="list-button"></PrimaryButton>               
@@ -14,13 +14,11 @@
     </div>
 </template>
 <script>
-    import UserInputLine from './components/UserInputLine.vue';
-    import PrimaryButton from './components/PrimaryButton.vue';
+    import PrimaryButton from './PrimaryButton.vue';
     
     export default {
       name: 'LogIn',
       components:{
-        UserInputLine,
         PrimaryButton
       }
     }

@@ -26,23 +26,25 @@
   <style>
  .button-wrapper :hover{
         background-color: #61589A;
+        border-radius: 50px;
       }
   .slim-btn {
-      width: 250px;
-      height: 65px;
+      width: 100%;
+      height: 100%;
+      position: relative;
       background-color: #8781ad;
       border-radius: 50px;
       border: none;
   }
   
   .slim-btn .text-wrapper {
-    color: #ffffff;
+    padding: 1%;
     font-family: "Inter-Regular", Helvetica;
-    font-size: 32px;
-    font-weight: 400;
+    color: #ffffff;
+    font-size: 180%;
     letter-spacing: 0;
     line-height: normal;
-    position: relative;
+    white-space: nowrap;
     text-align: center;
   }
   </style>

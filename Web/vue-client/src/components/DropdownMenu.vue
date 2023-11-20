@@ -36,26 +36,26 @@ return {
   background-color: #202020;
   border-radius: 10px;
   position: relative;
-  height: 74px;
-  width: 325px;
+  height: 100%;
+  width: 100%;
 }
 .text-wraper{
-  padding: 14px 0 0 5px;
+  padding: 1% 0 5% 5%;
   font-family: "Inter-Regular", Helvetica;
   color: #ffffff;
-  font-size: 36px;
+  font-size: 180%;
   letter-spacing: 0;
   line-height: normal;
   white-space: nowrap;
 }
 .drop-down-menu{
   position: relative;
-  width: 280px;
-  height: 175px;
+  width: 100%;
+  height: 120px;
   background-color: #313131;
   opacity: 0.95;
   border-radius: 0 0 25px 25px;
-  margin-left: 36px;
+  margin-left: 2.5%;
   overflow-y: scroll;
 }
 .option{
