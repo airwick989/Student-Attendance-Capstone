@@ -12,16 +12,16 @@
   
   <style>
   .box {
-    height: 824px;
-    width: 1195px;
+    height: 100%;
+    width: 100%;
   }
   
   .box .main-pop-up {
     background-color: #3a3a3a;
     opacity: 0.85;
     border-radius: 25px;
-    height: 824px;
+    height: 85%;
     position: fixed;
-    width: 1195px;
+    width: 75%;
   }
   </style>

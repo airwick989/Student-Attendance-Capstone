@@ -10,8 +10,13 @@
   
   <script>
   export default {
-    name: "NameDropdown",
-    props: {}
+    name: "NameDropdownFilled",
+    props: {
+      studentInfo:{
+        type: String,
+        default: "",
+      },
+    }
   };
   </script>
   
