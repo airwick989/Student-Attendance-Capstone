@@ -16,6 +16,26 @@ const getSeat = async (roomNum, seatNum) => {
   return seat.val();
 };
 
+const getAllSeats = async (roomNum) => {
+
+  if (!roomNum) {
+    throw Error("No room provided");
+
+  }
+
+  const roomQuery = ref(db, `Rooms/${roomNum}`);
+  const roomData = await get(roomQuery)
+
+  if(!roomData.exists()){
+    throw Error("Could not find room.")
+  }
+
+  return roomData.val();
+
+
+}
+
+
 const setSeat = async (roomNum, seatNum, studentNum) => {
   const seatQuery = ref(db, `Rooms/${roomNum}/map/${seatNum}`);
 
@@ -48,7 +68,7 @@ const emptySeat = async (roomNum, seatNum) => {
   }
 };
 
-export { getSeat, setSeat, emptySeat };
+export { getSeat, getAllSeats, setSeat, emptySeat };
 
 /*(async () => {
   emptySeat("UA1350", 1);
