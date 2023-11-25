@@ -58,6 +58,6 @@ const setRoomSchedule = async (roomNum, courseCode, startTime, endTime) => {
 
 export { createRoom, setRoomSchedule };
 
-//createRoom("UA1350", 10);
+//createRoom("UA1350", 18);
 
 //setRoomSchedule("The BackRooms", "SOFE4590", "10:00AM", "12:00PM");
