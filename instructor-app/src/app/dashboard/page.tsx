@@ -7,7 +7,7 @@ export default function Page() {
   return (
     <>
       <div>{session?.data?.user?.name}</div>
-      <button onClick={() => signOut()}>Logout</button>
+      <button onClick={() => signOut({ callbackUrl: "/login" })}>Logout</button>
     </>
   );
 }
