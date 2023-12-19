@@ -4,9 +4,14 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import SessionProvider from "./SessionProvider";
 import Login from "./Login";
-import Home from "./page";
+import Dashboard from "../../pages/dashboard/page"
 
 const inter = Inter({ subsets: ["latin"] });
+
+export const metadata = {
+  title: 'Classroom Map',
+  description: 'Classroom Map',
+}
 
 export default async function RootLayout({
   children,
@@ -18,7 +23,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>
-          {!session ? <Login /> : <Home />}
+          {!session ? <Login /> : <Dashboard />}
         </SessionProvider>
       </body>
     </html>
