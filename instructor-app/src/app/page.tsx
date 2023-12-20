@@ -6,19 +6,19 @@ import { useEffect } from "react";
 export default function Home() {
   const session = useSession();
 
-  useEffect(()=>{
-    if(session.status == 'unauthenticated'){
+  useEffect(() => {
+    if (session.status == 'unauthenticated') {
       redirect('/login')
     }
-      redirect('/dashboard')
-    
+    redirect('/dashboard')
 
-  },[])
 
-  
+  }, [session.status])
+
+
   return (
     <>
-      
+
       <div>{session?.data?.user?.name}</div>
       <button onClick={() => signOut()}>Logout</button>
     </>

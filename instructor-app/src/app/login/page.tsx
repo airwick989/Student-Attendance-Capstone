@@ -13,12 +13,12 @@ export default function Page() {
 
     return (
         <>
-            <div className="flex items-center justify-center overflow-hidden h-screen dark:bg-slate-900">
+            <div className="flex items-center justify-center overflow-hidden h-screen ">
                 <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-20">
                     <div className="relative mx-auto max-w-4xl grid space-y-5 sm:space-y-10 ">
                         <div className="text-center">
                             <h1 className="inline-block text-transparent text-3xl bg-clip-text  font-bold sm:text-5xl lg:text-6xl lg:leading-tight  bg-gradient-to-r from-slate-200 via-rose-400 to-indigo-400">
-                                ATTEND-OT
+                                ATTEND-OTU
                             </h1>
                         </div>
 
