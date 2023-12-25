@@ -1,19 +1,28 @@
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+/* eslint-disable @typescript-eslint/no-var-requires */
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+import * as express from "express";
+
+const professorRoutes = require("./routes/professorRoutes");
 
 admin.initializeApp();
 
-export const getAllClassrooms = functions.https.onRequest(async (request, response) => {
+const app = express();
+
+app.use(express.json());
+app.use("/professor", professorRoutes );
+
+/* app.get('/getAllRoomNames', async (req, res) => {
     try {
         const query = admin.database().ref('Rooms');
         const result = await query.once('value');
-
-        // Convert the result to a JSON object using val()
         const data = result.val();
-
-        response.json({ data });
+        const roomNames = Object.keys(data || {});
+        res.json({ roomNames });
     } catch (error) {
         console.error('Error:', error);
-        response.status(500).send('Internal Server Error');
+        res.status(500).send('Internal Server Error');
     }
-});
+});*/
+
+export const api = functions.https.onRequest(app);

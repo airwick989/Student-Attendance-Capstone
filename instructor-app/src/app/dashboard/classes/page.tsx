@@ -1,4 +1,16 @@
-export default function Page() {
+async function getClasses() {
+    try {
+        const res = await fetch("http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllClasses", { cache: 'force-cache' })
+        return res.json()
+    } catch (e) {
+        return {}
+    }
+}
+
+export default async function Page() {
+
+    const classes = await getClasses();
+    console.log(classes)
 
     return (
         <>
@@ -9,26 +21,22 @@ export default function Page() {
                         <div className="card-body">
                             <h2 className="card-title font-bold text-3xl mb-4">My Classes</h2>
 
-                            <div className="flex flex-col gap-2">
-                                <div className="collapse collapse-close border border-base-300 bg-primary p-2">
-                                    <div className="collapse-title text-xl font-medium text-primary-content">
-                                        Class 1
-                                    </div>
-                                </div>
+                            {Object.keys(classes).length == 0 ? <>No classes?</> : Object.keys(classes).map((classKey, index) => {
+                                return (
+                                    <div className="flex flex-col gap-2" key={index}>
+                                        <div className="collapse collapse-close border border-base-300 bg-primary hover:bg-gradient-to-tl hover:from-violet-400 p-2">
+                                            <div className="collapse-title text-xl font-medium text-primary-content">
+                                                {`${classKey} - ${classes[classKey].courseName}`}
+                                            </div>
+                                        </div>
 
-                                <div className="collapse collapse-close border border-base-300 bg-primary p-2">
-                                    <div className="collapse-title text-xl font-medium text-primary-content">
-                                        Class 2
                                     </div>
-                                </div>
 
-                                <div className="collapse collapse-close border border-base-300 bg-primary p-2">
-                                    <div className="collapse-title text-xl font-medium text-primary-content">
-                                        Class 3
-                                    </div>
-                                </div>
 
-                            </div>
+                                )
+                            })}
+
+
 
                         </div>
                     </div>
