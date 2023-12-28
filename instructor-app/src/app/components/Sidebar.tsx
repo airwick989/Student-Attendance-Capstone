@@ -19,8 +19,8 @@ export default function Sidebar() {
 
           <li><Link href='/dashboard'>Home</Link></li>
           <li><Link href='/dashboard/classes'>Attendance</Link></li>
-          <li><Link href='/dashboard/classes'>My Classes</Link></li>
-          <li><Link href='/dashboard/classes'>Add Class</Link></li>
+          <li><Link href='/dashboard/courses'>Courses</Link></li>
+          <li><Link href='/dashboard/rooms'>Rooms</Link></li>
 
 
         </ul>

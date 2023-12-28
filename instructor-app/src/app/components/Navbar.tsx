@@ -3,6 +3,7 @@
 import { signOut, useSession } from "next-auth/react";
 import Sidebar from "./Sidebar";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Navbar() {
 
@@ -15,9 +16,9 @@ export default function Navbar() {
                 <Sidebar />
             </div>
 
-            <div className="flex-1">
+            <Link className="flex-1" href={"/dashboard"}>
                 <h1 className="mx-4 text-transparent text-2xl bg-clip-text  font-bold lg:text-3xl lg:leading-tight  bg-gradient-to-r from-slate-200 via-rose-400 to-indigo-400">ATTEND-OTU</h1>
-            </div>
+            </Link>
             <div className="flex-none">
 
                 <div className="dropdown dropdown-end">
