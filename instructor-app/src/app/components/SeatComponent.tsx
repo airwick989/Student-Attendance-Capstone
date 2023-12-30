@@ -12,7 +12,7 @@ export default function SeatComponent({ seatInfo }: { seatInfo: SeatInfo }) {
     return (
         <>
             <div
-                className="md:tooltip before:whitespace-pre before:content-[attr(data-tip)]"
+                className="tooltip before:whitespace-pre before:content-[attr(data-tip)]"
                 data-tip={
                     seatInfo == "none"
                         ? `Empty Seat`
@@ -20,7 +20,7 @@ export default function SeatComponent({ seatInfo }: { seatInfo: SeatInfo }) {
                 }
             >
                 <div className="avatar">
-                    <div className="w-24 rounded text-center">
+                    <div className="md:w-24 rounded text-center w-8">
                         <FaSquare
                             size={96}
                             color={seatInfo == "none" ? `gray` : `#8781AD`}

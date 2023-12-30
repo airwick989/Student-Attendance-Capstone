@@ -18,7 +18,7 @@ export default function Sidebar() {
         <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
 
           <li><Link href='/dashboard'>Home</Link></li>
-          <li><Link href='/dashboard/classes'>Attendance</Link></li>
+          <li><Link href='/dashboard/courses'>Attendance</Link></li>
           <li><Link href='/dashboard/courses'>Courses</Link></li>
           <li><Link href='/dashboard/rooms'>Rooms</Link></li>
 
