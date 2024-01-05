@@ -4,8 +4,8 @@ import { FaPlus, FaEdit } from "react-icons/fa";
 async function getClasses() {
     try {
         const res = await fetch(
-            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllClasses",
-            { cache: "force-cache" }
+            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllClasses", { next: { revalidate: 30 } }
+
         );
         return res.json();
     } catch (e) {
@@ -62,12 +62,19 @@ export default async function Page() {
                                                     </div>
                                                     <div className="collapse-content font-medium text-secondary-content self-center">
                                                         <div className="grid place-items-center grid-cols-1 gap-3">
-                                                            <Link
-                                                                href={`./rooms/${classes[classKey].Room}`}
-                                                                className="btn md:btn-wide"
-                                                            >
-                                                                {classes[classKey].Room}
-                                                            </Link>
+                                                            {classes[classKey].Room && typeof classes[classKey].Room === 'object' && (
+                                                                Object.values(classes[classKey].Room).map((room, index) => (
+                                                                    room && (
+                                                                        <Link
+                                                                            href={`./rooms/${room}`}
+                                                                            className="btn md:btn-wide"
+                                                                            key={index}
+                                                                        >
+                                                                            {`${room}`}
+                                                                        </Link>
+                                                                    )
+                                                                ))
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>

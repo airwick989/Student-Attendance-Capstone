@@ -1,8 +1,20 @@
 import { FaEdit, FaPlus } from "react-icons/fa";
 import Link from "next/link";
 
-export default function Page() {
-    const rooms = {};
+async function getRooms() {
+    try {
+        const res = await fetch(
+            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllRoomNames", { next: { revalidate: 30 } }
+
+        );
+        return res.json()
+    } catch (error) {
+        return {};
+    }
+}
+
+export default async function Page() {
+    const rooms = await getRooms();
 
     return (
         <>
@@ -38,11 +50,15 @@ export default function Page() {
                             ) : (
                                 <>
                                     <div className="flex flex-col gap-2">
-                                        <div className="collapse border border-base-300 bg-secondary hover:bg-gradient-to-tl hover:from-pink-200 p-2">
-                                            <div className="collapse-title text-xl text-primary-content font-semibold">
-                                                UA1350
-                                            </div>
-                                        </div>
+                                        {Object.values(rooms).map((room, index) => (
+                                            <Link href={`rooms/${room}`} className="collapse border border-base-300 bg-secondary hover:bg-gradient-to-tl hover:from-pink-200 p-2" key={index}>
+                                                <div className="collapse-title text-xl text-primary-content font-semibold">
+                                                    {`${room}`}
+                                                </div>
+                                            </Link>
+                                        ))}
+
+
                                     </div>
                                 </>
                             )}
