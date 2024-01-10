@@ -1,61 +1,60 @@
-'use client'
+"use client";
 
-import { FaArrowLeft } from "react-icons/fa";
-import Link from "next/link";
+import RoomDetails from "@/app/components/new-room/RoomDetails";
+import RoomLayout from "@/app/components/new-room/RoomLayout";
+import RoomConfirm from "@/app/components/new-room/RoomConfirm";
+import { ChangeEvent, useState } from "react";
 
 export default function Page() {
+    const [step, setStep] = useState(0);
+    const [data, setData] = useState({
+        roomName: "",
+        numSeats: "1",
+        dimensions: {
+            rows: "1",
+            columns: "1",
+        },
+    });
 
+    const handleChange = (
+        e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+        const { name, value } = e.target;
+        setData((prevData) => {
+            if (name.startsWith("dimensions.")) {
+                const nestedProperty = name.split(".")[1];
+                return {
+                    ...prevData,
+                    dimensions: {
+                        ...prevData.dimensions,
+                        [nestedProperty]: value,
+                    },
+                };
+            }
 
-    return (<>
-        <div className="min-h-screen bg-base-200">
-            <div className="flex flex-col items-center xl:px-96 lg:px-64 px-16">
+            return {
+                ...prevData,
+                [name]: value,
+            };
+        });
+        console.log(data);
+    };
 
+    const formFunctions = { setStep, handleChange, data };
 
-                <div className="card w-full bg-base-100 shadow-xl mt-16">
-                    <form className="card-body">
-                        <div className="flex flex-col md:flex-row justify-between items-baseline pb-4">
+    const formElements = [
+        <RoomDetails key={0} {...formFunctions} />,
+        <RoomLayout key={1} {...formFunctions} />,
+        <RoomConfirm key={2} {...formFunctions} />,
+    ];
 
-                            <h2 className="card-title font-bold text-3xl mb-4 self-center">
-                                <Link href={'/dashboard/rooms'}>
-                                    <FaArrowLeft />
-                                </Link>
-                                Room Details
-                            </h2>
-                        </div>
-                        <div className="md:px-16 flex flex-col gap-4">
-                            <ul className="steps">
-                                <li className="step step-primary">Details</li>
-                                <li className="step">Layout</li>
-                                <li className="step">Confirm</li>
-
-                            </ul>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Room Name</span>
-                                </label>
-                                <input type="text" placeholder="enter a room name" className="input input-bordered" required />
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Number of Seats</span>
-                                </label>
-                                <input type="number" defaultValue={1} className="input input-bordered" required min={1} max={100} />
-
-                            </div>
-                            <div className="flex justify-between w-full mt-4 ">
-                                <Link href={'/dashboard/rooms'} className="btn btn-error w-28 ">Cancel</Link>
-                                <button className="btn btn-primary w-28  ">Next</button>
-                            </div>
-                        </div>
-
-
-                    </form>
+    return (
+        <>
+            <div className="min-h-screen bg-base-200">
+                <div className="flex flex-col items-center xl:px-96 lg:px-64 px-16">
+                    {formElements[step]}
                 </div>
-
             </div>
-
-        </div>
-
-    </>)
-
+        </>
+    );
 }

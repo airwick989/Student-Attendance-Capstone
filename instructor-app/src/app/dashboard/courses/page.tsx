@@ -4,8 +4,8 @@ import { FaPlus, FaEdit } from "react-icons/fa";
 async function getClasses() {
     try {
         const res = await fetch(
-            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllClasses", { next: { revalidate: 30 } }
-
+            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllClasses",
+            { next: { revalidate: 30 } }
         );
         return res.json();
     } catch (e) {
@@ -34,7 +34,10 @@ export default async function Page() {
                                         <FaPlus />
                                         <span className="hidden md:block">New Course</span>
                                     </Link>
-                                    <button className={`${Object.keys(classes).length == 0 ? `hidden` : ''} btn btn-outline btn-secondary`}>
+                                    <button
+                                        className={`${Object.keys(classes).length == 0 ? `hidden` : ""
+                                            } btn btn-outline btn-secondary`}
+                                    >
                                         <FaEdit />
                                         <span className="hidden md:block">Edit Course</span>
                                     </button>
@@ -44,7 +47,6 @@ export default async function Page() {
                             {Object.keys(classes).length == 0 ? (
                                 <>
                                     <p className="self-center text-lg mt-2">No classes found.</p>
-
                                 </>
                             ) : (
                                 <>
@@ -62,19 +64,20 @@ export default async function Page() {
                                                     </div>
                                                     <div className="collapse-content font-medium text-secondary-content self-center">
                                                         <div className="grid place-items-center grid-cols-1 gap-3">
-                                                            {classes[classKey].Room && typeof classes[classKey].Room === 'object' && (
-                                                                Object.values(classes[classKey].Room).map((room, index) => (
-                                                                    room && (
-                                                                        <Link
-                                                                            href={`./rooms/${room}`}
-                                                                            className="btn md:btn-wide"
-                                                                            key={index}
-                                                                        >
-                                                                            {`${room}`}
-                                                                        </Link>
-                                                                    )
-                                                                ))
-                                                            )}
+                                                            {classes[classKey].Room &&
+                                                                typeof classes[classKey].Room === "object" &&
+                                                                Object.values(classes[classKey].Room).map(
+                                                                    (room, index) =>
+                                                                        room && (
+                                                                            <Link
+                                                                                href={`./rooms/${room}`}
+                                                                                className="btn md:btn-wide"
+                                                                                key={index}
+                                                                            >
+                                                                                {`${room}`}
+                                                                            </Link>
+                                                                        )
+                                                                )}
                                                         </div>
                                                     </div>
                                                 </div>
