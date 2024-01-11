@@ -4,7 +4,7 @@ import Link from "next/link";
 async function getRooms() {
     try {
         const res = await fetch(
-            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllRoomNames", { next: { revalidate: 30 } }
+            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllRoomNames", { next: { revalidate: 10 } }
 
         );
         return res.json()
