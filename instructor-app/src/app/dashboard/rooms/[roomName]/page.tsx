@@ -10,6 +10,7 @@ import Loading from "./loading";
 
 export default function Page({ params }: { params: { roomName: string } }) {
     const [classMap, setClassMap] = useState([]);
+    const [dimensions, setDimensions] = useState({columns: 0, rows: 0});
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
@@ -20,9 +21,11 @@ export default function Page({ params }: { params: { roomName: string } }) {
             const data = snapshot.val();
             if (snapshot.exists()) {
                 setClassMap(data.map.reverse());
+                setDimensions(data.dimensions);                
                 setLoading(false);
             }
             setLoading(false);
+
         });
     }, [params.roomName]);
 
@@ -40,14 +43,14 @@ export default function Page({ params }: { params: { roomName: string } }) {
                             </h2>
                             <Suspense fallback={<Loading/>}>
                                 {!loading ? (
-                                    classMap && classMap.length > 0 ? (
+                                    classMap && classMap.length > 0 && dimensions ? (
                                         <>
                                             {" "}
-                                            <div className="grid grid-cols-7 gap-6 self-center">
+                                            <div className={`grid grid-cols-${dimensions.columns} gap-4 grid-rows-${dimensions.rows} self-center`}>
                                                 {classMap.map((seat, index) => (
                                                     <div
                                                         key={index}
-                                                        className={index % 6 === 2 ? "col-span-2" : ""}
+                                                        className={/*index % 6 === 2 ? "col-span-2" : ""*/""}
                                                     >
                                                         <SeatComponent seatInfo={seat} />
                                                     </div>
