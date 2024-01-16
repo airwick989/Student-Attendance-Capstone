@@ -5,6 +5,7 @@ import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import Link from "next/link";
 import Loading from "./loading";
+import ConfirmDelete from "@/app/components/ConfirmDelete";
 
 export default function Page() {
     const [rooms, setRooms] = useState([]);
@@ -26,12 +27,12 @@ export default function Page() {
                 setLoading(false);
             }
         })();
-
     }, []);
 
     return (
         <>
-        {loading && <Loading/>}
+            {loading && <Loading />}
+
             <div className="min-h-screen bg-base-200">
                 <div className="flex flex-col items-center xl:px-96 lg:px-64 px-16">
                     <div className="card w-full bg-base-100 shadow-xl mt-16 p-6 ">
@@ -78,29 +79,54 @@ export default function Page() {
                             ) : (
                                 <>
                                     <div className="flex flex-col gap-2">
-                                        {Object.values(rooms).map((room, index) =>
-                                            editMode ? (
-                                                <div
-                                                    className="collapse border border-base-300 bg-base-300 p-2 "
-                                                    key={index}
-                                                >
-                                                    <div className="collapse-title text-xl font-medium flex items-center flex-col  md:flex-row px-4">
-                                                        <p className="mb-4 md:mb-0">{`${room}`}</p>
+                                        {Object.values(rooms).map((room, index) => {
+                                            if (editMode) {
+                                                return (
+                                                    <>
+                                                        <div
+                                                            className="collapse border border-base-300 bg-base-300 p-2 "
+                                                            key={index}
+                                                        >
+                                                            <ConfirmDelete
+                                                                resource={`${room}`}
+                                                                resourceType="room"
+                                                            />
+                                                            <div className="collapse-title text-xl font-medium flex items-center flex-col  md:flex-row px-4">
+                                                                <p className="mb-4 md:mb-0">{`${room}`}</p>
 
-                                                        <div className="flex gap-2">
-                                                            <Link className="btn btn-secondary btn-outline" href={`/dashboard/edit-room/${room}`}>
-                                                                <FaEdit/>
-                                                                <span className="hidden md:block">Edit</span>
-                                                                
-                                                            </Link>
-                                                            <button className="btn btn-error btn-outline">
-                                                                <FaTrashAlt/>
-                                                                <span className="hidden md:block">Delete</span>                                                                
-                                                            </button>
+                                                                <div className="flex gap-2">
+                                                                    <Link
+                                                                        className="btn btn-secondary btn-outline"
+                                                                        href={`/dashboard/edit-room/${room}`}
+                                                                    >
+                                                                        <FaEdit />
+                                                                        <span className="hidden md:block">
+                                                                            Edit
+                                                                        </span>
+                                                                    </Link>
+                                                                    <button
+                                                                        className="btn btn-error btn-outline"
+                                                                        onClick={() => {
+                                                                            const modal = document.getElementById(
+                                                                                `${room}`
+                                                                            ) as HTMLDialogElement | null;
+                                                                            if (modal) {
+                                                                                modal.showModal();
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        <FaTrashAlt />
+                                                                        <span className="hidden md:block">
+                                                                            Delete
+                                                                        </span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            ) : (
+                                                    </>
+                                                );
+                                            }
+                                            return (
                                                 <Link
                                                     href={`rooms/${room}`}
                                                     className="collapse border border-base-300 bg-secondary hover:bg-gradient-to-tl hover:from-pink-200 p-2"
@@ -110,8 +136,8 @@ export default function Page() {
                                                         <p className="">{`${room}`}</p>
                                                     </div>
                                                 </Link>
-                                            )
-                                        )}
+                                            );
+                                        })}
                                     </div>
                                 </>
                             )}

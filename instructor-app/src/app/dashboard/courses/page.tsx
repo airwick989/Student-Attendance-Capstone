@@ -1,20 +1,43 @@
-import Link from "next/link";
-import { FaPlus, FaEdit } from "react-icons/fa";
+"use client";
 
-async function getClasses() {
-    try {
-        const res = await fetch(
-            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllClasses",
-            { next: { revalidate: 30 } }
-        );
-        return res.json();
-    } catch (e) {
-        return {};
-    }
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
+import ConfirmDelete from "@/app/components/ConfirmDelete";
+
+interface Room {
+    [key: string]: string;
 }
 
-export default async function Page() {
-    const classes = await getClasses();
+interface Course {
+    courseName: string;
+    Room: Room;
+}
+
+interface Courses {
+    [classKey: string]: Course;
+}
+
+export default function Page() {
+    const [courses, setCourses] = useState<Courses>({});
+    const [editMode, setEditMode] = useState(false);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const res = await fetch(
+                    "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllClasses",
+                    { next: { revalidate: 5 } }
+                );
+                const data = await res.json();
+                setCourses(data);
+                console.log(data);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        })();
+    }, []);
 
     return (
         <>
@@ -35,23 +58,80 @@ export default async function Page() {
                                         <span className="hidden md:block">New Course</span>
                                     </Link>
                                     <button
-                                        className={`${Object.keys(classes).length == 0 ? `hidden` : ""
-                                            } btn btn-outline btn-secondary`}
+                                        className={`${Object.keys(courses).length == 0 ? `hidden` : ""
+                                            } btn btn-outline w-max btn-secondary ${editMode && `btn-error`
+                                            }`}
+                                        onClick={() => setEditMode(!editMode)}
                                     >
-                                        <FaEdit />
-                                        <span className="hidden md:block">Edit Course</span>
+                                        {editMode ? (
+                                            <>
+                                                <ImCross />
+                                                <span className="hidden md:block">Cancel</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <FaEdit />{" "}
+                                                <span className="hidden md:block">Manage Courses</span>
+                                            </>
+                                        )}
                                     </button>
                                 </div>
                             </div>
 
-                            {Object.keys(classes).length == 0 ? (
+                            {Object.keys(courses).length == 0 ? (
                                 <>
                                     <p className="self-center text-lg mt-2">No classes found.</p>
                                 </>
                             ) : (
                                 <>
                                     <div className="flex flex-col gap-2">
-                                        {Object.keys(classes).map((classKey, index) => {
+                                        {Object.keys(courses).map((classKey, index) => {
+                                            if (editMode) {
+                                                return (
+                                                    <>
+                                                        <div
+                                                            className="collapse border border-base-300 bg-base-300 p-2 "
+                                                            key={index}
+                                                        >
+                                                            <ConfirmDelete
+                                                                resource={`${classKey}`}
+                                                                resourceType="course"
+                                                            />
+                                                            <div className="collapse-title text-xl font-medium flex items-center flex-col  md:flex-row px-4">
+                                                                <p className="mb-4 md:mb-0">{`${classKey} - ${courses[classKey].courseName}`}</p>
+                                                                <div className="flex gap-2">
+                                                                    <Link
+                                                                        className="btn btn-secondary btn-outline"
+                                                                        href={`/dashboard/edit-course/${classKey}`}
+                                                                    >
+                                                                        <FaEdit />
+                                                                        <span className="hidden md:block">
+                                                                            Edit
+                                                                        </span>
+                                                                    </Link>
+                                                                    <button
+                                                                        className="btn btn-error btn-outline"
+                                                                        onClick={() => {
+                                                                            const modal = document.getElementById(
+                                                                                `${classKey}`
+                                                                            ) as HTMLDialogElement | null;
+                                                                            if (modal) {
+                                                                                modal.showModal();
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        <FaTrashAlt />
+                                                                        <span className="hidden md:block">
+                                                                            Delete
+                                                                        </span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                );
+                                            }
+
                                             return (
                                                 <div
                                                     className="collapse collapse-arrow border border-base-300 bg-primary hover:bg-gradient-to-tl hover:from-violet-400 p-2"
@@ -60,13 +140,13 @@ export default async function Page() {
                                                     <input type="checkbox" />
 
                                                     <div className="collapse-title text-xl text-primary-content font-semibold">
-                                                        {`${classKey} - ${classes[classKey].courseName}`}
+                                                        {`${classKey} - ${courses[classKey].courseName}`}
                                                     </div>
                                                     <div className="collapse-content font-medium text-secondary-content self-center">
                                                         <div className="grid place-items-center grid-cols-1 gap-3">
-                                                            {classes[classKey].Room &&
-                                                                typeof classes[classKey].Room === "object" &&
-                                                                Object.values(classes[classKey].Room).map(
+                                                            {courses[classKey].Room &&
+                                                                typeof courses[classKey].Room === "object" &&
+                                                                Object.values(courses[classKey].Room).map(
                                                                     (room, index) =>
                                                                         room && (
                                                                             <Link
