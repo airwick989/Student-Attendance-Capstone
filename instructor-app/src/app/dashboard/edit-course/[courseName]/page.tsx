@@ -1,3 +1,3 @@
 export default function Page(){
-    return(<>Edit Room</>)
+    return(<>Edit Course</>)
 }
