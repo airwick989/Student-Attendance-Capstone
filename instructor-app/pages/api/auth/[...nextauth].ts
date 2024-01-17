@@ -12,6 +12,15 @@ export const authOptions: NextAuthOptions = {
     }),
     // ...add more providers here
   ],
+  callbacks: {
+    async signIn({ user }) {
+      if (user.email && (user.email.endsWith('@ontariotechu.net') || user.email.endsWith('@ontariotechu.ca'))) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
 
   adapter: FirestoreAdapter({
     credential: cert({
