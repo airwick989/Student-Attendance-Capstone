@@ -5,7 +5,7 @@ import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import Link from "next/link";
 import Loading from "./loading";
-import ConfirmDelete from "@/app/components/ConfirmDelete";
+import ConfirmDeleteRoom from "@/app/components/ConfirmDeleteRoom";
 
 export default function Page() {
     const [rooms, setRooms] = useState([]);
@@ -82,48 +82,49 @@ export default function Page() {
                                         {Object.values(rooms).map((room, index) => {
                                             if (editMode) {
                                                 return (
-                                                    <>
-                                                        <div
-                                                            className="collapse border border-base-300 bg-base-300 p-2 "
-                                                            key={index}
-                                                        >
-                                                            <ConfirmDelete
-                                                                resource={`${room}`}
-                                                                resourceType="room"
-                                                            />
-                                                            <div className="collapse-title text-xl font-medium flex items-center flex-col  md:flex-row px-4">
-                                                                <p className="mb-4 md:mb-0">{`${room}`}</p>
 
-                                                                <div className="flex gap-2">
-                                                                    <Link
-                                                                        className="btn btn-secondary btn-outline"
-                                                                        href={`/dashboard/edit-room/${room}`}
-                                                                    >
-                                                                        <FaEdit />
-                                                                        <span className="hidden md:block">
-                                                                            Edit
-                                                                        </span>
-                                                                    </Link>
-                                                                    <button
-                                                                        className="btn btn-error btn-outline"
-                                                                        onClick={() => {
-                                                                            const modal = document.getElementById(
-                                                                                `${room}`
-                                                                            ) as HTMLDialogElement | null;
-                                                                            if (modal) {
-                                                                                modal.showModal();
-                                                                            }
-                                                                        }}
-                                                                    >
-                                                                        <FaTrashAlt />
-                                                                        <span className="hidden md:block">
-                                                                            Delete
-                                                                        </span>
-                                                                    </button>
-                                                                </div>
+                                                    <div
+                                                        className="collapse border border-base-300 bg-base-300 p-2 "
+                                                        key={index}
+                                                    >
+                                                        <ConfirmDeleteRoom
+                                                            resource={`${room}`}
+                                                            setResource={setRooms}
+                                                            resourceList={rooms}
+                                                        />
+                                                        <div className="collapse-title text-xl font-medium flex items-center flex-col  md:flex-row px-4">
+                                                            <p className="mb-4 md:mb-0">{`${room}`}</p>
+
+                                                            <div className="flex gap-2">
+                                                                <Link
+                                                                    className="btn btn-secondary btn-outline"
+                                                                    href={`/dashboard/edit-room/${room}`}
+                                                                >
+                                                                    <FaEdit />
+                                                                    <span className="hidden md:block">
+                                                                        Edit
+                                                                    </span>
+                                                                </Link>
+                                                                <button
+                                                                    className="btn btn-error btn-outline"
+                                                                    onClick={() => {
+                                                                        const modal = document.getElementById(
+                                                                            `${room}`
+                                                                        ) as HTMLDialogElement | null;
+                                                                        if (modal) {
+                                                                            modal.showModal();
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    <FaTrashAlt />
+                                                                    <span className="hidden md:block">
+                                                                        Delete
+                                                                    </span>
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                    </>
+                                                    </div>
+
                                                 );
                                             }
                                             return (

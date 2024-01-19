@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
-import ConfirmDelete from "@/app/components/ConfirmDelete";
+import ConfirmDeleteCourse from "@/app/components/ConfirmDeleteCourse";
 
 interface Room {
     [key: string]: string;
@@ -88,14 +88,14 @@ export default function Page() {
                                         {Object.keys(courses).map((classKey, index) => {
                                             if (editMode) {
                                                 return (
-                                                    <>
+                                                    
                                                         <div
                                                             className="collapse border border-base-300 bg-base-300 p-2 "
                                                             key={index}
                                                         >
-                                                            <ConfirmDelete
-                                                                resource={`${classKey}`}
-                                                                resourceType="course"
+                                                            <ConfirmDeleteCourse
+                                                                    resource={classKey}
+                                                                    setResource={setCourses}
                                                             />
                                                             <div className="collapse-title text-xl font-medium flex items-center flex-col  md:flex-row px-4">
                                                                 <p className="mb-4 md:mb-0">{`${classKey} - ${courses[classKey].courseName}`}</p>
@@ -128,7 +128,7 @@ export default function Page() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </>
+                                                    
                                                 );
                                             }
 

@@ -41,6 +41,8 @@ export const createRoom = async (
   }
 };
 
+
+// TODO: need to search and delete room from Courses
 export const deleteRoom = async (roomName: string) => {
   if (!roomName) {
     throw Error("Missing parameters.");
