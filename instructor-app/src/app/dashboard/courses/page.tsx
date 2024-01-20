@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
+import Loading from "./loading";
 import ConfirmDeleteCourse from "@/app/components/ConfirmDeleteCourse";
 
 interface Room {
@@ -22,6 +23,7 @@ interface Courses {
 export default function Page() {
     const [courses, setCourses] = useState<Courses>({});
     const [editMode, setEditMode] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
@@ -32,15 +34,17 @@ export default function Page() {
                 );
                 const data = await res.json();
                 setCourses(data);
-                console.log(data);
+                setLoading(false);
             } catch (error) {
                 console.error("Error:", error);
+                setLoading(false);
             }
         })();
     }, []);
 
     return (
         <>
+            {loading && <Loading />}
             <div className="min-h-screen bg-base-200">
                 <div className="flex flex-col items-center xl:px-96 lg:px-64 px-16 min-w-md">
                     <div className="card w-full bg-base-100 shadow-xl mt-16 p-6">
@@ -58,7 +62,9 @@ export default function Page() {
                                         <span className="hidden md:block">New Course</span>
                                     </Link>
                                     <button
-                                        className={`${Object.keys(courses).length == 0 ? `hidden` : ""
+                                        className={`${Object.keys(courses).length == 0 && !loading
+                                                ? `hidden`
+                                                : ""
                                             } btn btn-outline w-max btn-secondary ${editMode && `btn-error`
                                             }`}
                                         onClick={() => setEditMode(!editMode)}
@@ -78,7 +84,7 @@ export default function Page() {
                                 </div>
                             </div>
 
-                            {Object.keys(courses).length == 0 ? (
+                            {Object.keys(courses).length == 0 && !loading ? (
                                 <>
                                     <p className="self-center text-lg mt-2">No classes found.</p>
                                 </>
@@ -88,47 +94,43 @@ export default function Page() {
                                         {Object.keys(courses).map((classKey, index) => {
                                             if (editMode) {
                                                 return (
-                                                    
-                                                        <div
-                                                            className="collapse border border-base-300 bg-base-300 p-2 "
-                                                            key={index}
-                                                        >
-                                                            <ConfirmDeleteCourse
-                                                                    resource={classKey}
-                                                                    setResource={setCourses}
-                                                            />
-                                                            <div className="collapse-title text-xl font-medium flex items-center flex-col  md:flex-row px-4">
-                                                                <p className="mb-4 md:mb-0">{`${classKey} - ${courses[classKey].courseName}`}</p>
-                                                                <div className="flex gap-2">
-                                                                    <Link
-                                                                        className="btn btn-secondary btn-outline"
-                                                                        href={`/dashboard/edit-course/${classKey}`}
-                                                                    >
-                                                                        <FaEdit />
-                                                                        <span className="hidden md:block">
-                                                                            Edit
-                                                                        </span>
-                                                                    </Link>
-                                                                    <button
-                                                                        className="btn btn-error btn-outline"
-                                                                        onClick={() => {
-                                                                            const modal = document.getElementById(
-                                                                                `${classKey}`
-                                                                            ) as HTMLDialogElement | null;
-                                                                            if (modal) {
-                                                                                modal.showModal();
-                                                                            }
-                                                                        }}
-                                                                    >
-                                                                        <FaTrashAlt />
-                                                                        <span className="hidden md:block">
-                                                                            Delete
-                                                                        </span>
-                                                                    </button>
-                                                                </div>
+                                                    <div
+                                                        className="collapse border border-base-300 bg-base-300 p-2 "
+                                                        key={index}
+                                                    >
+                                                        <ConfirmDeleteCourse
+                                                            resource={classKey}
+                                                            setResource={setCourses}
+                                                        />
+                                                        <div className="collapse-title text-xl font-medium flex items-center flex-col  md:flex-row px-4">
+                                                            <p className="mb-4 md:mb-0">{`${classKey} - ${courses[classKey].courseName}`}</p>
+                                                            <div className="flex gap-2">
+                                                                <Link
+                                                                    className="btn btn-secondary btn-outline"
+                                                                    href={`/dashboard/edit-course/${classKey}`}
+                                                                >
+                                                                    <FaEdit />
+                                                                    <span className="hidden md:block">Edit</span>
+                                                                </Link>
+                                                                <button
+                                                                    className="btn btn-error btn-outline"
+                                                                    onClick={() => {
+                                                                        const modal = document.getElementById(
+                                                                            `${classKey}`
+                                                                        ) as HTMLDialogElement | null;
+                                                                        if (modal) {
+                                                                            modal.showModal();
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    <FaTrashAlt />
+                                                                    <span className="hidden md:block">
+                                                                        Delete
+                                                                    </span>
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                    
+                                                    </div>
                                                 );
                                             }
 
