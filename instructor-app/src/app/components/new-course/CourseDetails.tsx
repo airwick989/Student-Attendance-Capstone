@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
 
-export default function CourseDetails({ setStep }: any) {
+export default function CourseDetails({ setStep, rooms, handleChange, data }: any) {
     return (
         <>
             <div className="card w-full bg-base-100 shadow-xl mt-16 py-6">
@@ -30,6 +30,8 @@ export default function CourseDetails({ setStep }: any) {
                                 className="input input-bordered"
                                 required
                                 name="courseCode"
+                                value={data.courseCode}
+                                onChange={(e)=>{handleChange(e)}}
                                 autoComplete="off"
                             />
                         </div>
@@ -44,6 +46,8 @@ export default function CourseDetails({ setStep }: any) {
                                 className="input input-bordered"
                                 required
                                 name="courseName"
+                                value={data.courseName}
+                                onChange={(e)=>{handleChange(e)}}
                                 autoComplete="off"
                             />
                         </div>
@@ -52,15 +56,13 @@ export default function CourseDetails({ setStep }: any) {
                             <div className="label">
                                 <span className="label-text">Select Room(s)</span>
                             </div>
-                            <select multiple className="select select-bordered py-4">
-                                <option disabled selected>
+                            <select multiple className="select select-bordered py-4" required onChange={(e)=>handleChange(e)} name="room">
+                                <option disabled defaultValue={""}>
                                     select a room for this course:
                                 </option>
-                                <option>Star Wars</option>
-                                <option>Harry Potter</option>
-                                <option>Lord of the Rings</option>
-                                <option>Planet of the Apes</option>
-                                <option>Star Trek</option>
+                                {Object(rooms).map((room:string, index:number)=><option key={index}>{room}</option>                            
+                                )}
+
                             </select>
                         </label>
 

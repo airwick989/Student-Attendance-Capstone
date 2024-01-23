@@ -1,6 +1,6 @@
 import { FaArrowLeft } from "react-icons/fa";
 
-export default function CourseConfirm({setStep}:any) {
+export default function CourseConfirm({setStep, data}:any) {
     
     return(<>
     
@@ -25,10 +25,9 @@ export default function CourseConfirm({setStep}:any) {
 
                         <div className="card bg-base-200">
                             <div className="card-body text-xl">
-                                <div>Room Name: </div>
-                                <div>Number of Seats: </div>
-                                <div>Rows: </div>
-                                <div>Columns: </div>
+                                <div>Course Code: {data.courseCode} </div>
+                                <div>Name: {data.courseName} </div>
+                                <div>Room(s): </div>
                             </div>
                         </div>
                         <div className="flex justify-between w-full mt-4 ">
