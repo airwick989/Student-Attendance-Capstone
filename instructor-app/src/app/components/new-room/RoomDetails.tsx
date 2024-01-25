@@ -19,15 +19,12 @@ export default function RoomDetails({ setStep, handleChange, data }: any) {
                 <form className="card-body">
                     <div className="flex flex-col md:flex-row justify-between items-baseline pb-4">
                         <h2 className="card-title font-bold text-3xl mb-4 self-center">
-                            <Link href={"/dashboard/rooms"}>
-                                <FaArrowLeft />
-                            </Link>
                             Room Details
                         </h2>
                     </div>
                     <div className="md:px-16 flex flex-col gap-4">
                         <ul className="steps">
-                            <li className="step step-secondary">Details</li>
+                            <li className="step step-primary">Details</li>
                             <li className="step">Layout</li>
                             <li className="step">Confirm</li>
                         </ul>
@@ -52,7 +49,7 @@ export default function RoomDetails({ setStep, handleChange, data }: any) {
                                 Cancel
                             </Link>
                             <button
-                                className="btn btn-secondary w-28"
+                                className="btn btn-primary w-28"
                                 disabled={preventSubmit}
                                 onClick={(e) => {
                                     e.preventDefault();
