@@ -1,7 +1,27 @@
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
+import { useState, useEffect } from "react";
 
-export default function CourseDetails({ setStep, rooms, handleChange, data }: any) {
+export default function CourseDetails({
+    setStep,
+    rooms,
+    handleChange,
+    data,
+}: any) {
+    const [preventSubmit, setPreventSubmit] = useState(true);
+
+    useEffect(() => {
+        if (
+            data.courseCode === "" ||
+            data.courseName === "" ||
+            data.room.length === 0
+        ) {
+            setPreventSubmit(true);
+        } else {
+            setPreventSubmit(false);
+        }
+    }, [data]);
+
     return (
         <>
             <div className="card w-full bg-base-100 shadow-xl mt-16 py-6">
@@ -31,7 +51,9 @@ export default function CourseDetails({ setStep, rooms, handleChange, data }: an
                                 required
                                 name="courseCode"
                                 value={data.courseCode}
-                                onChange={(e)=>{handleChange(e)}}
+                                onChange={(e) => {
+                                    handleChange(e);
+                                }}
                                 autoComplete="off"
                             />
                         </div>
@@ -47,7 +69,9 @@ export default function CourseDetails({ setStep, rooms, handleChange, data }: an
                                 required
                                 name="courseName"
                                 value={data.courseName}
-                                onChange={(e)=>{handleChange(e)}}
+                                onChange={(e) => {
+                                    handleChange(e);
+                                }}
                                 autoComplete="off"
                             />
                         </div>
@@ -56,13 +80,19 @@ export default function CourseDetails({ setStep, rooms, handleChange, data }: an
                             <div className="label">
                                 <span className="label-text">Select Room(s)</span>
                             </div>
-                            <select multiple className="select select-bordered py-4" required onChange={(e)=>handleChange(e)} name="room">
+                            <select
+                                multiple
+                                className="select select-bordered py-4"
+                                required
+                                onChange={(e) => handleChange(e)}
+                                name="room"
+                            >
                                 <option disabled defaultValue={""}>
                                     select a room for this course:
                                 </option>
-                                {Object(rooms).map((room:string, index:number)=><option key={index}>{room}</option>                            
-                                )}
-
+                                {Object(rooms).map((room: string, index: number) => (
+                                    <option key={index}>{room}</option>
+                                ))}
                             </select>
                         </label>
 
@@ -72,6 +102,7 @@ export default function CourseDetails({ setStep, rooms, handleChange, data }: an
                             </Link>
                             <button
                                 className="btn btn-primary w-28"
+                                disabled={preventSubmit}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     setStep(1);
