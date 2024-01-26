@@ -18,10 +18,10 @@ export default function Page() {
               new course and room, or view existing ones here.
             </p>
             <div className="flex justify-center gap-2">
-              <Link href={"./dashboard/courses"} className="btn btn-primary">
+              <Link href={"./dashboard/courses"} className="btn btn-primary bg-gradient-to-tl from-rose-200 to-violet-400 hover:from-violet-50 hover:to-violet-500 border-none">
                 View Courses
               </Link>
-              <Link href={"./dashboard/rooms"} className="btn btn-secondary ">
+              <Link href={"./dashboard/rooms"} className="btn btn-primary bg-gradient-to-bl from-violet-400 to-rose-200 hover:from-violet-500 hover:to-violet-50 border-none">
                 View Rooms
               </Link>
             </div>

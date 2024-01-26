@@ -4,6 +4,8 @@ import { signOut, useSession } from "next-auth/react";
 import Sidebar from "./Sidebar";
 import Image from "next/image";
 import Link from "next/link";
+import Logo from "../assets/Logo.svg";
+
 
 export default function Navbar() {
     const session = useSession();
@@ -16,9 +18,9 @@ export default function Navbar() {
                     <Sidebar />
                 </div>
 
-                <div className="flex-1">
-                    <Link  href={"/dashboard"} className="mx-4 text-transparent text-2xl bg-clip-text  font-bold lg:text-3xl lg:leading-tight  bg-gradient-to-r from-slate-200 via-rose-400 to-indigo-400">
-                        ATTEND-OTU
+                <div className="flex-1 ps-3 scale-70">
+                    <Link  href={"/dashboard"}>
+                        <Image src={Logo} alt="88"/>
                     </Link>
                 </div>
                 <div className="flex-none">

@@ -30,9 +30,9 @@ export default function RoomConfirm({ setStep, data, createRoom }: any) {
                     </div>
                     <div className="md:px-16 flex flex-col gap-4 ">
                         <ul className="steps mb-8">
-                            <li className="step step-secondary">Details</li>
-                            <li className="step step-secondary">Layout</li>
-                            <li className="step step-secondary">Confirm</li>
+                            <li className="step step-primary">Details</li>
+                            <li className="step step-primary">Layout</li>
+                            <li className="step step-primary">Confirm</li>
                         </ul>
 
                         <h2 className="card-title font-semibold text-2xl">Preview</h2>
@@ -67,7 +67,7 @@ export default function RoomConfirm({ setStep, data, createRoom }: any) {
                             >
                                 Previous
                             </button>
-                            <button className="btn w-30" onClick={(e)=>submitForm(e)}>Create Room</button>
+                            <button className="btn btn-primary w-30" onClick={(e)=>submitForm(e)}>Create Room</button>
                         </div>
                     </div>
                 </form>

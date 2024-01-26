@@ -35,8 +35,8 @@ export default function RoomLayout({ setStep, handleChange, data }: any) {
                     </div>
                     <div className="md:px-16 flex flex-col gap-4">
                         <ul className="steps">
-                            <li className="step step-secondary">Details</li>
-                            <li className="step step-secondary">Layout</li>
+                            <li className="step step-primary">Details</li>
+                            <li className="step step-primary">Layout</li>
                             <li className="step">Confirm</li>
                         </ul>
                         <div className="form-control">
@@ -101,7 +101,7 @@ export default function RoomLayout({ setStep, handleChange, data }: any) {
                                 Previous
                             </button>
                             <button
-                                className="btn btn-secondary w-28"
+                                className="btn btn-primary w-28"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     setStep(2);
