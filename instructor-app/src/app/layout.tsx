@@ -8,8 +8,8 @@ import SessionProvider from "./SessionProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'Classroom Map',
-  description: 'Classroom Map',
+  title: 'Attend-OTU',
+  description: 'Classroom Tracker',
 }
 
 export default async function RootLayout({

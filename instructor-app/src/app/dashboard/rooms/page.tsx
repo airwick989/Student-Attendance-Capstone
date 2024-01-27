@@ -72,7 +72,7 @@ export default function Page() {
                                 </div>
                             </div>
 
-                            {Object.keys(rooms).length == 0 && loading == false ? (
+                            {Object.keys(rooms).length == 0 && !loading ? (
                                 <>
                                     <p className="self-center text-lg mt-2">No rooms found.</p>
                                 </>
@@ -82,7 +82,6 @@ export default function Page() {
                                         {Object.values(rooms).map((room, index) => {
                                             if (editMode) {
                                                 return (
-
                                                     <div
                                                         className="collapse border border-base-300 bg-base-300 p-2 "
                                                         key={index}
@@ -101,9 +100,7 @@ export default function Page() {
                                                                     href={`/dashboard/edit-room/${room}`}
                                                                 >
                                                                     <FaEdit />
-                                                                    <span className="hidden md:block">
-                                                                        Edit
-                                                                    </span>
+                                                                    <span className="hidden md:block">Edit</span>
                                                                 </Link>
                                                                 <button
                                                                     className="btn btn-error btn-outline"
@@ -124,7 +121,6 @@ export default function Page() {
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 );
                                             }
                                             return (

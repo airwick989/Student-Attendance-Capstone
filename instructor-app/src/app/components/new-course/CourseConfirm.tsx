@@ -1,19 +1,10 @@
 import { FaArrowLeft } from "react-icons/fa";
-import SeatComponent from "../SeatComponent";
 import { MouseEvent } from "react";
 
-export default function RoomConfirm({ setStep, data, createRoom }: any) {
-    const seatGenerator = () => {
-        let seatArray = [];
-        for (let index = 1; index <= data.numSeats; index++) {
-            seatArray.push(<SeatComponent seatInfo={"none"} key={index} />);
-        }
-        return seatArray;
-    };
-
+export default function CourseConfirm({ setStep, data, createCourse }: any) {
     const submitForm = async (e: MouseEvent) => {
         e.preventDefault();
-        await createRoom();
+        await createCourse();
     };
 
     return (
@@ -25,41 +16,28 @@ export default function RoomConfirm({ setStep, data, createRoom }: any) {
                             <button onClick={() => setStep(1)}>
                                 <FaArrowLeft />
                             </button>
-                            Confirm Room
+                            Confirm Course
                         </h2>
                     </div>
                     <div className="md:px-16 flex flex-col gap-4 ">
                         <ul className="steps mb-8">
                             <li className="step step-primary">Details</li>
-                            <li className="step step-primary">Layout</li>
+                            <li className="step step-primary">Class List</li>
                             <li className="step step-primary">Confirm</li>
                         </ul>
 
-                        <h2 className="card-title font-semibold text-2xl">Preview</h2>
-                        <div className="card bg-base-200 mb-4">
-                            <div className="card-body">
-                                {data && (
-                                    <div
-                                        className={`grid grid-cols-${data.dimensions.columns} grid-rows-${data.dimensions.rows} gap-4`}
-                                    >
-                                        {seatGenerator()}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
                         <h2 className="card-title font-semibold text-2xl mt-4">Details</h2>
 
                         <div className="card bg-base-200">
                             <div className="card-body text-xl">
-                                <div>Room Name: {data.roomName}</div>
-                                <div>Number of Seats: {data.numSeats}</div>
-                                <div>Rows: {data.dimensions.rows}</div>
-                                <div>Columns: {data.dimensions.columns}</div>
+                                <div>Course Code: {data.courseCode} </div>
+                                <div>Name: {data.courseName} </div>
+                                <div>Room(s): {data.room.join(", ")} </div>
                             </div>
                         </div>
                         <div className="flex justify-between w-full mt-4 ">
                             <button
-                                className="btn btn-secondary w-28"
+                                className="btn btn-primary w-28"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     setStep(1);
@@ -67,11 +45,8 @@ export default function RoomConfirm({ setStep, data, createRoom }: any) {
                             >
                                 Previous
                             </button>
-                            <button
-                                className="btn btn-primary w-30"
-                                onClick={(e) => submitForm(e)}
-                            >
-                                Create Room
+                            <button className="btn w-30" onClick={(e) => submitForm(e)}>
+                                Create Course
                             </button>
                         </div>
                     </div>

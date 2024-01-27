@@ -20,7 +20,7 @@ export default function Navbar() {
 
                 <div className="flex-1 ps-3 scale-70">
                     <Link  href={"/dashboard"}>
-                        <Image src={Logo} alt="88"/>
+                        <Image src={Logo} alt="Attend-OTU" width={256}/>
                     </Link>
                 </div>
                 <div className="flex-none">
