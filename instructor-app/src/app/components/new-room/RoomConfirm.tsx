@@ -1,20 +1,20 @@
 import { FaArrowLeft } from "react-icons/fa";
 import SeatComponent from "../SeatComponent";
-import { ChangeEvent, MouseEvent } from "react";
+import { MouseEvent } from "react";
 
 export default function RoomConfirm({ setStep, data, createRoom }: any) {
     const seatGenerator = () => {
         let seatArray = [];
         for (let index = 1; index <= data.numSeats; index++) {
-            seatArray.push(<SeatComponent seatInfo={"none"} key={index}/>);
+            seatArray.push(<SeatComponent seatInfo={"none"} key={index} />);
         }
         return seatArray;
     };
 
     const submitForm = async (e: MouseEvent) => {
-        e.preventDefault()
-        await createRoom()
-    }
+        e.preventDefault();
+        await createRoom();
+    };
 
     return (
         <>
@@ -67,7 +67,12 @@ export default function RoomConfirm({ setStep, data, createRoom }: any) {
                             >
                                 Previous
                             </button>
-                            <button className="btn btn-primary w-30" onClick={(e)=>submitForm(e)}>Create Room</button>
+                            <button
+                                className="btn btn-primary w-30"
+                                onClick={(e) => submitForm(e)}
+                            >
+                                Create Room
+                            </button>
                         </div>
                     </div>
                 </form>

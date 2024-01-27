@@ -1,10 +1,15 @@
 import { FaArrowLeft } from "react-icons/fa";
+import { MouseEvent } from "react";
 
-export default function CourseConfirm({setStep, data}:any) {
-    
-    return(<>
-    
-    <div className="card w-full bg-base-100 shadow-xl my-16 py-6">
+export default function CourseConfirm({ setStep, data, createCourse }: any) {
+    const submitForm = async (e: MouseEvent) => {
+        e.preventDefault();
+        await createCourse();
+    };
+
+    return (
+        <>
+            <div className="card w-full bg-base-100 shadow-xl my-16 py-6">
                 <form className="card-body">
                     <div className="flex flex-col md:flex-row justify-between items-baseline mb-4">
                         <h2 className="card-title font-bold text-3xl mb-4 self-center">
@@ -27,7 +32,7 @@ export default function CourseConfirm({setStep, data}:any) {
                             <div className="card-body text-xl">
                                 <div>Course Code: {data.courseCode} </div>
                                 <div>Name: {data.courseName} </div>
-                                <div>Room(s): </div>
+                                <div>Room(s): {data.room.join(", ")} </div>
                             </div>
                         </div>
                         <div className="flex justify-between w-full mt-4 ">
@@ -40,12 +45,13 @@ export default function CourseConfirm({setStep, data}:any) {
                             >
                                 Previous
                             </button>
-                            <button className="btn w-30" onClick={(e)=>{}}>Create Course</button>
+                            <button className="btn w-30" onClick={(e) => submitForm(e)}>
+                                Create Course
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
-    
-    </>)
-
+        </>
+    );
 }
