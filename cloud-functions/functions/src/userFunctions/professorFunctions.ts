@@ -50,6 +50,25 @@ export const createNewRoom = async (
   }
 };
 
+export const editExistingRoom = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const {oldRoomName, roomName, numSeats, dimensions} = req.body;
+
+  try {
+    const response = await roomController.editRoom(
+      oldRoomName,
+      roomName,
+      numSeats,
+      dimensions
+    );
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
 export const deleteRoomByName = async (
   req: express.Request,
   res: express.Response
