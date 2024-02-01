@@ -10,6 +10,7 @@ import Loading from "./loading";
 export default function Page() {
     const router = useRouter();
     const [step, setStep] = useState(0);
+    const [file, setFile] = useState<File | null>(null);
     const [data, setData] = useState<{
         courseCode: string;
         courseName: string;
@@ -41,17 +42,18 @@ export default function Page() {
     }, []);
 
     const createCourse = async () => {
+        const formData = new FormData();
+        formData.append("courseInfo", JSON.stringify(data));
+        formData.append("", file as Blob);
         const response = await fetch(
             "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/createCourse",
             {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
+                body: formData,
             }
-            
         );
-        if(await response.ok){
-            router.push("/dashboard/courses")
+        if (await response.ok) {
+            router.push("/dashboard/courses");
         }
     };
 
@@ -70,10 +72,16 @@ export default function Page() {
 
             return { ...prevData, [name]: value };
         });
-
     };
 
-    const formFunctions = { setStep, handleChange, createCourse, data, rooms };
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setFile(file);
+        }
+    };
+
+    const formFunctions = { setStep, handleChange, createCourse, handleFileChange, data, file, rooms };
 
     const formElements = [
         <CourseDetails {...formFunctions} key={0} />,
@@ -83,7 +91,7 @@ export default function Page() {
 
     return (
         <>
-            {loading && <Loading/>}
+            {loading && <Loading />}
             <div className="min-h-screen bg-base-200">
                 <div className="flex flex-col items-center xl:px-96 lg:px-64 px-16">
                     {formElements[step]}

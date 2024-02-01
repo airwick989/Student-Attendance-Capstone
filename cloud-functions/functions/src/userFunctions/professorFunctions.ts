@@ -2,6 +2,8 @@
 import * as express from "express";
 import * as roomController from "../controllers/roomController";
 import * as courseController from "../controllers/courseController";
+import * as classListController from "../controllers/classListController";
+import * as busboy from "busboy";
 
 // Room Functions
 export const getAllRoomNames = async (
@@ -65,17 +67,62 @@ export const createNewCourse = async (
   req: express.Request,
   res: express.Response
 ) => {
-  const {courseCode, courseName, room} = req.body;
-  try {
-    const response = await courseController.createCourse(
-      courseCode,
-      courseName,
-      room
-    );
-    res.status(200).json(response);
-  } catch (error) {
-    res.status(400).send(error);
-  }
+  const bb = busboy({headers: req.headers});
+
+  const formData: any = {};
+  const studentList: any = [];
+  let validFileType = true;
+
+  bb.on("field", (fieldname, val) => {
+    formData[fieldname] = val;
+  });
+
+  bb.on("file", (_fieldname: any, file: any, filename: any): void => {
+    if (filename.mimeType && filename.mimeType !== "text/csv") {
+      validFileType = false;
+    }
+    file.on("data", (data: any) => {
+      const lines = data.toString().split("\n").slice(1);
+      lines.forEach((line: any) => {
+        if (line.trim() !== "") {
+          const [studentName, studentId, sis, email, section] = line.split(",");
+          studentList.push({
+            studentId,
+            studentName,
+            sis,
+            email,
+            section,
+          });
+        }
+      });
+    });
+  });
+
+  bb.on("finish", async () => {
+    const {courseCode, courseName, room} = JSON.parse(formData.courseInfo);
+    if (!validFileType) {
+      return res.status(400).send({
+        error: "Invalid file type, only CSV files allowed.",
+      });
+    }
+    try {
+      const response = await courseController.createCourse(
+        courseCode,
+        courseName,
+        room
+      );
+      await classListController.createClasslist(courseCode, studentList);
+      return res.status(200).json(response);
+    } catch (error) {
+      return res.status(400).send({error: "Could not create course."});
+    }
+  });
+  req.on("error", (err) => {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  });
+
+  bb.end(req.body);
 };
 
 export const deleteCourseByCode = async (
@@ -83,11 +130,11 @@ export const deleteCourseByCode = async (
   res: express.Response
 ) => {
   const {courseCode} = req.body;
-
   try {
-    const response = await courseController.deleteCourse(courseCode);
-    res.status(200).json(response);
+    await courseController.deleteCourse(courseCode);
+    await classListController.deleteClasslist(courseCode);
+    res.status(200).json({success: "Course deleted."});
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({error: "Could not delete course."});
   }
 };

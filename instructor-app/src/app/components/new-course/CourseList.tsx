@@ -1,6 +1,6 @@
 import { FaArrowLeft } from "react-icons/fa";
 
-export default function CourseList({ setStep }: any) {
+export default function CourseList({ setStep, handleFileChange, file }: any) {
     return (
         <>
             <div className="card w-full bg-base-100 shadow-xl mt-16 py-6">
@@ -19,6 +19,26 @@ export default function CourseList({ setStep }: any) {
                             <li className="step step-primary">Class List</li>
                             <li className="step">Confirm</li>
                         </ul>
+
+                        <div className="form-control pt-6">
+                            <p className="pb-4">
+                                Import your class from Canvas with the instructions: Lorem ipsum
+                                dolor sit amet consectetur adipisicing elit. Maiores laborum
+                                ullam laboriosam dignissimos eaque harum nemo aperiam beatae
+                                alias! Dolorum rem nihil et provident sed impedit eaque minus
+                                odit similique!
+                            </p>
+                            <label className="label">
+                                <span className="label-text">Upload class list (.csv)</span>
+                                {file && <span className="label-text-alt">Selected file: {file.name}</span>}
+                            </label>
+                            <input
+                                type="file"
+                                className="file-input file-input-bordered file-input-primary w-full"
+                                accept="text/csv"
+                                onChange={(e) => {handleFileChange(e)}}
+                            />
+                        </div>
 
                         <div className="flex justify-between w-full mt-4">
                             <button
