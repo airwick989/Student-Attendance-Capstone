@@ -14,3 +14,15 @@ export const createClasslist = async (
     throw Error("Could not create class list.");
   }
 };
+
+export const deleteClasslist = async (courseCode: string) => {
+  const query = admin.database().ref(`ClassLists/${courseCode}`);
+  try {
+    const snapshot = await query.once("value");
+    if (snapshot.exists()) {
+      await query.remove();
+    }
+  } catch (error) {
+    throw Error("Could not delete class list.");
+  }
+};

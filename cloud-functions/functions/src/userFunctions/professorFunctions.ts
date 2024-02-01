@@ -130,10 +130,10 @@ export const deleteCourseByCode = async (
   res: express.Response
 ) => {
   const {courseCode} = req.body;
-
   try {
-    const response = await courseController.deleteCourse(courseCode);
-    res.status(200).json(response);
+    await courseController.deleteCourse(courseCode);
+    await classListController.deleteClasslist(courseCode);
+    res.status(200).json({success: "Course deleted."});
   } catch (error) {
     res.status(400).send({error: "Could not delete course."});
   }
