@@ -1,7 +1,7 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { MouseEvent } from "react";
 
-export default function CourseConfirm({ setStep, data, createCourse }: any) {
+export default function CourseConfirm({ setStep, data, createCourse, file }: any) {
     const submitForm = async (e: MouseEvent) => {
         e.preventDefault();
         await createCourse();
@@ -33,6 +33,7 @@ export default function CourseConfirm({ setStep, data, createCourse }: any) {
                                 <div>Course Code: {data.courseCode} </div>
                                 <div>Name: {data.courseName} </div>
                                 <div>Room(s): {data.room.join(", ")} </div>
+                                <div>Class Map: {file ? `"${file.name}"` : "No file selected."} </div>
                             </div>
                         </div>
                         <div className="flex justify-between w-full mt-4 ">
