@@ -9,6 +9,28 @@ export const roomNames = async () => {
   return roomNames;
 };
 
+export const roomDetails =async (roomName:string) => {
+  const queryDimensions = admin.database().ref(`Rooms/${roomName}/dimensions`)
+  const queryMap = admin.database().ref(`Rooms/${roomName}/map`)
+  
+  try {
+    const dimSnapshot = await queryDimensions.once('value');
+    const dimensions = dimSnapshot.val();
+
+    const mapSnapshot = await queryMap.once('value');
+    const map = mapSnapshot.val()
+    const seatNum = map.length - 1;
+
+    return {
+      'dimensions': dimensions,
+      'seatNum': seatNum
+    };
+  } catch (error) {
+    console.error('Error fetching room details:', error);
+    throw error; // Re-throw the error if needed
+  }
+};
+
 export const createRoom = async (
   roomName: string,
   totalSeats: number,

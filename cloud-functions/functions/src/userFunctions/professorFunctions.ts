@@ -18,6 +18,20 @@ export const getAllRoomNames = async (
   }
 };
 
+export const getRoomDetails = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const roomName = String(req.query.roomName);
+
+  try {
+    const response = await roomController.roomDetails(roomName);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+}
+
 export const createNewRoom = async (
   req: express.Request,
   res: express.Response

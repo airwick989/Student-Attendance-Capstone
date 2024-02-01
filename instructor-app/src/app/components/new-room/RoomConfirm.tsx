@@ -2,7 +2,23 @@ import { FaArrowLeft } from "react-icons/fa";
 import SeatComponent from "../SeatComponent";
 import { MouseEvent } from "react";
 
-export default function RoomConfirm({ setStep, data, createRoom }: any) {
+
+interface RoomConfirmProps {
+    setStep: (step: number) => void;
+    data: {
+      roomName: string;
+      numSeats: number;
+      dimensions: {
+        rows: number;
+        columns: number;
+      };
+    };
+    createRoom: () => Promise<void>;
+    editFlag?: boolean;
+}
+
+
+const RoomConfirm: React.FC<RoomConfirmProps> = ({ setStep, data, createRoom, editFlag = false }: RoomConfirmProps) => {
     const seatGenerator = () => {
         let seatArray = [];
         for (let index = 1; index <= data.numSeats; index++) {
@@ -71,7 +87,7 @@ export default function RoomConfirm({ setStep, data, createRoom }: any) {
                                 className="btn btn-primary w-30"
                                 onClick={(e) => submitForm(e)}
                             >
-                                Create Room
+                                {editFlag ? "Update Room" : "Create Room"}
                             </button>
                         </div>
                     </div>
@@ -80,3 +96,11 @@ export default function RoomConfirm({ setStep, data, createRoom }: any) {
         </>
     );
 }
+
+
+// Set default value for editFlag
+RoomConfirm.defaultProps = {
+    editFlag: false,
+};
+  
+export default RoomConfirm;
