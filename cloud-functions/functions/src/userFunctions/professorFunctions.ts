@@ -2,6 +2,7 @@
 import * as express from "express";
 import * as roomController from "../controllers/roomController";
 import * as courseController from "../controllers/courseController";
+import * as classListController from "../controllers/classListController";
 import * as busboy from "busboy";
 
 // Room Functions
@@ -69,49 +70,51 @@ export const createNewCourse = async (
   const bb = busboy({headers: req.headers});
 
   const formData: any = {};
+  const studentList: any = [];
+  let validFileType = true;
 
   bb.on("field", (fieldname, val) => {
     formData[fieldname] = val;
   });
 
-  bb.on(
-    "file",
-    (
-      fieldname: any,
-      file: any,
-      filename: any,
-      encoding: any,
-      mimetype: any
-    ): void => {
-      console.log(fieldname, file, filename, encoding, mimetype);
-
-      file.on("data", (data: any) => {
-        const lines = data.toString().split("\n");
-        lines.forEach((line: any) => {
-          const [studentId, studentName, sis, email] = line.split(",");
-          console.log(studentId, studentName, sis, email);
-          /* courseController.addStudentToCourse(
-            JSON.parse(formData.courseInfo).courseCode,
-            studentId,
-            studentName
-          ); */
-        });
-      });
-      file.resume();
+  bb.on("file", (_fieldname: any, file: any, filename: any): void => {
+    if (filename.mimeType && filename.mimeType !== "text/csv") {
+      validFileType = false;
     }
-  );
+    file.on("data", (data: any) => {
+      const lines = data.toString().split("\n").slice(1);
+      lines.forEach((line: any) => {
+        if (line.trim() !== "") {
+          const [studentName, studentId, sis, email, section] = line.split(",");
+          studentList.push({
+            studentId,
+            studentName,
+            sis,
+            email,
+            section,
+          });
+        }
+      });
+    });
+  });
 
   bb.on("finish", async () => {
     const {courseCode, courseName, room} = JSON.parse(formData.courseInfo);
+    if (!validFileType) {
+      return res.status(400).send({
+        error: "Invalid file type, only CSV files allowed.",
+      });
+    }
     try {
       const response = await courseController.createCourse(
         courseCode,
         courseName,
         room
       );
-      res.status(200).json(response);
+      await classListController.createClasslist(courseCode, studentList);
+      return res.status(200).json(response);
     } catch (error) {
-      res.status(400).send(error);
+      return res.status(400).send({error: "Could not create course."});
     }
   });
   req.on("error", (err) => {
@@ -132,6 +135,6 @@ export const deleteCourseByCode = async (
     const response = await courseController.deleteCourse(courseCode);
     res.status(200).json(response);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({error: "Could not delete course."});
   }
 };
