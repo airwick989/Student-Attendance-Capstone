@@ -63,7 +63,6 @@ export const createRoom = async (
   }
 };
 
-
 export const editRoom = async (
   oldRoomName: string,
   roomName: string,
@@ -105,8 +104,6 @@ export const editRoom = async (
   }
 };
 
-
-// TODO: need to search and delete room from Courses
 export const deleteRoom = async (roomName: string) => {
   if (!roomName) {
     throw Error("Missing parameters.");
@@ -116,6 +113,25 @@ export const deleteRoom = async (roomName: string) => {
   try {
     const snapshot = await query.once("value");
     if (snapshot.exists()) {
+      const courseQuery = admin.database().ref("Courses");
+      const courseSnapshot = await courseQuery.once("value");
+
+      for (const course in courseSnapshot.val()) {
+        if (
+          Object.prototype.hasOwnProperty.call(courseSnapshot.val(), course)
+        ) {
+          const roomQuery = admin.database().ref(`Courses/${course}/Room`);
+          const roomSnapshot = await roomQuery.once("value");
+          const rooms = roomSnapshot.val();
+
+          if (rooms && rooms.includes(roomName)) {
+            const index = rooms.indexOf(roomName);
+            rooms.splice(index, 1);
+            await roomQuery.set(rooms);
+          }
+        }
+      }
+
       await query.remove();
       return `${roomName} deleted.`;
     }
