@@ -12,6 +12,7 @@ export default function Page() {
     const router = useRouter();
     const [step, setStep] = useState(0);
     const [data, setData] = useState({
+        oldRoomName:"",
         roomName: "",
         numSeats: 1,
         dimensions: {
@@ -42,6 +43,7 @@ export default function Page() {
                 console.log(roomDetails);
                 setData(
                     {
+                        oldRoomName: room,
                         roomName: room,
                         numSeats: roomDetails['seatNum'],
                         dimensions: {
@@ -59,12 +61,12 @@ export default function Page() {
         })();
     }, []);
 
-    console.log(data)
+    console.log(data);
 
-
+    //createRoom function modified to edit room instead
     const createRoom = async () => {
         const response = await fetch(
-            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/createRoom",
+            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/updateRoom",
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

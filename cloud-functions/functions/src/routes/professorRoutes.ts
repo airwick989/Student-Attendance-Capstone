@@ -9,6 +9,7 @@ import {
   createNewRoom,
   createNewCourse,
   getRoomDetails,
+  editExistingRoom,
 } from "../userFunctions/professorFunctions";
 
 router.get("/getAllRoomNames", getAllRoomNames);
@@ -17,6 +18,7 @@ router.get("/editRoom", getRoomDetails);
 
 router.post("/createRoom", createNewRoom);
 router.post("/createCourse", createNewCourse);
+router.post("/updateRoom", editExistingRoom);
 
 router.delete("/deleteRoom", deleteRoomByName);
 router.delete("/deleteCourse", deleteCourseByCode);

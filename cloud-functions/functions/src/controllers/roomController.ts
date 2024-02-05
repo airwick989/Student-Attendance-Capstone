@@ -63,6 +63,49 @@ export const createRoom = async (
   }
 };
 
+
+export const editRoom = async (
+  oldRoomName: string,
+  roomName: string,
+  totalSeats: number,
+  dimensions?: { rows: number; columns: number }
+) => {
+  if (oldRoomName === roomName) {
+    const roomRef = admin.database().ref(`Rooms/${roomName}`);
+
+    if (totalSeats == 0) {
+      throw Error("Cannot have 0 seats.");
+    }
+
+    try {
+      const seatMap: { [key: number]: string } = {};
+
+      for (let index = 1; index <= totalSeats; index++) {
+        seatMap[index] = "none";
+      }
+
+      await roomRef.set({map: seatMap});
+
+      if (dimensions) {
+        await roomRef.update({dimensions});
+      }
+    } catch (error) {
+      throw Error("Could not update room");
+    }
+  } else {
+    try {
+      createRoom(roomName, totalSeats, dimensions);
+
+      // Remove old room node
+      const oldRoomRef = admin.database().ref(`Rooms/${oldRoomName}`);
+      await oldRoomRef.remove();
+    } catch (error) {
+      throw Error("Could not update room");
+    }
+  }
+};
+
+
 // TODO: need to search and delete room from Courses
 export const deleteRoom = async (roomName: string) => {
   if (!roomName) {
