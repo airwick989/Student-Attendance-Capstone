@@ -9,24 +9,24 @@ export const roomNames = async () => {
   return roomNames;
 };
 
-export const roomDetails =async (roomName:string) => {
-  const queryDimensions = admin.database().ref(`Rooms/${roomName}/dimensions`)
-  const queryMap = admin.database().ref(`Rooms/${roomName}/map`)
-  
+export const roomDetails = async (roomName: string) => {
+  const queryDimensions = admin.database().ref(`Rooms/${roomName}/dimensions`);
+  const queryMap = admin.database().ref(`Rooms/${roomName}/map`);
+
   try {
-    const dimSnapshot = await queryDimensions.once('value');
+    const dimSnapshot = await queryDimensions.once("value");
     const dimensions = dimSnapshot.val();
 
-    const mapSnapshot = await queryMap.once('value');
-    const map = mapSnapshot.val()
+    const mapSnapshot = await queryMap.once("value");
+    const map = mapSnapshot.val();
     const seatNum = map.length - 1;
 
     return {
-      'dimensions': dimensions,
-      'seatNum': seatNum
+      dimensions: dimensions,
+      seatNum: seatNum,
     };
   } catch (error) {
-    console.error('Error fetching room details:', error);
+    console.error("Error fetching room details:", error);
     throw error; // Re-throw the error if needed
   }
 };
@@ -62,7 +62,6 @@ export const createRoom = async (
     throw Error("Could not create room");
   }
 };
-
 
 // TODO: need to search and delete room from Courses
 export const deleteRoom = async (roomName: string) => {
