@@ -6,6 +6,32 @@ export const courseNames = async () => {
   return result;
 };
 
+export const courseDetails =async (courseCode:string) => {
+  const queryName = admin.database().ref(`Courses/${courseCode}/courseName`)
+  const queryRoom = admin.database().ref(`Courses/${courseCode}/Room`)
+  const queryStudents = admin.database().ref(`ClassLists/${courseCode}`)
+  
+  try {
+    const nameSnapshot = await queryName.once('value');
+    const courseName = nameSnapshot.val();
+
+    const roomSnapshot = await queryRoom.once('value');
+    const courseRoom = roomSnapshot.val();
+
+    const studentsSnapshot = await queryStudents.once('value');
+    const classList = studentsSnapshot.val();
+
+    return {
+      'courseName': courseName,
+      'courseRoom': courseRoom,
+      'classList': classList
+    };
+  } catch (error) {
+    console.error('Error fetching course details:', error);
+    throw error; // Re-throw the error if needed
+  }
+};
+
 export const createCourse = async (
   courseCode: string,
   courseName: string,

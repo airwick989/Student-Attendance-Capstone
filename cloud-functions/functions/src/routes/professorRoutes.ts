@@ -10,11 +10,13 @@ import {
   createNewCourse,
   getRoomDetails,
   editExistingRoom,
+  getCourseDetails,
 } from "../userFunctions/professorFunctions";
 
 router.get("/getAllRoomNames", getAllRoomNames);
 router.get("/getAllClasses", getAllCourses);
 router.get("/editRoom", getRoomDetails);
+router.get("/editCourse", getCourseDetails)
 
 router.post("/createRoom", createNewRoom);
 router.post("/createCourse", createNewCourse);

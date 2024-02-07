@@ -71,6 +71,7 @@ export const editRoom = async (
   dimensions?: { rows: number; columns: number }
 ) => {
 
+  //Probably need to edit this, pretty sure all this is unnecessary, and all you need is just the old room name comparison with the new one
   if(oldRoomName === roomName){
 
     const roomRef = admin.database().ref(`Rooms/${roomName}`);

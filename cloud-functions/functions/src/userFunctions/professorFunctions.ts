@@ -96,6 +96,20 @@ export const getAllCourses = async (
   }
 };
 
+export const getCourseDetails = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = String(req.query.courseCode);
+
+  try {
+    const response = await courseController.courseDetails(courseCode);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+}
+
 export const createNewCourse = async (
   req: express.Request,
   res: express.Response
