@@ -30,7 +30,7 @@ export const getRoomDetails = async (
   } catch (error) {
     res.status(400).send(error);
   }
-}
+};
 
 export const createNewRoom = async (
   req: express.Request,
