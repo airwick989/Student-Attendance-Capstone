@@ -54,6 +54,42 @@ export const createCourse = async (
   }
 };
 
+export const editCourse = async (
+  oldCourseCode: string,
+  courseCode: string,
+  courseName: string,
+  room?: [string]
+) => {
+  if(oldCourseCode === courseCode){
+    if (!courseName || !courseCode) {
+      throw Error("Missing parameters");
+    }
+    const courseRef = admin.database().ref(`Courses/${courseCode}`);
+  
+    try {
+      await courseRef.update({
+        Room: room,
+        courseName: courseName
+      })
+    } catch (error) {
+      throw Error("Could not create course.");
+    }
+  }
+  else{
+    try {
+      createCourse(courseCode, courseName, room);
+
+      //Remove old course node
+      const oldCourseRef = admin.database().ref(`Courses/${oldCourseCode}`);
+      await oldCourseRef.remove();
+      
+    } catch (error) {
+      throw Error("Could not update course");
+    }
+  }
+  
+};
+
 export const deleteCourse = async (coursecode: string) => {
   if (!coursecode) {
     throw Error("Missing parameters.");

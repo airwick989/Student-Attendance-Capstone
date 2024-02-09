@@ -120,6 +120,7 @@ export default function EditCourseList({ setStep, handleFileChange, file, studen
                         e.preventDefault();
                         downloadCSV();
                         }}
+                        style={{marginBottom: '2em'}}
                     >
                         Download Current Class List
                     </button>

@@ -19,15 +19,19 @@ export default function Page() {
     const [step, setStep] = useState(0);
     const [file, setFile] = useState<File | null>(null);
     const [data, setData] = useState<{
+        oldCourseCode: string;
         courseCode: string;
         courseName: string;
         room: string[];
         classList: Student[];
+        isFileChanged: boolean;
     }>({
+        oldCourseCode: "",
         courseCode: "",
         courseName: "",
         room: [],
         classList: [],
+        isFileChanged: false
     });
 
     const route_prefix = "http://localhost:6969/dashboard/edit-course/"
@@ -62,10 +66,12 @@ export default function Page() {
                     console.log(courseDetails);
                     setData(
                         {
+                            oldCourseCode: course,
                             courseCode: course,
                             courseName: courseDetails["courseName"],
                             room: courseDetails["courseRoom"],
                             classList: courseDetails["classList"],
+                            isFileChanged: false
                         }
                     );
                     setLoading(false);
@@ -80,12 +86,14 @@ export default function Page() {
         })();
     }, []);
 
+
+    //createCourse function modified to edit course instead
     const createCourse = async () => {
         const formData = new FormData();
         formData.append("courseInfo", JSON.stringify(data));
         formData.append("", file as Blob);
         const response = await fetch(
-            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/createCourse",
+            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/updateCourse",
             {
                 method: "POST",
                 body: formData,
@@ -117,11 +125,22 @@ export default function Page() {
         const file = e.target.files?.[0];
         if (file) {
             setFile(file);
+            setData(
+                {
+                    oldCourseCode: data["oldCourseCode"],
+                    courseCode: data["courseCode"],
+                    courseName: data["courseName"],
+                    room: data["room"],
+                    classList: data["classList"],
+                    isFileChanged: true
+                }
+            );
         }
     };
 
     const students = data["classList"];
-    const formFunctions = { setStep, handleChange, createCourse, handleFileChange, data, file, rooms, students };
+    const editFlag = true;
+    const formFunctions = { setStep, handleChange, createCourse, handleFileChange, data, file, rooms, students, editFlag };
 
     const formElements = [
         <CourseDetails {...formFunctions} key={0} />,

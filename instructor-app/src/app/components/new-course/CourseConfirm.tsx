@@ -1,8 +1,22 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { MouseEvent } from "react";
 
-export default function CourseConfirm({ setStep, data, createCourse, file }: any) {
-    const submitForm = async (e: MouseEvent) => {
+interface CourseConfirmProps {
+  setStep: (step: number) => void;
+  data: { courseCode: string; courseName: string; room: string[] };
+  createCourse: () => Promise<void>;
+  file: File | null;
+  editFlag?: boolean; // New prop with a default value of false
+}
+
+export default function CourseConfirm({
+        setStep,
+        data,
+        createCourse,
+        file,
+        editFlag = false, // Default value for editFlag
+    }: CourseConfirmProps) {
+        const submitForm = async (e: MouseEvent) => {
         e.preventDefault();
         await createCourse();
     };
@@ -33,7 +47,7 @@ export default function CourseConfirm({ setStep, data, createCourse, file }: any
                                 <div>Course Code: {data.courseCode} </div>
                                 <div>Name: {data.courseName} </div>
                                 <div>Room(s): {data.room.join(", ")} </div>
-                                <div>Class Map: {file ? `"${file.name}"` : "No file selected."} </div>
+                                <div>Class List: {file ? `"${file.name}"` : (editFlag ? "Class list unchanged." : "No file selected.")}</div>
                             </div>
                         </div>
                         <div className="flex justify-between w-full mt-4 ">
@@ -47,7 +61,7 @@ export default function CourseConfirm({ setStep, data, createCourse, file }: any
                                 Previous
                             </button>
                             <button className="btn w-30" onClick={(e) => submitForm(e)}>
-                                Create Course
+                                {editFlag ? "Update Course" : "Create Course"}
                             </button>
                         </div>
                     </div>
