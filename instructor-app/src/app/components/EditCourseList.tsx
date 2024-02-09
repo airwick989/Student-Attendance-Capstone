@@ -105,13 +105,15 @@ export default function EditCourseList({ setStep, handleFileChange, file, studen
                     {/* Iterate over the students array and display information */}
                     <div className="form-control pt-6">
                         <h3 className="text-lg font-semibold mb-2">Students:</h3>
-                        <ul>
-                        {students.map((student, index) => (
-                            <li key={index}>
-                            {`${index + 1}: ${student.studentName}, ${student.studentId}, ${student.email}, Section ${student.section}`}
-                            </li>
-                        ))}
-                        </ul>
+                        <div>{students === null ? "No Class List" : 
+                            <ul>
+                                {students.map((student, index) => (
+                                    <li key={index}>
+                                    {`${index + 1}: ${student.studentName}, ${student.studentId}, ${student.email}, Section ${student.section}`}
+                                    </li>
+                                ))}
+                            </ul>
+                        }</div>
                     </div>
                     {/* Button to download CSV */}
                     <button
@@ -121,6 +123,7 @@ export default function EditCourseList({ setStep, handleFileChange, file, studen
                         downloadCSV();
                         }}
                         style={{marginBottom: '2em'}}
+                        disabled={students === null}
                     >
                         Download Current Class List
                     </button>
