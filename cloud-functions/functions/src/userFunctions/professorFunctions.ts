@@ -96,9 +96,24 @@ export const getAllCourses = async (
   }
 };
 
-export const createNewCourse = async (
+export const getCourseDetails = async (
   req: express.Request,
   res: express.Response
+) => {
+  const courseCode = String(req.query.courseCode);
+
+  try {
+    const response = await courseController.courseDetails(courseCode);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+export const createNewCourse = async (
+  req: express.Request,
+  res: express.Response,
+  editFlag = false
 ) => {
   const bb = busboy({headers: req.headers});
 
@@ -132,22 +147,43 @@ export const createNewCourse = async (
   });
 
   bb.on("finish", async () => {
-    const {courseCode, courseName, room} = JSON.parse(formData.courseInfo);
+    const {oldCourseCode, courseCode, courseName, room, isFileChanged} =
+      JSON.parse(formData.courseInfo);
     if (!validFileType) {
       return res.status(400).send({
         error: "Invalid file type, only CSV files allowed.",
       });
     }
-    try {
-      const response = await courseController.createCourse(
-        courseCode,
-        courseName,
-        room
-      );
-      await classListController.createClasslist(courseCode, studentList);
-      return res.status(200).json(response);
-    } catch (error) {
-      return res.status(400).send({error: "Could not create course."});
+    if (editFlag === false) {
+      try {
+        const response = await courseController.createCourse(
+          courseCode,
+          courseName,
+          room
+        );
+        await classListController.createClasslist(courseCode, studentList);
+        return res.status(200).json(response);
+      } catch (error) {
+        return res.status(400).send({error: "Could not create course."});
+      }
+    } else {
+      try {
+        const response = await courseController.editCourse(
+          oldCourseCode,
+          courseCode,
+          courseName,
+          room
+        );
+        await classListController.editClasslist(
+          oldCourseCode,
+          courseCode,
+          studentList,
+          isFileChanged
+        );
+        return res.status(200).json(response);
+      } catch (error) {
+        return res.status(400).send({error: "Could not create course."});
+      }
     }
   });
   req.on("error", (err) => {
@@ -156,6 +192,13 @@ export const createNewCourse = async (
   });
 
   bb.end(req.body);
+};
+
+export const editExistingCourse = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  createNewCourse(req, res, true);
 };
 
 export const deleteCourseByCode = async (
