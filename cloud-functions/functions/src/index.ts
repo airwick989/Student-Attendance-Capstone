@@ -5,6 +5,7 @@ import * as express from "express";
 import * as cors from "cors";
 
 const professorRoutes = require("./routes/professorRoutes");
+const studentRoutes = require("./routes/studentRoutes");
 
 admin.initializeApp();
 
@@ -12,19 +13,15 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/professor", professorRoutes );
-
-/* app.get('/getAllRoomNames', async (req, res) => {
-    try {
-        const query = admin.database().ref('Rooms');
-        const result = await query.once('value');
-        const data = result.val();
-        const roomNames = Object.keys(data || {});
-        res.json({ roomNames });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});*/
+app.use("/professor", professorRoutes);
+app.use("/student", studentRoutes);
 
 export const api = functions.https.onRequest(app);
+
+
+/* exports.initializeMobileUser = functions.auth
+  .user()
+  .onCreate(async (user) => {
+    console.log("User created:", user.uid);
+  });
+*/

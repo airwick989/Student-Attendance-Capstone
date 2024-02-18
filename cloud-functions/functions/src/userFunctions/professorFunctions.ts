@@ -30,7 +30,7 @@ export const getRoomDetails = async (
   } catch (error) {
     res.status(400).send(error);
   }
-}
+};
 
 export const createNewRoom = async (
   req: express.Request,
@@ -108,12 +108,12 @@ export const getCourseDetails = async (
   } catch (error) {
     res.status(400).send(error);
   }
-}
+};
 
 export const createNewCourse = async (
   req: express.Request,
   res: express.Response,
-  editFlag: boolean = false
+  editFlag = false
 ) => {
   const bb = busboy({headers: req.headers});
 
@@ -147,13 +147,14 @@ export const createNewCourse = async (
   });
 
   bb.on("finish", async () => {
-    const {oldCourseCode, courseCode, courseName, room, isFileChanged} = JSON.parse(formData.courseInfo);
+    const {oldCourseCode, courseCode, courseName, room, isFileChanged} =
+      JSON.parse(formData.courseInfo);
     if (!validFileType) {
       return res.status(400).send({
         error: "Invalid file type, only CSV files allowed.",
       });
     }
-    if(editFlag === false){
+    if (editFlag === false) {
       try {
         const response = await courseController.createCourse(
           courseCode,
@@ -165,8 +166,7 @@ export const createNewCourse = async (
       } catch (error) {
         return res.status(400).send({error: "Could not create course."});
       }
-    }
-    else{
+    } else {
       try {
         const response = await courseController.editCourse(
           oldCourseCode,
@@ -174,7 +174,12 @@ export const createNewCourse = async (
           courseName,
           room
         );
-        await classListController.editClasslist(oldCourseCode, courseCode, studentList, isFileChanged);
+        await classListController.editClasslist(
+          oldCourseCode,
+          courseCode,
+          studentList,
+          isFileChanged
+        );
         return res.status(200).json(response);
       } catch (error) {
         return res.status(400).send({error: "Could not create course."});
@@ -189,14 +194,12 @@ export const createNewCourse = async (
   bb.end(req.body);
 };
 
-
 export const editExistingCourse = async (
   req: express.Request,
   res: express.Response
 ) => {
   createNewCourse(req, res, true);
 };
-
 
 export const deleteCourseByCode = async (
   req: express.Request,

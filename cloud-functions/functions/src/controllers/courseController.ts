@@ -7,27 +7,27 @@ export const courseNames = async () => {
 };
 
 export const courseDetails =async (courseCode:string) => {
-  const queryName = admin.database().ref(`Courses/${courseCode}/courseName`)
-  const queryRoom = admin.database().ref(`Courses/${courseCode}/Room`)
-  const queryStudents = admin.database().ref(`ClassLists/${courseCode}`)
-  
+  const queryName = admin.database().ref(`Courses/${courseCode}/courseName`);
+  const queryRoom = admin.database().ref(`Courses/${courseCode}/Room`);
+  const queryStudents = admin.database().ref(`ClassLists/${courseCode}`);
+
   try {
-    const nameSnapshot = await queryName.once('value');
+    const nameSnapshot = await queryName.once("value");
     const courseName = nameSnapshot.val();
 
-    const roomSnapshot = await queryRoom.once('value');
+    const roomSnapshot = await queryRoom.once("value");
     const courseRoom = roomSnapshot.val();
 
-    const studentsSnapshot = await queryStudents.once('value');
+    const studentsSnapshot = await queryStudents.once("value");
     const classList = studentsSnapshot.val();
 
     return {
-      'courseName': courseName,
-      'courseRoom': courseRoom,
-      'classList': classList
+      "courseName": courseName,
+      "courseRoom": courseRoom,
+      "classList": classList,
     };
   } catch (error) {
-    console.error('Error fetching course details:', error);
+    console.error("Error fetching course details:", error);
     throw error; // Re-throw the error if needed
   }
 };
@@ -60,34 +60,31 @@ export const editCourse = async (
   courseName: string,
   room?: [string]
 ) => {
-  if(oldCourseCode === courseCode){
+  if (oldCourseCode === courseCode) {
     if (!courseName || !courseCode) {
       throw Error("Missing parameters");
     }
     const courseRef = admin.database().ref(`Courses/${courseCode}`);
-  
+
     try {
       await courseRef.update({
         Room: room,
-        courseName: courseName
-      })
+        courseName: courseName,
+      });
     } catch (error) {
       throw Error("Could not create course.");
     }
-  }
-  else{
+  } else {
     try {
       createCourse(courseCode, courseName, room);
 
-      //Remove old course node
+      // Remove old course node
       const oldCourseRef = admin.database().ref(`Courses/${oldCourseCode}`);
       await oldCourseRef.remove();
-      
     } catch (error) {
       throw Error("Could not update course");
     }
   }
-  
 };
 
 export const deleteCourse = async (coursecode: string) => {

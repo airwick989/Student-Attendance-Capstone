@@ -17,7 +17,7 @@ import {
 router.get("/getAllRoomNames", getAllRoomNames);
 router.get("/getAllClasses", getAllCourses);
 router.get("/editRoom", getRoomDetails);
-router.get("/editCourse", getCourseDetails)
+router.get("/editCourse", getCourseDetails);
 
 router.post("/createRoom", createNewRoom);
 router.post("/createCourse", (req, res) => createNewCourse(req, res, false));

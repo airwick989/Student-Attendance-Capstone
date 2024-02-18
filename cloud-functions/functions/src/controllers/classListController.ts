@@ -23,28 +23,25 @@ export const editClasslist = async (
 ) => {
   const classListRef = admin.database().ref(`ClassLists/${oldCourseCode}`);
   const classListSnapshot = (await classListRef.once("value")).val();
-  
-  if(oldCourseCode === courseCode){
-  
+
+  if (oldCourseCode === courseCode) {
     try {
-      if(isFileChanged){
+      if (isFileChanged) {
         await classListRef.set(classList);
       }
     } catch (error) {
       throw Error("Could not update class list.");
     }
-
   } else {
     try {
-      if(isFileChanged){
+      if (isFileChanged) {
         createClasslist(courseCode, classList);
       } else {
         createClasslist(courseCode, classListSnapshot);
       }
 
-      //Remove old class list node
+      // Remove old class list node
       await classListRef.remove();
-  
     } catch (error) {
       throw Error("Could not update class list.");
     }
