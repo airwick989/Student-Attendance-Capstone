@@ -4,24 +4,27 @@ export const setSeat = async (
   studentName: string,
   seatNumber: number,
   roomName: string,
+  studentNumber?: string,
+  pronouns?: string,
+  preferredName?: string
 ) => {
-  const seatQuery = admin
-    .database()
-    .ref(`Rooms/${roomName}/map/${seatNumber}`);
+  const seatQuery = admin.database().ref(`Rooms/${roomName}/map/${seatNumber}`);
 
   try {
-    await seatQuery.update({student: studentName});
+    await seatQuery.update({
+      fullName: studentName,
+      prefName: preferredName || studentName,
+      pronouns: pronouns || "none",
+      studentNumber: studentNumber || "none",
+    });
     return "Seat set";
   } catch (e: unknown) {
-    console.log(e);
     throw new Error(e as string);
   }
 };
 
 export const emptySeat = async (roomName: string, seatNum: number) => {
-  const seatQuery = admin
-    .database()
-    .ref(`Rooms/${roomName}/map/`);
+  const seatQuery = admin.database().ref(`Rooms/${roomName}/map/`);
 
   const snapshot = await seatQuery.once("value");
 
