@@ -6,11 +6,21 @@ export const studentScan = async (
   res: express.Response
 ) => {
   try {
-    const {studentName, roomName, seatNumber} = req.body;
+    const {
+      studentName,
+      roomName,
+      seatNumber,
+      studentNumber,
+      pronouns,
+      preferredName,
+    } = req.body;
     const response = await seatController.setSeat(
       studentName,
       seatNumber,
-      roomName
+      roomName,
+      studentNumber,
+      pronouns,
+      preferredName
     );
     res.status(200).json({response: response});
   } catch (e) {
