@@ -1,4 +1,5 @@
 import * as admin from "firebase-admin";
+import {registerClass, unregisterClass} from "./studentAccountController";
 
 export const createClasslist = async (
   courseCode: string,
@@ -9,6 +10,7 @@ export const createClasslist = async (
     const snapshot = await query.once("value");
     if (!snapshot.exists()) {
       await query.set(classList);
+      await registerClass(courseCode, classList);
     }
   } catch (error) {
     throw Error("Could not create class list.");
@@ -28,6 +30,8 @@ export const editClasslist = async (
     try {
       if (isFileChanged) {
         await classListRef.set(classList);
+        await unregisterClass(oldCourseCode);
+        await registerClass(oldCourseCode, classList);
       }
     } catch (error) {
       throw Error("Could not update class list.");
@@ -36,6 +40,8 @@ export const editClasslist = async (
     try {
       if (isFileChanged) {
         createClasslist(courseCode, classList);
+        await registerClass(courseCode, classList);
+        await unregisterClass(oldCourseCode);
       } else {
         createClasslist(courseCode, classListSnapshot);
       }
@@ -54,6 +60,7 @@ export const deleteClasslist = async (courseCode: string) => {
     const snapshot = await query.once("value");
     if (snapshot.exists()) {
       await query.remove();
+      await unregisterClass(courseCode);
     }
   } catch (error) {
     throw Error("Could not delete class list.");
