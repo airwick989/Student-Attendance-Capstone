@@ -1,22 +1,36 @@
 import { FaArrowLeft } from "react-icons/fa";
 import { MouseEvent } from "react";
 
+type ValuePiece = Date | string | null;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
+type MeetingTime = {
+    meetingDate: string;
+    timeRange: Value;
+};
+type MeetingTimes = MeetingTime[];
+
 interface CourseConfirmProps {
-  setStep: (step: number) => void;
-  data: { courseCode: string; courseName: string; room: string[] };
-  createCourse: () => Promise<void>;
-  file: File | null;
-  editFlag?: boolean; // New prop with a default value of false
+    setStep: (step: number) => void;
+    data: {
+        courseCode: string;
+        courseName: string;
+        room: string[];
+        meetingTimes: MeetingTimes;
+    };
+    createCourse: () => Promise<void>;
+    file: File | null;
+    editFlag?: boolean; // New prop with a default value of false
 }
 
 export default function CourseConfirm({
-        setStep,
-        data,
-        createCourse,
-        file,
-        editFlag = false, // Default value for editFlag
-    }: CourseConfirmProps) {
-        const submitForm = async (e: MouseEvent) => {
+    setStep,
+    data,
+    createCourse,
+    file,
+    editFlag = false, // Default value for editFlag
+}: CourseConfirmProps) {
+    const submitForm = async (e: MouseEvent) => {
         e.preventDefault();
         await createCourse();
     };
@@ -47,7 +61,27 @@ export default function CourseConfirm({
                                 <div>Course Code: {data.courseCode} </div>
                                 <div>Name: {data.courseName} </div>
                                 <div>Room(s): {data.room.join(", ")} </div>
-                                <div>Class List: {file ? `"${file.name}"` : (editFlag ? "Class list unchanged." : "No file selected.")}</div>
+                                <div className="py-1">
+                                    <span className="underline">Meeting Time(s):</span>
+                                    {data.meetingTimes.map((meetingTime, index) => {
+                                        return (
+                                            <p key={index} className="text-lg font-bold">
+                                                {meetingTime.meetingDate} from{" "}
+                                                {meetingTime.timeRange
+                                                    ?.toLocaleString()
+                                                    .replace(",", " to ")}
+                                            </p>
+                                        );
+                                    })}
+                                </div>
+                                <div>
+                                    Class List:{" "}
+                                    {file
+                                        ? `"${file.name}"`
+                                        : editFlag
+                                            ? "Class list unchanged."
+                                            : "No file selected."}
+                                </div>
                             </div>
                         </div>
                         <div className="flex justify-between w-full mt-4 ">

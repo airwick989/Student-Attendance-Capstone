@@ -147,8 +147,14 @@ export const createNewCourse = async (
   });
 
   bb.on("finish", async () => {
-    const {oldCourseCode, courseCode, courseName, room, isFileChanged} =
-      JSON.parse(formData.courseInfo);
+    const {
+      oldCourseCode,
+      courseCode,
+      courseName,
+      room,
+      isFileChanged,
+      meetingTimes,
+    } = JSON.parse(formData.courseInfo);
     if (!validFileType) {
       return res.status(400).send({
         error: "Invalid file type, only CSV files allowed.",
@@ -159,7 +165,8 @@ export const createNewCourse = async (
         const response = await courseController.createCourse(
           courseCode,
           courseName,
-          room
+          room,
+          meetingTimes
         );
         await classListController.createClasslist(courseCode, studentList);
         return res.status(200).json(response);
@@ -172,7 +179,8 @@ export const createNewCourse = async (
           oldCourseCode,
           courseCode,
           courseName,
-          room
+          room,
+          meetingTimes
         );
         await classListController.editClasslist(
           oldCourseCode,

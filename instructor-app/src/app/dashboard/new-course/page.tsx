@@ -7,6 +7,14 @@ import CourseList from "@/app/components/new-course/CourseList";
 import CourseConfirm from "@/app/components/new-course/CourseConfirm";
 import Loading from "./loading";
 
+type ValuePiece = Date | string | null;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
+type MeetingTime = {
+    meetingDate: string;
+    timeRange: Value;
+};
+
 export default function Page() {
     const router = useRouter();
     const [step, setStep] = useState(0);
@@ -15,10 +23,17 @@ export default function Page() {
         courseCode: string;
         courseName: string;
         room: string[];
+        meetingTimes: MeetingTime[];
     }>({
         courseCode: "",
         courseName: "",
         room: [],
+        meetingTimes: [
+            {
+                meetingDate: "",
+                timeRange: ["12:00", "13:00"],
+            },
+        ],
     });
 
     const [rooms, setRooms] = useState([]);
@@ -40,6 +55,10 @@ export default function Page() {
             }
         })();
     }, []);
+
+    useEffect(() => {
+        console.log(data);
+    }, [data]);
 
     const createCourse = async () => {
         const formData = new FormData();
@@ -81,7 +100,71 @@ export default function Page() {
         }
     };
 
-    const formFunctions = { setStep, handleChange, createCourse, handleFileChange, data, file, rooms };
+    const addMeetingTime = () => {
+        setData((prevData) => {
+            return {
+                ...prevData,
+                meetingTimes: prevData.meetingTimes.concat({
+                    meetingDate: "",
+                    timeRange: prevData.meetingTimes[0].timeRange,
+                }),
+            };
+        });
+    };
+
+    const removeMeetingTime = () => {
+        setData((prevData) => {
+            return {
+                ...prevData,
+                meetingTimes: prevData.meetingTimes.splice(-1),
+            };
+        });
+    };
+
+    const handleDateChange = (e: React.ChangeEvent<HTMLSelectElement>, index: number) => {
+        const { name, value } = e.target;
+        setData(prevState => ({
+            ...prevState,
+            meetingTimes: prevState.meetingTimes.map((meeting, i) => {
+                if (i === index) {
+                    return {
+                        ...meeting,
+                        meetingDate: value,
+                    };
+                }
+                return meeting;
+            }),
+        }));
+    };
+    
+    const handleTimeRangeChange = (value: Value, index: number) => {
+        setData(prevState => ({
+            ...prevState,
+            meetingTimes: prevState.meetingTimes.map((meeting, i) => {
+                if (i === index) {
+                    return {
+                        ...meeting,
+                        timeRange: value,
+                    };
+                }
+                return meeting;
+            }),
+        }));
+    };
+    
+    const formFunctions = {
+        setStep,
+        handleChange,
+        createCourse,
+        handleFileChange,
+        addMeetingTime,
+        removeMeetingTime,
+        handleDateChange,
+        handleTimeRangeChange,
+        data,
+        file,
+        rooms,
+    };
 
     const formElements = [
         <CourseDetails {...formFunctions} key={0} />,

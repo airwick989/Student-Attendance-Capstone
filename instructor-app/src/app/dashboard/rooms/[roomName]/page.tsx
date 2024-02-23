@@ -11,6 +11,7 @@ import Loading from "./loading";
 export default function Page({ params }: { params: { roomName: string } }) {
     const [classMap, setClassMap] = useState([]);
     const [dimensions, setDimensions] = useState({columns: 0, rows: 0});
+    const [activeClass, setActiveClass] = useState("none");
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
@@ -21,7 +22,8 @@ export default function Page({ params }: { params: { roomName: string } }) {
             const data = snapshot.val();
             if (snapshot.exists()) {
                 setClassMap(data.map.reverse());
-                setDimensions(data.dimensions);                
+                setDimensions(data.dimensions);
+                setActiveClass(data?.activeClass);                
                 setLoading(false);
             }
             setLoading(false);
@@ -39,7 +41,7 @@ export default function Page({ params }: { params: { roomName: string } }) {
                                 <button className="mr-3" onClick={() => router.back()}>
                                     <FaArrowLeft />
                                 </button>
-                                {params.roomName}
+                                {`${params.roomName} ${activeClass && activeClass !== "" ? `- ${activeClass}`: ""}`}
                             </h2>
                             <Suspense fallback={<Loading/>}>
                                 {!loading ? (
