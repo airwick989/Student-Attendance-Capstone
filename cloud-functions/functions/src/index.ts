@@ -4,6 +4,8 @@ import * as admin from "firebase-admin";
 import * as express from "express";
 import * as cors from "cors";
 
+import {sessionService} from "./backing-services/sessionService";
+
 const professorRoutes = require("./web-functions/routes/professorRoutes");
 const studentRoutes = require("./mobile-functions/routes/studentRoutes");
 
@@ -22,6 +24,7 @@ mobileApp.use("/student", studentRoutes);
 
 export const api = functions.https.onRequest(app);
 export const mobileApi = functions.https.onRequest(mobileApp);
+export const session = sessionService;
 
 
 /* exports.initializeMobileUser = functions.auth

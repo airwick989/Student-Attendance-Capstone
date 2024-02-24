@@ -10,8 +10,10 @@ import Loading from "./loading";
 
 export default function Page({ params }: { params: { roomName: string } }) {
     const [classMap, setClassMap] = useState([]);
-    const [dimensions, setDimensions] = useState({columns: 0, rows: 0});
-    const [activeClass, setActiveClass] = useState("none");
+    const [dimensions, setDimensions] = useState({ columns: 0, rows: 0 });
+    const [activeClass, setActiveClass] = useState<
+        string | { courseCode: string; courseName: string }
+    >("");
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
@@ -23,13 +25,20 @@ export default function Page({ params }: { params: { roomName: string } }) {
             if (snapshot.exists()) {
                 setClassMap(data.map.reverse());
                 setDimensions(data.dimensions);
-                setActiveClass(data?.activeClass);                
+                setActiveClass(data?.activeClass);
                 setLoading(false);
             }
             setLoading(false);
-
         });
     }, [params.roomName]);
+
+    const isActiveClassObject = (
+        obj: any
+    ): obj is { courseCode: string; courseName: string } => {
+        return (
+            typeof obj === "object" && "courseCode" in obj && "courseName" in obj
+        );
+    };
 
     return (
         <>
@@ -41,18 +50,25 @@ export default function Page({ params }: { params: { roomName: string } }) {
                                 <button className="mr-3" onClick={() => router.back()}>
                                     <FaArrowLeft />
                                 </button>
-                                {`${params.roomName} ${activeClass && activeClass !== "" ? `- ${activeClass}`: ""}`}
+                                {`${params.roomName} ${isActiveClassObject(activeClass)
+                                        ? `- ${activeClass.courseCode} (${activeClass.courseName})`
+                                        : ""
+                                    }`}
                             </h2>
-                            <Suspense fallback={<Loading/>}>
+                            <Suspense fallback={<Loading />}>
                                 {!loading ? (
                                     classMap && classMap.length > 0 && dimensions ? (
                                         <>
                                             {" "}
-                                            <div className={`grid grid-cols-${dimensions.columns} gap-4 grid-rows-${dimensions.rows} self-center`}>
+                                            <div
+                                                className={`grid grid-cols-${dimensions.columns} gap-4 grid-rows-${dimensions.rows} self-center`}
+                                            >
                                                 {classMap.map((seat, index) => (
                                                     <div
                                                         key={index}
-                                                        className={/*index % 6 === 2 ? "col-span-2" : ""*/""}
+                                                        className={
+                              /*index % 6 === 2 ? "col-span-2" : ""*/ ""
+                                                        }
                                                     >
                                                         <SeatComponent seatInfo={seat} />
                                                     </div>
@@ -66,13 +82,14 @@ export default function Page({ params }: { params: { roomName: string } }) {
                                     ) : (
                                         <>Class not found.</>
                                     )
-                                ) : (<Loading />)}
+                                ) : (
+                                    <Loading />
+                                )}
                             </Suspense>
                         </div>
                     </div>
                 </div>
             </div>
-
         </>
     );
 }
