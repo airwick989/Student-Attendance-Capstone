@@ -7,24 +7,24 @@ export const studentScan = async (
 ) => {
   try {
     const {
-      studentName,
       roomName,
       seatNumber,
+      courseCode,
       studentNumber,
       pronouns,
       preferredName,
     } = req.body;
     const response = await seatController.setSeat(
-      studentName,
       seatNumber,
       roomName,
+      courseCode,
       studentNumber,
       pronouns,
       preferredName
     );
     res.status(200).json({response: response});
   } catch (e) {
-    res.status(400).json({error: e});
+    res.status(400).json({error: (e as Error).message});
   }
 };
 
@@ -39,6 +39,6 @@ export const studentLeaveSeat = async (
 
     res.status(200).json({response: response});
   } catch (e) {
-    res.status(400).json({error: "Could not empty seat"});
+    res.status(400).json({error: (e as Error).message});
   }
 };

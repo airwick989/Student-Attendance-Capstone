@@ -4,7 +4,8 @@ import * as admin from "firebase-admin";
 process.env.TZ = "America/New_York";
 
 export const sessionService = functions.pubsub
-  .schedule("every 5 minutes")
+  .schedule("*/5  * * * *")
+  .timeZone("America/New_York")
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   .onRun((context) => {
     const currentTime = new Date();

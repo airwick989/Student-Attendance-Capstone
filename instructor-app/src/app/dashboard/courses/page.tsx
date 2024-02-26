@@ -61,7 +61,7 @@ export default function Page() {
                                         <FaPlus />
                                         <span className="hidden md:block">New Course</span>
                                     </Link>
-                                    <button
+                                    {courses && (                                    <button
                                         className={`${Object.keys(courses).length == 0 && !loading
                                                 ? `hidden`
                                                 : ""
@@ -80,11 +80,12 @@ export default function Page() {
                                                 <span className="hidden md:block">Manage Courses</span>
                                             </>
                                         )}
-                                    </button>
+                                    </button>)}
+
                                 </div>
                             </div>
 
-                            {Object.keys(courses).length == 0 && !loading ? (
+                            {!courses ||Object.keys(courses).length == 0 && !loading ? (
                                 <>
                                     <p className="self-center text-lg mt-2">No classes found.</p>
                                 </>
