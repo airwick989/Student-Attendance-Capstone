@@ -1,26 +1,38 @@
 import Link from "next/link";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import DateSelector from "./DateSelector";
+import { MdOutlineRemoveCircleOutline } from "react-icons/md";
+import useTimeValidation from "@/app/hooks/useTimeValidation";
 
 export default function CourseDetails({
     setStep,
     rooms,
     handleChange,
     data,
+    addMeetingTime,
+    removeMeetingTime,
+    handleDateChange,
+    handleTimeRangeChange,
 }: any) {
     const [preventSubmit, setPreventSubmit] = useState(true);
+    const [secondDate, setSecondDate] = useState(false);
+    const { timeValidator, validTime } = useTimeValidation();
 
     useEffect(() => {
+
+        timeValidator(data.meetingTimes);
         if (
             data.courseCode === "" ||
             data.courseName === "" ||
-            data.room.length === 0
+            data.room.length === 0 ||
+            !validTime
         ) {
             setPreventSubmit(true);
         } else {
             setPreventSubmit(false);
         }
-    }, [data]);
+    }, [data, timeValidator, validTime]);
 
     return (
         <>
@@ -95,6 +107,55 @@ export default function CourseDetails({
                                 ))}
                             </select>
                         </label>
+
+                        <div className="divider mb-2"></div>
+                        <div className="flex items-baseline">
+                            <h3 className="card-title font-bold text-2xl mb-4 ">
+                                Meeting Times
+                            </h3>
+
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setSecondDate(!secondDate);
+                                    if(data.meetingTimes.length===1){
+                                        addMeetingTime()
+                                    }else if(data.meetingTimes.length===2){
+                                        removeMeetingTime()
+                                    }
+                                }}
+                                className="btn ml-auto"
+                            >
+                                {data.meetingTimes.length === 2 ? (
+                                    <>
+                                        <MdOutlineRemoveCircleOutline />
+                                        <span className="hidden md:block">Remove Time</span>
+                                    </>
+                                ) : data.meetingTimes.length === 1 ? (
+                                    <>
+                                        <FaPlus />
+                                        <span className="hidden md:block">Add Time</span>
+                                    </>
+                                ) : null}
+                            </button>
+                        </div>
+
+                        <DateSelector
+                            handleChange={handleChange}
+                            data={data}
+                            handleDateChange={handleDateChange}
+                            handleTimeRangeChange={handleTimeRangeChange}
+                            index={0}
+                        />
+                        {data.meetingTimes.length == 2 && (
+                            <DateSelector
+                                handleChange={handleChange}
+                                data={data}
+                                handleDateChange={handleDateChange}
+                                handleTimeRangeChange={handleTimeRangeChange}
+                                index={1}
+                            />
+                        )}
 
                         <div className="flex justify-between w-full mt-4 ">
                             <Link href={"/dashboard/courses"} className="btn btn-error w-28 ">

@@ -35,7 +35,8 @@ export const courseDetails =async (courseCode:string) => {
 export const createCourse = async (
   courseCode: string,
   courseName: string,
-  room?: [string]
+  room: [string],
+  meetingTimes: [{meetingDate: string, timeRange: string[]}]
 ) => {
   if (!courseName || !courseCode) {
     throw Error("Missing parameters");
@@ -46,8 +47,9 @@ export const createCourse = async (
     if (!snapshot.exists()) {
       await course.set({courseName});
     }
-    if (room) {
+    if (room && meetingTimes) {
       await course.child("Room").set(room);
+      await course.child("meetingTimes").set(meetingTimes);
     }
   } catch (error) {
     throw Error("Could not create course.");
@@ -58,7 +60,8 @@ export const editCourse = async (
   oldCourseCode: string,
   courseCode: string,
   courseName: string,
-  room?: [string]
+  room: [string],
+  meetingTimes: [{meetingDate: string, timeRange: string[]}]
 ) => {
   if (oldCourseCode === courseCode) {
     if (!courseName || !courseCode) {
@@ -70,13 +73,14 @@ export const editCourse = async (
       await courseRef.update({
         Room: room,
         courseName: courseName,
+        meetingTimes: meetingTimes,
       });
     } catch (error) {
       throw Error("Could not create course.");
     }
   } else {
     try {
-      createCourse(courseCode, courseName, room);
+      createCourse(courseCode, courseName, room, meetingTimes);
 
       // Remove old course node
       const oldCourseRef = admin.database().ref(`Courses/${oldCourseCode}`);

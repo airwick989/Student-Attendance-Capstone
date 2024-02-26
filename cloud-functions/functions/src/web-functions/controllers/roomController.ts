@@ -54,6 +54,7 @@ export const createRoom = async (
     }
 
     await room.set({map: seatMap});
+    await room.update({activeClass: ""});
 
     if (dimensions) {
       await room.update({dimensions});
