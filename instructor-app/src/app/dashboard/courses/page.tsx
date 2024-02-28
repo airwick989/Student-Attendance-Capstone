@@ -6,14 +6,19 @@ import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import Loading from "./loading";
 import ConfirmDeleteCourse from "@/app/components/ConfirmDeleteCourse";
+import useTimeValidation from "@/app/hooks/useTimeValidation";
 
-interface Room {
-    [key: string]: string;
-}
+type MeetingTimes = {
+    [key: string]: {
+        meetingDate: string;
+        timeRange: string[];
+    };
+};
 
 interface Course {
     courseName: string;
-    Room: Room;
+    Room: string[];
+    meetingTimes: MeetingTimes;
 }
 
 interface Courses {
@@ -24,6 +29,7 @@ export default function Page() {
     const [courses, setCourses] = useState<Courses>({});
     const [editMode, setEditMode] = useState(false);
     const [loading, setLoading] = useState(true);
+    const {timeConversion} = useTimeValidation();
 
     useEffect(() => {
         (async () => {
@@ -61,31 +67,34 @@ export default function Page() {
                                         <FaPlus />
                                         <span className="hidden md:block">New Course</span>
                                     </Link>
-                                    {courses && (                                    <button
-                                        className={`${Object.keys(courses).length == 0 && !loading
-                                                ? `hidden`
-                                                : ""
-                                            } btn btn-outline w-max btn-secondary ${editMode && `btn-error`
-                                            }`}
-                                        onClick={() => setEditMode(!editMode)}
-                                    >
-                                        {editMode ? (
-                                            <>
-                                                <ImCross />
-                                                <span className="hidden md:block">Cancel</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <FaEdit />{" "}
-                                                <span className="hidden md:block">Manage Courses</span>
-                                            </>
-                                        )}
-                                    </button>)}
-
+                                    {courses && (
+                                        <button
+                                            className={`${Object.keys(courses).length == 0 && !loading
+                                                    ? `hidden`
+                                                    : ""
+                                                } btn btn-outline w-max btn-secondary ${editMode && `btn-error`
+                                                }`}
+                                            onClick={() => setEditMode(!editMode)}
+                                        >
+                                            {editMode ? (
+                                                <>
+                                                    <ImCross />
+                                                    <span className="hidden md:block">Cancel</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <FaEdit />{" "}
+                                                    <span className="hidden md:block">
+                                                        Manage Courses
+                                                    </span>
+                                                </>
+                                            )}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
 
-                            {!courses ||Object.keys(courses).length == 0 && !loading ? (
+                            {!courses || (Object.keys(courses).length == 0 && !loading) ? (
                                 <>
                                     <p className="self-center text-lg mt-2">No classes found.</p>
                                 </>
@@ -103,7 +112,7 @@ export default function Page() {
                                                             resource={classKey}
                                                             setResource={setCourses}
                                                         />
-                                                        <div className="collapse-title text-xl font-medium flex items-center flex-col  md:flex-row px-4">
+                                                        <div className="collapse-title text-2xl font-medium flex items-center flex-col  md:flex-row px-4">
                                                             <p className="mb-4 md:mb-0">{`${classKey} - ${courses[classKey].courseName}`}</p>
                                                             <div className="flex gap-2">
                                                                 <Link
@@ -142,11 +151,32 @@ export default function Page() {
                                                 >
                                                     <input type="checkbox" />
 
-                                                    <div className="collapse-title text-xl text-primary-content font-semibold">
+                                                    <div className="collapse-title text-2xl text-primary-content font-semibold">
                                                         {`${classKey} - ${courses[classKey].courseName}`}
                                                     </div>
                                                     <div className="collapse-content font-medium text-secondary-content self-center">
-                                                        <div className="grid place-items-center grid-cols-1 gap-3">
+                                                        <div className="flex flex-col gap-3">
+                                                            <p className="font-semibold text-xl underline">
+                                                                Scheduled Time(s):
+                                                            </p>
+                                                            {courses[classKey].meetingTimes &&
+                                                                Object.values(
+                                                                    courses[classKey].meetingTimes
+                                                                ).map((meetingTime, index) => {
+                                                                    const start = timeConversion(
+                                                                        meetingTime.timeRange[0]
+                                                                    );
+                                                                    const end = timeConversion(
+                                                                        meetingTime.timeRange[1]
+                                                                    );
+                                                                    return (
+                                                                        <p key={index}>
+                                                                            {meetingTime.meetingDate} from {start} to{" "}
+                                                                            {end}
+                                                                        </p>
+                                                                    );
+                                                                })}
+
                                                             {courses[classKey].Room &&
                                                                 typeof courses[classKey].Room === "object" &&
                                                                 Object.values(courses[classKey].Room).map(
@@ -154,7 +184,7 @@ export default function Page() {
                                                                         room && (
                                                                             <Link
                                                                                 href={`./rooms/${room}`}
-                                                                                className="btn md:btn-wide"
+                                                                                className="btn btn-wide self-center  mt-3"
                                                                                 key={index}
                                                                             >
                                                                                 {`${room}`}

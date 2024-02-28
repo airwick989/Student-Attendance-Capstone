@@ -67,7 +67,8 @@ export default function CourseConfirm({
                                         return (
                                             <p key={index} className="text-lg font-bold">
                                                 {meetingTime.meetingDate} from{" "}
-                                                {meetingTime.timeRange
+                                                {
+                                                meetingTime.timeRange
                                                     ?.toLocaleString()
                                                     .replace(",", " to ")}
                                             </p>

@@ -6,9 +6,8 @@ import RoomConfirm from "@/app/components/new-room/RoomConfirm";
 import { ChangeEvent, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "./loading";
-import { Console } from "console";
 
-export default function Page() {
+export default function Page({ params }: { params: { roomName: string } }) {
     const router = useRouter();
     const [step, setStep] = useState(0);
     const [data, setData] = useState({
@@ -21,15 +20,11 @@ export default function Page() {
         },
     });
 
-    const route_prefix = "http://localhost:6969/dashboard/edit-room/"
     const [loading, setLoading] = useState(true);
-
 
     useEffect(() => {
         (async () => {
-            var curr_route = window.location.href;
-            const room = curr_route.replace(route_prefix, '')
-
+            const room = params.roomName;
             try {
 
                 const response = await fetch(
@@ -40,7 +35,6 @@ export default function Page() {
                     
                 );
                 const roomDetails = await response.json();
-                console.log(roomDetails);
                 setData(
                     {
                         oldRoomName: room,
@@ -59,9 +53,7 @@ export default function Page() {
             }
             
         })();
-    }, []);
-
-    console.log(data);
+    }, [params.roomName]);
 
     //createRoom function modified to edit room instead
     const createRoom = async () => {
@@ -119,6 +111,7 @@ export default function Page() {
 
     return (
         <>
+            {loading && <Loading />}
             <div className="min-h-screen bg-base-200">
                 <div className="flex flex-col items-center xl:px-96 lg:px-64 px-16">
                     {formElements[step]}

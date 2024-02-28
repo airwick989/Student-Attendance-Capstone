@@ -2,27 +2,36 @@ import { FaArrowLeft } from "react-icons/fa";
 import SeatComponent from "../SeatComponent";
 import { MouseEvent } from "react";
 
-
 interface RoomConfirmProps {
     setStep: (step: number) => void;
     data: {
-      roomName: string;
-      numSeats: number;
-      dimensions: {
-        rows: number;
-        columns: number;
-      };
+        roomName: string;
+        numSeats: number;
+        dimensions: {
+            rows: number;
+            columns: number;
+        };
     };
     createRoom: () => Promise<void>;
     editFlag?: boolean;
 }
 
-
-const RoomConfirm: React.FC<RoomConfirmProps> = ({ setStep, data, createRoom, editFlag = false }: RoomConfirmProps) => {
+const RoomConfirm: React.FC<RoomConfirmProps> = ({
+    setStep,
+    data,
+    createRoom,
+    editFlag = false,
+}: RoomConfirmProps) => {
     const seatGenerator = () => {
         let seatArray = [];
         for (let index = 1; index <= data.numSeats; index++) {
-            seatArray.push(<SeatComponent seatInfo={"none"} key={index} />);
+            seatArray.push(
+                <SeatComponent
+                    seatInfo={"none"}
+                    key={index}
+                    index={data.numSeats - index + 1}
+                />
+            );
         }
         return seatArray;
     };
@@ -61,6 +70,10 @@ const RoomConfirm: React.FC<RoomConfirmProps> = ({ setStep, data, createRoom, ed
                                         {seatGenerator()}
                                     </div>
                                 )}
+                                <div className="divider"></div>
+                                <p className="text-center font-semibold text-xl pb-6">
+                                    Front of Class
+                                </p>
                             </div>
                         </div>
                         <h2 className="card-title font-semibold text-2xl mt-4">Details</h2>
@@ -95,12 +108,11 @@ const RoomConfirm: React.FC<RoomConfirmProps> = ({ setStep, data, createRoom, ed
             </div>
         </>
     );
-}
-
+};
 
 // Set default value for editFlag
 RoomConfirm.defaultProps = {
     editFlag: false,
 };
-  
+
 export default RoomConfirm;

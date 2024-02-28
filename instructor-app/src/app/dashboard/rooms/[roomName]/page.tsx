@@ -51,8 +51,8 @@ export default function Page({ params }: { params: { roomName: string } }) {
                                     <FaArrowLeft />
                                 </button>
                                 {`${params.roomName} ${isActiveClassObject(activeClass)
-                                        ? `- ${activeClass.courseCode} (${activeClass.courseName})`
-                                        : ""
+                                    ? `- ${activeClass.courseCode} (${activeClass.courseName})`
+                                    : ""
                                     }`}
                             </h2>
                             <Suspense fallback={<Loading />}>
@@ -63,17 +63,19 @@ export default function Page({ params }: { params: { roomName: string } }) {
                                             <div
                                                 className={`grid grid-cols-${dimensions.columns} gap-4 grid-rows-${dimensions.rows} self-center`}
                                             >
-                                                {classMap.map((seat, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className={
-                              /*index % 6 === 2 ? "col-span-2" : ""*/ ""
-                                                        }
-                                                    >
-                                                        <SeatComponent seatInfo={seat} />
-                                                    </div>
-                                                ))}
+                                                {classMap.map((seat, index) => {
+                                                    // Reverse the string representation of the index and trim leading zeros
+                                                    
+                                                    return (
+                                                        <div
+                                                            key={index}
+                                                        >
+                                                            <SeatComponent seatInfo={seat} index={classMap.length-index-1} />
+                                                        </div>
+                                                    );
+                                                })}
                                             </div>
+
                                             <div className="divider"></div>
                                             <p className="text-center font-semibold text-xl pb-6">
                                                 Front of Class

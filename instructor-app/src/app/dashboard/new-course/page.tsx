@@ -37,17 +37,24 @@ export default function Page() {
     });
 
     const [rooms, setRooms] = useState([]);
+    const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
             try {
-                const res = await fetch(
+                const roomResponse = await fetch(
                     "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllRoomNames",
                     { next: { revalidate: 5 } }
                 );
-                const data = await res.json();
-                setRooms(data);
+                const courseResponse = await fetch(
+                    "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllClasses",
+                    { next: { revalidate: 5 } }
+                );
+                const roomData = await roomResponse.json();
+                const courseData = await courseResponse.json();
+                setRooms(roomData);
+                setCourses(courseData);
                 setLoading(false);
             } catch (error) {
                 console.error("Error:", error);
@@ -55,10 +62,6 @@ export default function Page() {
             }
         })();
     }, []);
-
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
 
     const createCourse = async () => {
         const formData = new FormData();
@@ -121,9 +124,12 @@ export default function Page() {
         });
     };
 
-    const handleDateChange = (e: React.ChangeEvent<HTMLSelectElement>, index: number) => {
-        const { name, value } = e.target;
-        setData(prevState => ({
+    const handleDateChange = (
+        e: React.ChangeEvent<HTMLSelectElement>,
+        index: number
+    ) => {
+        const { value } = e.target;
+        setData((prevState) => ({
             ...prevState,
             meetingTimes: prevState.meetingTimes.map((meeting, i) => {
                 if (i === index) {
@@ -136,9 +142,9 @@ export default function Page() {
             }),
         }));
     };
-    
+
     const handleTimeRangeChange = (value: Value, index: number) => {
-        setData(prevState => ({
+        setData((prevState) => ({
             ...prevState,
             meetingTimes: prevState.meetingTimes.map((meeting, i) => {
                 if (i === index) {
@@ -151,7 +157,7 @@ export default function Page() {
             }),
         }));
     };
-    
+
     const formFunctions = {
         setStep,
         handleChange,
@@ -164,6 +170,7 @@ export default function Page() {
         data,
         file,
         rooms,
+        courses
     };
 
     const formElements = [
