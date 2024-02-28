@@ -15,7 +15,7 @@ type MeetingTime = {
   timeRange: Value;
 };
 
-export default function Page() {
+export default function Page({ params }: { params: { courseName: string } }) {
   const router = useRouter();
   interface Student {
     studentName: string;
@@ -44,22 +44,27 @@ export default function Page() {
     isFileChanged: false,
   });
 
-  const route_prefix = "http://localhost:6969/dashboard/edit-course/";
   const [rooms, setRooms] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      var curr_route = window.location.href;
-      const course = curr_route.replace(route_prefix, "");
+      const course = params.courseName;
 
       try {
-        const res = await fetch(
+        const roomResponse = await fetch(
           "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllRoomNames",
           { next: { revalidate: 5 } }
         );
-        const data = await res.json();
-        setRooms(data);
+        const courseResponse = await fetch(
+          "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllClasses",
+          { next: { revalidate: 5 } }
+        );
+        const roomData = await roomResponse.json();
+        const courseData = await courseResponse.json();
+        setRooms(roomData);
+        setCourses(courseData);
 
         try {
           const response = await fetch(
@@ -69,7 +74,6 @@ export default function Page() {
             }
           );
           const courseDetails = await response.json();
-          console.log(courseDetails);
           setData({
             oldCourseCode: course,
             courseCode: course,
@@ -91,7 +95,7 @@ export default function Page() {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [params.courseName]);
 
   //createCourse function modified to edit course instead
   const createCourse = async () => {
@@ -214,6 +218,7 @@ export default function Page() {
     rooms,
     students,
     editFlag,
+    courses,
   };
 
   const formElements = [

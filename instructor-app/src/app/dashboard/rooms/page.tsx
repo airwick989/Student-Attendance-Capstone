@@ -129,8 +129,8 @@ export default function Page() {
                                                     className="collapse border border-base-300 bg-secondary hover:bg-gradient-to-tl hover:from-pink-200 p-2"
                                                     key={index}
                                                 >
-                                                    <div className="collapse-title text-xl font-medium flex items-center flex-col gap-2 md:flex-row text-primary-content">
-                                                        <p className="">{`${room}`}</p>
+                                                    <div className="collapse-title text-2xl font-medium text-primary-content">
+                                                        {`${room}`}
                                                     </div>
                                                 </Link>
                                             );

@@ -8,6 +8,7 @@ import useTimeValidation from "@/app/hooks/useTimeValidation";
 export default function CourseDetails({
     setStep,
     rooms,
+    courses,
     handleChange,
     data,
     addMeetingTime,
@@ -17,11 +18,13 @@ export default function CourseDetails({
 }: any) {
     const [preventSubmit, setPreventSubmit] = useState(true);
     const [secondDate, setSecondDate] = useState(false);
-    const { timeValidator, validTime } = useTimeValidation();
+    const [courseConflict, setCourseConflict] = useState<string[]>([]);
+    const [conflictError, showConflictError] = useState(false);
+    const { timeValidator, timeConflict, validTime } = useTimeValidation();
 
     useEffect(() => {
-
         timeValidator(data.meetingTimes);
+
         if (
             data.courseCode === "" ||
             data.courseName === "" ||
@@ -33,6 +36,22 @@ export default function CourseDetails({
             setPreventSubmit(false);
         }
     }, [data, timeValidator, validTime]);
+
+    const handleNext = (e: any) => {
+        e.preventDefault();
+        const conflicts = timeConflict(
+            data.meetingTimes,
+            courses,
+            data.courseCode,
+            data.room[0]
+        );
+        setCourseConflict(conflicts);
+        if (conflicts.length > 0) {
+            showConflictError(true);
+        } else {
+            setStep(1);
+        }
+    };
 
     return (
         <>
@@ -90,7 +109,7 @@ export default function CourseDetails({
 
                         <label className="form-control w-full">
                             <div className="label">
-                                <span className="label-text">Select Room(s)</span>
+                                <span className="label-text">Select Room</span>
                             </div>
                             <select
                                 multiple
@@ -99,9 +118,6 @@ export default function CourseDetails({
                                 onChange={(e) => handleChange(e)}
                                 name="room"
                             >
-                                <option disabled defaultValue={""}>
-                                    select a room for this course:
-                                </option>
                                 {Object(rooms).map((room: string, index: number) => (
                                     <option key={index}>{room}</option>
                                 ))}
@@ -118,10 +134,10 @@ export default function CourseDetails({
                                 onClick={(e) => {
                                     e.preventDefault();
                                     setSecondDate(!secondDate);
-                                    if(data.meetingTimes.length===1){
-                                        addMeetingTime()
-                                    }else if(data.meetingTimes.length===2){
-                                        removeMeetingTime()
+                                    if (data.meetingTimes.length === 1) {
+                                        addMeetingTime();
+                                    } else if (data.meetingTimes.length === 2) {
+                                        removeMeetingTime();
                                     }
                                 }}
                                 className="btn ml-auto"
@@ -156,6 +172,14 @@ export default function CourseDetails({
                                 index={1}
                             />
                         )}
+                        <div className="label">
+                            <span className="label-text-alt"></span>
+                            {conflictError && (
+                                <span className="label-text-alt text-error">
+                                    Course Conflict(s): {courseConflict.map((error, index) => <p key={index}>{error}</p>)}
+                                </span>
+                            )}
+                        </div>
 
                         <div className="flex justify-between w-full mt-4 ">
                             <Link href={"/dashboard/courses"} className="btn btn-error w-28 ">
@@ -164,10 +188,7 @@ export default function CourseDetails({
                             <button
                                 className="btn btn-primary w-28"
                                 disabled={preventSubmit}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setStep(1);
-                                }}
+                                onClick={(e) => handleNext(e)}
                             >
                                 Next
                             </button>
