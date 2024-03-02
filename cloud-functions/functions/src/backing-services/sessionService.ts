@@ -68,6 +68,27 @@ export const sessionService = functions.pubsub
               );
             } else {
               console.log("Resetting activeClass for room: ", room);
+              const updates: {[key:string]: string} = {};
+              const mapRef = admin.database().ref(`Rooms/${room}/map`);
+
+              mapRef.once("value", (snapshot) => {
+                const mapData = snapshot.val();
+
+                Object.keys(mapData).forEach((key) => {
+                  // Setting the value to "none"
+                  updates[`${key}`] = "none";
+                });
+
+                mapRef
+                  .update(updates)
+                  .then(() => {
+                    console.log("Map updated successfully");
+                  })
+                  .catch((error) => {
+                    console.error("Error updating map:", error);
+                  });
+              });
+
               promises.push(
                 admin.database().ref(`Rooms/${room}/activeClass`).set("")
               );
