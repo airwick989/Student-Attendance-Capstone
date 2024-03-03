@@ -143,3 +143,27 @@ export const deleteRoom = async (roomName: string) => {
     throw Error(`Could not delete ${roomName}`);
   }
 };
+
+export const resetRoom = async (roomName: string) => {
+  if (!roomName) {
+    throw Error("Missing parameters.");
+  }
+  const query = admin.database().ref(`Rooms/${roomName}/map`);
+
+  try {
+    const snapshot = await query.once("value");
+    if (snapshot.exists()) {
+      const seatMap: { [key: number]: string } = {};
+
+      for (let index = 1; index <= snapshot.val().length-1; index++) {
+        seatMap[index] = "none";
+      }
+
+      await query.set(seatMap);
+      return `${roomName} reset.`;
+    }
+    return "Room not found.";
+  } catch (error) {
+    throw Error(`Could not reset ${roomName}`);
+  }
+};

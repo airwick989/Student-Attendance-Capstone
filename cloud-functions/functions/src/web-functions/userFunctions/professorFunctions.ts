@@ -83,6 +83,19 @@ export const deleteRoomByName = async (
   }
 };
 
+export const resetRoomByName = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const roomName = req.params.roomName;
+  try {
+    const response = await roomController.resetRoom(roomName);
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};
+
 // Course Functions
 export const getAllCourses = async (
   _req: express.Request,
@@ -200,6 +213,23 @@ export const createNewCourse = async (
   });
 
   bb.end(req.body);
+};
+
+export const createCourseSnapshot = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const {courseCode, room, snapshotName} = req.body;
+  try {
+    const response = await courseController.createSnapshot(
+      courseCode,
+      room,
+      snapshotName
+    );
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
 };
 
 export const editExistingCourse = async (

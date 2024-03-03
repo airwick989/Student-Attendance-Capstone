@@ -68,7 +68,7 @@ export const sessionService = functions.pubsub
               );
             } else {
               console.log("Resetting activeClass for room: ", room);
-              const updates: {[key:string]: string} = {};
+              /* const updates: {[key:string]: string} = {};
               const mapRef = admin.database().ref(`Rooms/${room}/map`);
 
               mapRef.once("value", (snapshot) => {
@@ -87,7 +87,7 @@ export const sessionService = functions.pubsub
                   .catch((error) => {
                     console.error("Error updating map:", error);
                   });
-              });
+              });*/
 
               promises.push(
                 admin.database().ref(`Rooms/${room}/activeClass`).set("")
