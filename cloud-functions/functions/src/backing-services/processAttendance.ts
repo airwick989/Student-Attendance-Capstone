@@ -154,9 +154,12 @@ const saveLogs = async (
     .collection("attendance-logs")
     .doc(courseCode);
 
+  const startUnix = startTime.getTime();
+  const endUnix = endTime.getTime();
+
   const newLogRef = attendanceLogs
     .collection("sorted-logs")
-    .doc(`${startTime}-${endTime}`);
+    .doc(`${startUnix}&${endUnix}`);
 
   const uniqueStudents = new Set<string>();
 
@@ -168,6 +171,7 @@ const saveLogs = async (
 
   newLogRef.set({
     numofStudents: uniqueStudentCount,
+    date: `${startTime}-${endTime}`,
     logs: logs,
   });
 };

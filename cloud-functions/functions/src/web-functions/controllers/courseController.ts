@@ -85,6 +85,7 @@ export const editCourse = async (
       // Remove old course node
       const oldCourseRef = admin.database().ref(`Courses/${oldCourseCode}`);
       await oldCourseRef.remove();
+      await removeAttendanceLogs(courseCode);
     } catch (error) {
       throw Error("Could not update course");
     }
@@ -100,6 +101,7 @@ export const deleteCourse = async (coursecode: string) => {
     const snapshot = await query.once("value");
     if (snapshot.exists()) {
       await query.remove();
+      await removeAttendanceLogs(coursecode);
       return `${coursecode} deleted.`;
     }
     return "Course not found.";
@@ -126,13 +128,13 @@ export const createSnapshot = async (
   room: string,
   snapshotName?: string
 ) => {
-  if (!courseCode || !snapshotName) {
+  if (!courseCode) {
     throw Error("Missing parameters");
   }
   const roomMapRef = admin.database().ref(`Rooms/${room}/map`);
   const roomMapSnapshot = await roomMapRef.once("value");
   const roomMap = roomMapSnapshot.val();
-  // Need to delete 0: undefined or shift indexes by 1
+
   const timeStamp = new Date();
   const unixStamp = timeStamp.getTime();
 
@@ -156,5 +158,24 @@ export const createSnapshot = async (
     });
   } catch (error) {
     throw Error(error as string);
+  }
+};
+
+const removeAttendanceLogs = async (courseCode: string) => {
+  const attendanceRef = admin
+    .firestore()
+    .collection("attendance-logs")
+    .doc(courseCode);
+
+  const snapshotRef = admin
+    .firestore()
+    .collection("course-snapshots")
+    .doc(courseCode);
+
+  try {
+    await admin.firestore().recursiveDelete(attendanceRef);
+    await admin.firestore().recursiveDelete(snapshotRef);
+  } catch (error) {
+    throw Error("Could not remove attendance logs.");
   }
 };

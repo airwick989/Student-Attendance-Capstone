@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as express from "express";
+import * as attendanceController from "../controllers/attendanceController";
 import * as roomController from "../controllers/roomController";
 import * as courseController from "../controllers/courseController";
 import * as classListController from "../controllers/classListController";
@@ -250,5 +251,19 @@ export const deleteCourseByCode = async (
     res.status(200).json({success: "Course deleted."});
   } catch (error) {
     res.status(400).send({error: "Could not delete course."});
+  }
+};
+
+// Attendance Functions
+export const getAllCourseSnapshots = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  try {
+    const response = await attendanceController.getAllSnapshots(courseCode);
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
   }
 };

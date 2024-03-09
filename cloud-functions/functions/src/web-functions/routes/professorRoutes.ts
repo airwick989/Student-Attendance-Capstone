@@ -14,12 +14,15 @@ import {
   getCourseDetails,
   editExistingCourse,
   resetRoomByName,
+  getAllCourseSnapshots,
 } from "../userFunctions/professorFunctions";
 
 router.get("/getAllRoomNames", getAllRoomNames);
 router.get("/getAllClasses", getAllCourses);
 router.get("/editRoom", getRoomDetails);
 router.get("/editCourse", getCourseDetails);
+
+router.get("/getCourseSnapshots/:courseCode", getAllCourseSnapshots);
 
 router.post("/createRoom", createNewRoom);
 router.post("/createCourse", (req, res) => createNewCourse(req, res, false));
