@@ -267,3 +267,54 @@ export const getAllCourseSnapshots = async (
     res.status(400).json({error: (e as Error).message});
   }
 };
+
+export const getCourseSnapshot = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  const snapshotID = req.params.snapshotID;
+
+  try {
+    const response = await attendanceController.getSnapshot(
+      courseCode,
+      snapshotID
+    );
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};
+
+export const getCourseAttendanceLogs = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  try {
+    const response = await attendanceController.getAllAttendanceLogs(
+      courseCode
+    );
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};
+
+export const getSingleAttendanceLog = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  const timeStamp = req.params.timeStamp;
+
+  try {
+    const response = await attendanceController.getAttendanceLog(
+      courseCode,
+      timeStamp
+    );
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};

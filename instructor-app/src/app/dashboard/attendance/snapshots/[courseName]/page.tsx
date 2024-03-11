@@ -53,8 +53,8 @@ export default async function Page({
                     const formattedDate = dateConversion(snapshot.date._seconds);
                     return (
                       <Link
-                        className="card bg-secondary text-primary-content"
-                        href={`/dashboard/attendance/snapshots/${params.courseName}/${snapshot.id}`}
+                        className="card bg-secondary text-primary-content hover:scale-105 hover:ease-in-out hover:duration-200"
+                        href={`/dashboard/attendance/snapshots/${params.courseName}/view/${snapshot.id}`}
                         key={index}
                       >
                         <div className="card-body">
@@ -65,7 +65,7 @@ export default async function Page({
                     );
                   })}
                 </div>
-                : <p className=" text-center text-lg mt-2">No snapshots available for this course.</p>
+                : <p className="text-center text-lg mt-2">No snapshots available for this course.</p>
               }
 
             </div>

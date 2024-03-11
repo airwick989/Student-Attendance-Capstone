@@ -15,6 +15,9 @@ import {
   editExistingCourse,
   resetRoomByName,
   getAllCourseSnapshots,
+  getCourseSnapshot,
+  getCourseAttendanceLogs,
+  getSingleAttendanceLog,
 } from "../userFunctions/professorFunctions";
 
 router.get("/getAllRoomNames", getAllRoomNames);
@@ -23,6 +26,12 @@ router.get("/editRoom", getRoomDetails);
 router.get("/editCourse", getCourseDetails);
 
 router.get("/getCourseSnapshots/:courseCode", getAllCourseSnapshots);
+router.get("/getCourseSnapshots/:courseCode/:snapshotID", getCourseSnapshot);
+router.get("/getAllAttendanceLogs/:courseCode", getCourseAttendanceLogs);
+router.get(
+  "/getAllAttendanceLogs/:courseCode/:timeStamp",
+  getSingleAttendanceLog
+);
 
 router.post("/createRoom", createNewRoom);
 router.post("/createCourse", (req, res) => createNewCourse(req, res, false));

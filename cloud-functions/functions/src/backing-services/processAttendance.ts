@@ -154,6 +154,7 @@ const saveLogs = async (
     .collection("attendance-logs")
     .doc(courseCode);
 
+  const classList = admin.database().ref(`/ClassLists/${courseCode}`);
   const startUnix = startTime.getTime();
   const endUnix = endTime.getTime();
 
@@ -169,9 +170,14 @@ const saveLogs = async (
 
   const uniqueStudentCount = uniqueStudents.size;
 
+  const classListSnapshot = await classList.once("value");
+  const classSize = classListSnapshot.numChildren();
+
   newLogRef.set({
-    numofStudents: uniqueStudentCount,
-    date: `${startTime}-${endTime}`,
+    totalStudents: uniqueStudentCount,
+    attendance: uniqueStudentCount/classSize,
+    startTime: startTime,
+    endTime: endTime,
     logs: logs,
   });
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-function AttendancePreview({ course, courseName }: any) {
+export default function AttendancePreview({ course, courseName }: any) {
     if (course === "") {
         return (
             <div>
@@ -24,12 +24,10 @@ function AttendancePreview({ course, courseName }: any) {
                 <Link className="card min-w-md w-full bg-secondary text-primary-content hover:scale-105 hover:ease-in-out hover:duration-200" href={`attendance/snapshots/${course}`}>
                     <div className="card-body">
                         <h2 className="card-title text-2xl">Class Snapshots</h2>
-                        <p>View classroom snapshots logs for {course}.</p>
+                        <p>View classroom snapshots for {course}.</p>
                     </div>
                 </Link>
             </div>
         </>
     );
 }
-
-export default AttendancePreview;
