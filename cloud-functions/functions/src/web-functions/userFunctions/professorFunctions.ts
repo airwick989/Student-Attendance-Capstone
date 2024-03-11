@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as express from "express";
+import * as attendanceController from "../controllers/attendanceController";
 import * as roomController from "../controllers/roomController";
 import * as courseController from "../controllers/courseController";
 import * as classListController from "../controllers/classListController";
@@ -80,6 +81,19 @@ export const deleteRoomByName = async (
     res.status(200).json(response);
   } catch (error) {
     res.status(400).send(error);
+  }
+};
+
+export const resetRoomByName = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const roomName = req.params.roomName;
+  try {
+    const response = await roomController.resetRoom(roomName);
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
   }
 };
 
@@ -202,6 +216,23 @@ export const createNewCourse = async (
   bb.end(req.body);
 };
 
+export const createCourseSnapshot = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const {courseCode, room, snapshotName} = req.body;
+  try {
+    const response = await courseController.createSnapshot(
+      courseCode,
+      room,
+      snapshotName
+    );
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};
+
 export const editExistingCourse = async (
   req: express.Request,
   res: express.Response
@@ -220,5 +251,70 @@ export const deleteCourseByCode = async (
     res.status(200).json({success: "Course deleted."});
   } catch (error) {
     res.status(400).send({error: "Could not delete course."});
+  }
+};
+
+// Attendance Functions
+export const getAllCourseSnapshots = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  try {
+    const response = await attendanceController.getAllSnapshots(courseCode);
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};
+
+export const getCourseSnapshot = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  const snapshotID = req.params.snapshotID;
+
+  try {
+    const response = await attendanceController.getSnapshot(
+      courseCode,
+      snapshotID
+    );
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};
+
+export const getCourseAttendanceLogs = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  try {
+    const response = await attendanceController.getAllAttendanceLogs(
+      courseCode
+    );
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};
+
+export const getSingleAttendanceLog = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  const timeStamp = req.params.timeStamp;
+
+  try {
+    const response = await attendanceController.getAttendanceLog(
+      courseCode,
+      timeStamp
+    );
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
   }
 };

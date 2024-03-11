@@ -6,7 +6,7 @@ export const courseNames = async () => {
   return result;
 };
 
-export const courseDetails =async (courseCode:string) => {
+export const courseDetails = async (courseCode: string) => {
   const queryName = admin.database().ref(`Courses/${courseCode}/courseName`);
   const queryRoom = admin.database().ref(`Courses/${courseCode}/Room`);
   const queryStudents = admin.database().ref(`ClassLists/${courseCode}`);
@@ -22,9 +22,9 @@ export const courseDetails =async (courseCode:string) => {
     const classList = studentsSnapshot.val();
 
     return {
-      "courseName": courseName,
-      "courseRoom": courseRoom,
-      "classList": classList,
+      courseName: courseName,
+      courseRoom: courseRoom,
+      classList: classList,
     };
   } catch (error) {
     console.error("Error fetching course details:", error);
@@ -36,7 +36,7 @@ export const createCourse = async (
   courseCode: string,
   courseName: string,
   room: [string],
-  meetingTimes: [{meetingDate: string, timeRange: string[]}]
+  meetingTimes: [{ meetingDate: string; timeRange: string[] }]
 ) => {
   if (!courseName || !courseCode) {
     throw Error("Missing parameters");
@@ -61,7 +61,7 @@ export const editCourse = async (
   courseCode: string,
   courseName: string,
   room: [string],
-  meetingTimes: [{meetingDate: string, timeRange: string[]}]
+  meetingTimes: [{ meetingDate: string; timeRange: string[] }]
 ) => {
   if (oldCourseCode === courseCode) {
     if (!courseName || !courseCode) {
@@ -85,6 +85,7 @@ export const editCourse = async (
       // Remove old course node
       const oldCourseRef = admin.database().ref(`Courses/${oldCourseCode}`);
       await oldCourseRef.remove();
+      await removeAttendanceLogs(courseCode);
     } catch (error) {
       throw Error("Could not update course");
     }
@@ -100,6 +101,7 @@ export const deleteCourse = async (coursecode: string) => {
     const snapshot = await query.once("value");
     if (snapshot.exists()) {
       await query.remove();
+      await removeAttendanceLogs(coursecode);
       return `${coursecode} deleted.`;
     }
     return "Course not found.";
@@ -118,5 +120,62 @@ export const addRoomtoCourse = async (coursecode: string, room: string) => {
     return "Room successfully added to course";
   } catch (error) {
     throw Error("Could not add room to course.");
+  }
+};
+
+export const createSnapshot = async (
+  courseCode: string,
+  room: string,
+  snapshotName?: string
+) => {
+  if (!courseCode) {
+    throw Error("Missing parameters");
+  }
+  const roomMapRef = admin.database().ref(`Rooms/${room}/map`);
+  const roomMapSnapshot = await roomMapRef.once("value");
+  const roomMap = roomMapSnapshot.val();
+
+  const timeStamp = new Date();
+  const unixStamp = timeStamp.getTime();
+
+  const roomMapArray = Object.entries(roomMap);
+  const updatedRoomMap = Object.fromEntries(roomMapArray);
+
+  const snapshotRef = admin
+    .firestore()
+    .collection("course-snapshots")
+    .doc(`${courseCode}`);
+
+  const newSnapshotRef = snapshotRef
+    .collection("snapshots")
+    .doc(`${unixStamp}`);
+
+  try {
+    await newSnapshotRef.set({
+      roomMap: updatedRoomMap,
+      timeStamp: timeStamp,
+      name: snapshotName || "Unnamed Snapshot",
+    });
+  } catch (error) {
+    throw Error(error as string);
+  }
+};
+
+const removeAttendanceLogs = async (courseCode: string) => {
+  const attendanceRef = admin
+    .firestore()
+    .collection("attendance-logs")
+    .doc(courseCode);
+
+  const snapshotRef = admin
+    .firestore()
+    .collection("course-snapshots")
+    .doc(courseCode);
+
+  try {
+    await admin.firestore().recursiveDelete(attendanceRef);
+    await admin.firestore().recursiveDelete(snapshotRef);
+  } catch (error) {
+    throw Error("Could not remove attendance logs.");
   }
 };

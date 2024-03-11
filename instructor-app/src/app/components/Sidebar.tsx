@@ -3,7 +3,7 @@ import Link from "next/link"
 export default function Sidebar() {
 
   return (<>
-    <div className="drawer z-10">
+    <div className="drawer z-20">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
 
@@ -18,7 +18,7 @@ export default function Sidebar() {
         <ul className="menu p-4 pt-5 text-2xl w-80 min-h-full bg-base-200 text-base-content">
 
           <li><Link href='/dashboard'>Home</Link></li>
-          <li><Link href='/dashboard/courses'>Attendance</Link></li>
+          <li><Link href='/dashboard/attendance'>Attendance</Link></li>
           <li><Link href='/dashboard/courses'>Courses</Link></li>
           <li><Link href='/dashboard/rooms'>Rooms</Link></li>
 
