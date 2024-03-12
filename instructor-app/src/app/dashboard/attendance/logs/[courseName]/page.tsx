@@ -2,7 +2,45 @@ import Link from "next/link";
 import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
 
-export default function Page({ params }: { params: { courseName: string } }) {
+type Log = {
+  id: string;
+  startTime: { _seconds: number; _nanoseconds: number };
+  endTime: { _seconds: number; _nanoseconds: number };
+};
+
+const dateConversion = (seconds: number) => {
+  const date = new Date(seconds * 1000);
+  return date.toLocaleDateString();
+};
+
+const timeConversion = (seconds: number) => {
+  const date = new Date(seconds * 1000);
+  return date.toLocaleTimeString("en-US");
+};
+
+const getAttendanceLogs = async (courseName: string) => {
+  const res = await fetch(
+    `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllAttendanceLogs/${courseName}`,
+    { next: { revalidate: 300 } }
+  );
+
+  if (!res.ok) {
+    return [];
+  }
+
+  return await res.json();
+};
+
+export default async function Page({
+  params,
+}: {
+  params: { courseName: string };
+}) {
+  const logs = await getAttendanceLogs(params.courseName);
+  const sortedLogs = logs.sort((a: Log, b: Log) => {
+    return b.endTime._seconds - a.endTime._seconds;
+  });
+
   return (
     <>
       <div className="min-h-screen bg-base-200">
@@ -17,6 +55,34 @@ export default function Page({ params }: { params: { courseName: string } }) {
                   Attendance Logs for {params.courseName}
                 </h2>
               </div>
+              {sortedLogs && sortedLogs.length > 0 ? (
+                <div className="flex flex-col gap-4">
+                  {sortedLogs.map((log: Log) => {
+                    const formattedStartDay = dateConversion(
+                      log.startTime._seconds
+                    );
+                    const formattedStartTime = timeConversion(log.startTime._seconds);
+                    const formattedEndTime = timeConversion(log.endTime._seconds); 
+                    return (
+                      <div
+                        key={log.id}
+                        className="card bg-primary text-primary-content"
+                      >
+                        <div className="card-body">
+                          <h2 className="card-title text-2xl">
+                            Log for day of {formattedStartDay}
+                          </h2>
+                          <p className="text-lg">From {formattedStartTime} to {formattedEndTime}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-center text-lg mt-2">
+                  No attendance logs available for this course.
+                </p>
+              )}
             </div>
           </div>
         </div>
