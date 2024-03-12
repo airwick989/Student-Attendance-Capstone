@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as seatController from "../controllers/seatController";
-import * as studentAttendanceController from "../controllers/studentAttendanceController";
+import * as studentAttendanceController
+  from "../controllers/studentAttendanceController";
 
 export const studentScan = async (
   req: express.Request,
@@ -44,19 +45,21 @@ export const studentLeaveSeat = async (
   }
 };
 
-
 export const studentAttendance = async (
   req: express.Request,
   res: express.Response
-  ) => {
-    try {
-      const courseCode = req.params.courseCode;
-      const studentNumber = req.params.studentNumber;
-  
-      const response = await studentAttendanceController.studentAttendanceLogs(courseCode, studentNumber);
-  
-      res.status(200).json({response: response});
-    } catch (e) {
-      res.status(400).json({error: (e as Error).message});
-    }
+) => {
+  try {
+    const courseCode = req.params.courseCode;
+    const studentNumber = req.params.studentNumber;
+
+    const response = await studentAttendanceController.studentAttendanceLogs(
+      courseCode,
+      studentNumber
+    );
+
+    res.status(200).json({response: response});
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
 };
