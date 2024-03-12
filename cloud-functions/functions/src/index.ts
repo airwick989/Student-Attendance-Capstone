@@ -24,6 +24,7 @@ mobileApp.use(cors());
 mobileApp.use(express.json());
 mobileApp.use("/student", studentRoutes);
 
+
 export const api = functions.https.onRequest(app);
 export const mobileApi = functions.https.onRequest(mobileApp);
 export const session = sessionService;
