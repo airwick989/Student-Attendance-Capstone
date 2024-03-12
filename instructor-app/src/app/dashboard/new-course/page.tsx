@@ -183,7 +183,7 @@ export default function Page() {
         <>
             {loading && <Loading />}
             <div className="min-h-screen bg-base-200">
-                <div className="flex flex-col items-center xl:px-96 lg:px-64 px-16">
+                <div className="flex flex-col items-center xl:px-96 lg:px-64 px-8">
                     {formElements[step]}
                 </div>
             </div>

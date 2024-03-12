@@ -10,7 +10,11 @@ type Log = {
 
 const dateConversion = (seconds: number) => {
   const date = new Date(seconds * 1000);
-  return date.toLocaleDateString();
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 };
 
 const timeConversion = (seconds: number) => {
@@ -44,12 +48,12 @@ export default async function Page({
   return (
     <>
       <div className="min-h-screen bg-base-200">
-        <div className="flex flex-col items-center xl:px-96 lg:px-64 px-16">
+        <div className="flex flex-col items-center xl:px-96 lg:px-64 px-8">
           <div className="card w-full bg-base-100 shadow-xl mt-16 py-6">
             <div className="card-body">
               <div className="flex flex-col md:flex-row justify-between items-baseline pb-4">
                 <h2 className="card-title font-bold text-3xl mb-4 self-center">
-                  <Link href={"/dashboard/attendance"}>
+                  <Link href={"../"}>
                     <FaArrowLeft />
                   </Link>
                   Attendance Logs for {params.courseName}
@@ -61,19 +65,28 @@ export default async function Page({
                     const formattedStartDay = dateConversion(
                       log.startTime._seconds
                     );
-                    const formattedStartTime = timeConversion(log.startTime._seconds);
-                    const formattedEndTime = timeConversion(log.endTime._seconds); 
+                    const formattedStartTime = timeConversion(
+                      log.startTime._seconds
+                    );
+                    const formattedEndTime = timeConversion(
+                      log.endTime._seconds
+                    );
                     return (
                       <div
                         key={log.id}
-                        className="card bg-primary text-primary-content"
+                        className="card bg-primary text-primary-content hover:bg-gradient-to-tl hover:from-violet-400"
                       >
-                        <div className="card-body">
+                        <Link
+                          className="card-body"
+                          href={`/dashboard/attendance/logs/${params.courseName}/view/${log.id}`}
+                        >
                           <h2 className="card-title text-2xl">
-                            Log for day of {formattedStartDay}
+                            {formattedStartDay}
                           </h2>
-                          <p className="text-lg">From {formattedStartTime} to {formattedEndTime}</p>
-                        </div>
+                          <p className="text-lg">
+                            From {formattedStartTime} to {formattedEndTime}
+                          </p>
+                        </Link>
                       </div>
                     );
                   })}
