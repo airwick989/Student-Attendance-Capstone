@@ -34,6 +34,7 @@ export const setSeat = async (
 
   const {studentName} = verifyStudent;
 
+  const profilePicture = await getProfilePicture(studentNumber);
   try {
     await seatQuery.update({
       fullName: studentName,
@@ -41,6 +42,7 @@ export const setSeat = async (
       pronouns: pronouns || "none",
       studentNumber: studentNumber,
       courseCode: courseCode,
+      profilePicture: profilePicture || "",
     });
     return `Seat set for ${roomName}`;
   } catch (e: unknown) {
@@ -130,4 +132,21 @@ const verifyActiveClass = async (roomName: string, courseCode: string) => {
   const activeClass = snapshot.val();
 
   return activeClass.courseCode === courseCode;
+};
+
+const getProfilePicture = async (studentNumber: string) => {
+  const userQuery = admin
+    .firestore()
+    .collection("users")
+    .where("studentNumber", "==", studentNumber);
+
+  const snapshot = await userQuery.get();
+  if (!snapshot.empty) {
+    const userDoc = snapshot.docs[0].data();
+    if (userDoc.photo) {
+      return userDoc.photo;
+    }
+  }
+
+  return "";
 };

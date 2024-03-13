@@ -8,8 +8,8 @@ import SessionProvider from "./SessionProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'Attend-OTU',
-  description: 'Classroom Tracker',
+  title: 'ATTEND-OT',
+  description: 'Ontario Tech University class map and attendance tracker.',
 }
 
 export default async function RootLayout({
