@@ -34,18 +34,16 @@ export default function Page() {
         );
         const data = await res.json();
         setCourses(data);
-        // setLoading(false);
       } catch (error) {
         console.error("Error:", error);
-        // setLoading(false);
       }
     })();
   }, []);
   return (
     <>
       <div className="min-h-screen bg-base-200">
-        <div className="flex flex-col items-center mx-16 lg:mx-64 min-w-md">
-          <div className="card w-full bg-base-100 shadow-xl mt-16 p-6 min-h-screen mb-6">
+        <div className="flex flex-col items-center mx-8 lg:mx-64 min-w-md">
+          <div className="card w-full bg-base-100 shadow-xl my-16 p-6 min-h-screen mb-6">
             <div className="card-body">
               <div className="flex flex-col md:flex-row justify-between items-baseline overflow-auto">
                 <h2 className="card-title font-bold text-3xl mb-4 self-center">

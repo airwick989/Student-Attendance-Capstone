@@ -52,7 +52,7 @@ export default function Page() {
         <>
             {loading && <Loading />}
             <div className="min-h-screen bg-base-200">
-                <div className="flex flex-col items-center mx-16 lg:mx-64 min-w-md">
+                <div className="flex flex-col items-center mx-8 lg:mx-64 min-w-md">
                     <div className="card w-full bg-base-100 shadow-xl mt-16 p-6">
                         <div className="card-body">
                             <div className="flex flex-col md:flex-row justify-between items-baseline pb-4 overflow-auto">
@@ -154,7 +154,7 @@ export default function Page() {
                                                     <div className="collapse-title text-2xl text-primary-content font-semibold">
                                                         {`${classKey} - ${courses[classKey].courseName}`}
                                                     </div>
-                                                    <div className="collapse-content font-medium text-secondary-content self-center">
+                                                    <div className="collapse-content font-medium text-secondary-content self-center overflow-hidden">
                                                         <div className="flex flex-col gap-3">
                                                             <p className="font-semibold text-xl underline">
                                                                 Scheduled Time(s):

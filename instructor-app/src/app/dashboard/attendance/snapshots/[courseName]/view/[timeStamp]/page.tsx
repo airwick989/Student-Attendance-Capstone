@@ -19,7 +19,13 @@ const getSnapshot = async (courseName: string, snapshotID: string) => {
 
 const dateConversion = (seconds: number) => {
   const date = new Date(seconds * 1000);
-  return date.toLocaleString("en-US");
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    minute: "numeric",
+    hour: "numeric",
+  });
 };
 
 const getPresentStudents = (classList: {
@@ -76,12 +82,15 @@ export default async function Page({
                     >
                       <input type="checkbox" />
                       <div className="collapse-title text-xl font-medium text-center px-0">
-                        Students Attended ({Object.keys(presentStudents).length})
+                        Students Attended ({Object.keys(presentStudents).length}
+                        )
                       </div>
 
                       <div className="collapse-content">
                         {Object.keys(presentStudents).length == 0 ? (
-                          <p className="text-center text-sm">No students found in this snapshot.</p>
+                          <p className="text-center text-sm">
+                            No students found in this snapshot.
+                          </p>
                         ) : (
                           Object.keys(presentStudents).map((seat) => {
                             return (
@@ -113,7 +122,7 @@ export default async function Page({
                   <h2 className="card-title font-bold text-3xl  flex-grow">
                     <Link
                       className="mr-3"
-                      href={`/dashboard/attendance/snapshots/${params.courseName}`}
+                      href={`../../${params.courseName}`}
                     >
                       <FaArrowLeft />
                     </Link>

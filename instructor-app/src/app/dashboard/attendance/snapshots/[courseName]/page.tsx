@@ -9,8 +9,9 @@ type Snapshot = {
 
 async function getSnapshots(courseName: string) {
   const res = await fetch(
-    `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getCourseSnapshots/${courseName}`
-    , { next: { revalidate: 300 } });
+    `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getCourseSnapshots/${courseName}`,
+    { next: { revalidate: 300 } }
+  );
 
   if (!res.ok) {
     return [];
@@ -28,7 +29,13 @@ export default async function Page({
 
   const dateConversion = (seconds: number) => {
     const date = new Date(seconds * 1000);
-    return date.toLocaleString("en-US");
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      minute: "numeric",
+      hour: "numeric",
+    });
   };
 
   return (
@@ -39,22 +46,23 @@ export default async function Page({
             <div className="card-body">
               <div className="flex flex-col md:flex-row justify-between items-baseline pb-4">
                 <h2 className="card-title font-bold text-3xl mb-4 self-center">
-                  <Link href={"/dashboard/attendance"}>
+                  <Link href={"../"}>
                     <FaArrowLeft />
                   </Link>
                   Snapshots for {params.courseName}
                 </h2>
               </div>
 
-              {snapshots && snapshots.length > 0 ?
-
+              {snapshots && snapshots.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {snapshots.map((snapshot: Snapshot, index: number) => {
-                    const formattedDate = dateConversion(snapshot.date._seconds);
+                    const formattedDate = dateConversion(
+                      snapshot.date._seconds
+                    );
                     return (
                       <Link
-                        className="card bg-secondary text-primary-content hover:scale-105 hover:ease-in-out hover:duration-200"
-                        href={`/dashboard/attendance/snapshots/${params.courseName}/view/${snapshot.id}`}
+                        className="card bg-secondary text-primary-content hover:bg-gradient-to-tl hover:from-pink-200"
+                        href={`./${params.courseName}/view/${snapshot.id}`}
                         key={index}
                       >
                         <div className="card-body">
@@ -65,9 +73,11 @@ export default async function Page({
                     );
                   })}
                 </div>
-                : <p className="text-center text-lg mt-2">No snapshots available for this course.</p>
-              }
-
+              ) : (
+                <p className="text-center text-lg mt-2">
+                  No snapshots available for this course.
+                </p>
+              )}
             </div>
           </div>
         </div>
