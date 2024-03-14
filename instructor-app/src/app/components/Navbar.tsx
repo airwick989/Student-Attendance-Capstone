@@ -33,9 +33,10 @@ export default function Navbar() {
                             <div className="w-10 rounded-full">
                                 <Image
                                     alt="Profile Picture"
-                                    src={profileImage}
+                                    src={profileImage || "/default.svg"}
                                     width={24}
                                     height={24}
+                                    loading="lazy"
                                 />
                             </div>
                         </div>
