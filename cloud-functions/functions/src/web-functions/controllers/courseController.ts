@@ -1,4 +1,5 @@
 import * as admin from "firebase-admin";
+import {resetActiveClass} from "./roomController";
 
 export const courseNames = async () => {
   const query = admin.database().ref("Courses");
@@ -100,6 +101,9 @@ export const deleteCourse = async (coursecode: string) => {
   try {
     const snapshot = await query.once("value");
     if (snapshot.exists()) {
+      const room = snapshot.child("Room").val();
+      await resetActiveClass(room, coursecode);
+
       await query.remove();
       await removeAttendanceLogs(coursecode);
       return `${coursecode} deleted.`;
