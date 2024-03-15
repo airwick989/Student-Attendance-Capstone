@@ -3,7 +3,7 @@ import { FaArrowLeft } from "react-icons/fa";
 export default function CourseList({ setStep, handleFileChange, file }: any) {
     return (
         <>
-            <div className="card w-full bg-base-100 shadow-xl mt-16 py-6">
+            <div className="card w-full bg-base-100 shadow-xl mt-32 py-6">
                 <form className="card-body">
                     <div className="flex flex-col md:flex-row justify-between items-baseline pb-4">
                         <h2 className="card-title font-bold text-3xl mb-4 self-center">

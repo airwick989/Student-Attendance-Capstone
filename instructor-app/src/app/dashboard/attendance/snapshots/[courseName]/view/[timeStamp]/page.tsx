@@ -116,7 +116,7 @@ export default async function Page({
             </div>
           </div>
           <div className="flex flex-row">
-            <div className="card w-full bg-base-100 shadow-xl mt-16 p-6 z-0">
+            <div className="card w-full bg-base-100 shadow-xl my-32 p-6 z-0">
               <div className="card-body">
                 <div className="flex items-center mb-4">
                   <h2 className="card-title font-bold text-3xl  flex-grow">
