@@ -80,7 +80,7 @@ export default async function Page({
         <>
             <div className="min-h-screen bg-base-200">
                 <div className="flex flex-col items-center xl:px-96 lg:px-64 px-8">
-                    <div className="card w-full bg-base-100 shadow-xl my-16 py-6 ">
+                    <div className="card w-full bg-base-100 shadow-xl my-32 py-6 ">
                         <div className="card-body">
                             <div className="flex flex-col ">
                                 <div className="flex justify-between items-baseline">

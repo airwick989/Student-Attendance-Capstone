@@ -155,7 +155,7 @@ export const resetRoom = async (roomName: string) => {
     if (snapshot.exists()) {
       const seatMap: { [key: number]: string } = {};
 
-      for (let index = 1; index <= snapshot.val().length-1; index++) {
+      for (let index = 1; index <= snapshot.val().length - 1; index++) {
         seatMap[index] = "none";
       }
 
@@ -165,5 +165,30 @@ export const resetRoom = async (roomName: string) => {
     return "Room not found.";
   } catch (error) {
     throw Error(`Could not reset ${roomName}`);
+  }
+};
+
+export const resetActiveClass = async (
+  roomName: string,
+  courseCode: string
+) => {
+  if (!roomName || !courseCode) {
+    throw Error("Missing parameters.");
+  }
+  const query = admin.database().ref(`Rooms/${roomName}/activeClass`);
+  try {
+    const snapshot = await query.once("value");
+    const activeClass = snapshot.val();
+
+    if (activeClass && activeClass.courseCode === courseCode) {
+      await query.set("");
+      console.log(`Reset active class for ${roomName}.`);
+    } else {
+      console.log(
+        `No active class matching ${courseCode} found in ${roomName}.`
+      );
+    }
+  } catch (error) {
+    throw Error(`Could not reset ${roomName} active class`);
   }
 };
