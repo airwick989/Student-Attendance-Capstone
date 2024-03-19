@@ -5,6 +5,7 @@ import * as roomController from "../controllers/roomController";
 import * as courseController from "../controllers/courseController";
 import * as classListController from "../controllers/classListController";
 import * as busboy from "busboy";
+import * as csv from "csv-stringify";
 
 // Room Functions
 export const getAllRoomNames = async (
@@ -314,6 +315,36 @@ export const getSingleAttendanceLog = async (
       timeStamp
     );
     res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};
+
+export const downloadAttendance = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  const timeStamp = req.params.timeStamp;
+  try {
+    const attendance = await attendanceController.getAttendanceLog(
+      courseCode,
+      timeStamp
+    );
+
+    const csvLog = await attendanceController.downloadLog(attendance);
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=attendance_log_${csvLog.date}.csv`
+    );
+    res.setHeader("Content-Type", "text/csv");
+
+    csv.stringify(csvLog.data, (error, output) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(output);
+    });
   } catch (e) {
     res.status(400).json({error: (e as Error).message});
   }

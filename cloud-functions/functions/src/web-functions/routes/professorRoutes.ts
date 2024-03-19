@@ -18,6 +18,7 @@ import {
   getCourseSnapshot,
   getCourseAttendanceLogs,
   getSingleAttendanceLog,
+  downloadAttendance,
 } from "../userFunctions/professorFunctions";
 
 router.get("/getAllRoomNames", getAllRoomNames);
@@ -31,6 +32,11 @@ router.get("/getAllAttendanceLogs/:courseCode", getCourseAttendanceLogs);
 router.get(
   "/getAllAttendanceLogs/:courseCode/:timeStamp",
   getSingleAttendanceLog
+);
+
+router.get(
+  "/downloadAttendance/:courseCode/:timeStamp",
+  downloadAttendance
 );
 
 router.post("/createRoom", createNewRoom);

@@ -82,11 +82,83 @@ export const getAttendanceLog = async (
     .collection("sorted-logs")
     .doc(timeStamp);
 
-
   const log = await attendanceLog.get();
 
   if (!log.exists) {
     throw Error("Attendance log not found.");
   }
   return log.data();
+};
+
+export const downloadLog = async (
+  attendanceLog: FirebaseFirestore.DocumentData | undefined
+) => {
+  type Log = {
+    timeStamp: number;
+    studentNumber: string;
+  };
+  if (attendanceLog === undefined) {
+    throw Error("Attendance log not found.");
+  }
+
+  const csvData = [];
+  let isFirstRow = true;
+
+  csvData.push([
+    "Student Number",
+    "Time Stamp",
+    "Total Students",
+    "Attendance",
+    "Start Time",
+    "End Time",
+  ]);
+
+  const logDate = attendanceLog.startTime
+    .toDate()
+    .toLocaleDateString("en-US")
+    .replace(/\//g, "_");
+
+  if (attendanceLog.logs.length === 0) {
+    const startTimeString = attendanceLog.startTime
+      .toDate()
+      .toLocaleTimeString("en-US");
+    const endTimeString = attendanceLog.endTime
+      .toDate()
+      .toLocaleTimeString("en-US");
+    const row = [
+      "",
+      "",
+      attendanceLog.totalStudents,
+      attendanceLog.attendance,
+      startTimeString,
+      endTimeString,
+    ];
+    csvData.push(row);
+  } else {
+    const sortedLogs = attendanceLog.logs.sort((a: Log, b: Log) => {
+      return b.timeStamp - a.timeStamp;
+    });
+
+    sortedLogs.forEach(
+      (log: { studentNumber: string; timeStamp: number }) => {
+        const startTimeString = isFirstRow ?
+          attendanceLog.startTime.toDate().toLocaleTimeString("en-US") :
+          "";
+        const endTimeString = isFirstRow ?
+          attendanceLog.endTime.toDate().toLocaleTimeString("en-US") :
+          "";
+        const row = [
+          log.studentNumber || "",
+          new Date(log.timeStamp).toLocaleTimeString("en-US") || "",
+          isFirstRow ? attendanceLog.totalStudents || "" : "",
+          isFirstRow ? attendanceLog.attendance || "" : "",
+          startTimeString,
+          endTimeString,
+        ];
+        csvData.push(row);
+        isFirstRow = false;
+      }
+    );
+  }
+  return {data: csvData, date: logDate};
 };
