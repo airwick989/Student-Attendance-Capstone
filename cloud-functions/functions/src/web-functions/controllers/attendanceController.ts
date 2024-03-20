@@ -139,26 +139,99 @@ export const downloadLog = async (
       return b.timeStamp - a.timeStamp;
     });
 
-    sortedLogs.forEach(
-      (log: { studentNumber: string; timeStamp: number }) => {
-        const startTimeString = isFirstRow ?
-          attendanceLog.startTime.toDate().toLocaleTimeString("en-US") :
-          "";
-        const endTimeString = isFirstRow ?
-          attendanceLog.endTime.toDate().toLocaleTimeString("en-US") :
-          "";
-        const row = [
-          log.studentNumber || "",
-          new Date(log.timeStamp).toLocaleTimeString("en-US") || "",
-          isFirstRow ? attendanceLog.totalStudents || "" : "",
-          isFirstRow ? attendanceLog.attendance || "" : "",
-          startTimeString,
-          endTimeString,
-        ];
-        csvData.push(row);
-        isFirstRow = false;
-      }
-    );
+    sortedLogs.forEach((log: { studentNumber: string; timeStamp: number }) => {
+      const startTimeString = isFirstRow ?
+        attendanceLog.startTime.toDate().toLocaleTimeString("en-US") :
+        "";
+      const endTimeString = isFirstRow ?
+        attendanceLog.endTime.toDate().toLocaleTimeString("en-US") :
+        "";
+      const row = [
+        log.studentNumber || "",
+        new Date(log.timeStamp).toLocaleTimeString("en-US") || "",
+        isFirstRow ? attendanceLog.totalStudents || "" : "",
+        isFirstRow ? attendanceLog.attendance || "" : "",
+        startTimeString,
+        endTimeString,
+      ];
+      csvData.push(row);
+      isFirstRow = false;
+    });
   }
   return {data: csvData, date: logDate};
+};
+
+export const createSnapshot = async (
+  courseCode: string,
+  room: string,
+  snapshotName?: string
+) => {
+  if (!courseCode) {
+    throw Error("Missing parameters");
+  }
+  const roomMapRef = admin.database().ref(`Rooms/${room}/map`);
+  const roomMapSnapshot = await roomMapRef.once("value");
+  const roomMap = roomMapSnapshot.val();
+
+  const timeStamp = new Date();
+  const unixStamp = timeStamp.getTime();
+
+  const roomMapArray = Object.entries(roomMap);
+  const updatedRoomMap = Object.fromEntries(roomMapArray);
+
+  const snapshotRef = admin
+    .firestore()
+    .collection("course-snapshots")
+    .doc(`${courseCode}`);
+
+  const newSnapshotRef = snapshotRef
+    .collection("snapshots")
+    .doc(`${unixStamp}`);
+
+  try {
+    await newSnapshotRef.set({
+      roomMap: updatedRoomMap,
+      timeStamp: timeStamp,
+      name: snapshotName || "Unnamed Snapshot",
+    });
+  } catch (error) {
+    throw Error(error as string);
+  }
+};
+
+export const removeAttendanceLogs = async (courseCode: string) => {
+  const attendanceRef = admin
+    .firestore()
+    .collection("attendance-logs")
+    .doc(courseCode);
+
+  const snapshotRef = admin
+    .firestore()
+    .collection("course-snapshots")
+    .doc(courseCode);
+
+  try {
+    await admin.firestore().recursiveDelete(attendanceRef);
+    await admin.firestore().recursiveDelete(snapshotRef);
+  } catch (error) {
+    throw Error("Could not remove attendance logs.");
+  }
+};
+
+export const removeSingleAttendanceLog = async (
+  courseCode: string,
+  timeStamp: string
+) => {
+  const attendanceLog = admin
+    .firestore()
+    .collection("attendance-logs")
+    .doc(courseCode)
+    .collection("sorted-logs")
+    .doc(timeStamp);
+
+  try {
+    await attendanceLog.delete();
+  } catch (error) {
+    throw Error("Could not remove attendance log.");
+  }
 };

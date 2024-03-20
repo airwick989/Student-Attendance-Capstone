@@ -19,6 +19,7 @@ import {
   getCourseAttendanceLogs,
   getSingleAttendanceLog,
   downloadAttendance,
+  deleteSingleAttendanceLog,
 } from "../userFunctions/professorFunctions";
 
 router.get("/getAllRoomNames", getAllRoomNames);
@@ -47,6 +48,7 @@ router.post("/updateCourse", editExistingCourse);
 
 router.delete("/deleteRoom", deleteRoomByName);
 router.delete("/deleteCourse", deleteCourseByCode);
+router.delete("/deleteLog/:courseCode/:timeStamp", deleteSingleAttendanceLog);
 
 router.patch("/resetRoom/:roomName", resetRoomByName);
 

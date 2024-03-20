@@ -223,7 +223,7 @@ export const createCourseSnapshot = async (
 ) => {
   const {courseCode, room, snapshotName} = req.body;
   try {
-    const response = await courseController.createSnapshot(
+    const response = await attendanceController.createSnapshot(
       courseCode,
       room,
       snapshotName
@@ -345,6 +345,24 @@ export const downloadAttendance = async (
       }
       res.status(200).send(output);
     });
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};
+
+export const deleteSingleAttendanceLog = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  const timeStamp = req.params.timeStamp;
+
+  try {
+    const response = await attendanceController.removeSingleAttendanceLog(
+      courseCode,
+      timeStamp
+    );
+    res.status(200).json(response);
   } catch (e) {
     res.status(400).json({error: (e as Error).message});
   }
