@@ -1,5 +1,6 @@
 import * as admin from "firebase-admin";
 import {resetActiveClass} from "./roomController";
+import {removeAttendanceLogs} from "./attendanceController";
 
 export const courseNames = async () => {
   const query = admin.database().ref("Courses");
@@ -127,59 +128,3 @@ export const addRoomtoCourse = async (coursecode: string, room: string) => {
   }
 };
 
-export const createSnapshot = async (
-  courseCode: string,
-  room: string,
-  snapshotName?: string
-) => {
-  if (!courseCode) {
-    throw Error("Missing parameters");
-  }
-  const roomMapRef = admin.database().ref(`Rooms/${room}/map`);
-  const roomMapSnapshot = await roomMapRef.once("value");
-  const roomMap = roomMapSnapshot.val();
-
-  const timeStamp = new Date();
-  const unixStamp = timeStamp.getTime();
-
-  const roomMapArray = Object.entries(roomMap);
-  const updatedRoomMap = Object.fromEntries(roomMapArray);
-
-  const snapshotRef = admin
-    .firestore()
-    .collection("course-snapshots")
-    .doc(`${courseCode}`);
-
-  const newSnapshotRef = snapshotRef
-    .collection("snapshots")
-    .doc(`${unixStamp}`);
-
-  try {
-    await newSnapshotRef.set({
-      roomMap: updatedRoomMap,
-      timeStamp: timeStamp,
-      name: snapshotName || "Unnamed Snapshot",
-    });
-  } catch (error) {
-    throw Error(error as string);
-  }
-};
-
-const removeAttendanceLogs = async (courseCode: string) => {
-  const attendanceRef = admin
-    .firestore()
-    .collection("attendance-logs")
-    .doc(courseCode);
-
-  const snapshotRef = admin
-    .firestore()
-    .collection("course-snapshots")
-    .doc(courseCode);
-
-  try {
-    await admin.firestore().recursiveDelete(attendanceRef);
-    await admin.firestore().recursiveDelete(snapshotRef);
-  } catch (error) {
-    throw Error("Could not remove attendance logs.");
-  }
-};

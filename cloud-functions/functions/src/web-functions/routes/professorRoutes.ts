@@ -18,6 +18,9 @@ import {
   getCourseSnapshot,
   getCourseAttendanceLogs,
   getSingleAttendanceLog,
+  downloadAttendance,
+  deleteSingleAttendanceLog,
+  deleteSingleSnapshot,
 } from "../userFunctions/professorFunctions";
 
 router.get("/getAllRoomNames", getAllRoomNames);
@@ -33,6 +36,11 @@ router.get(
   getSingleAttendanceLog
 );
 
+router.get(
+  "/downloadAttendance/:courseCode/:timeStamp",
+  downloadAttendance
+);
+
 router.post("/createRoom", createNewRoom);
 router.post("/createCourse", (req, res) => createNewCourse(req, res, false));
 router.post("/createCourseSnapshot", createCourseSnapshot);
@@ -41,6 +49,8 @@ router.post("/updateCourse", editExistingCourse);
 
 router.delete("/deleteRoom", deleteRoomByName);
 router.delete("/deleteCourse", deleteCourseByCode);
+router.delete("/deleteLog/:courseCode/:timeStamp", deleteSingleAttendanceLog);
+router.delete("/deleteSnapshot/:courseCode/:timeStamp", deleteSingleSnapshot);
 
 router.patch("/resetRoom/:roomName", resetRoomByName);
 
