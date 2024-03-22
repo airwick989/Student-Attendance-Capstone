@@ -49,7 +49,6 @@ const deleteLog = async (courseName: string, timeStamp: string) => {
       method: "DELETE",
     }
   );
-
 };
 
 export default function Page({ params }: { params: { courseName: string } }) {
@@ -81,9 +80,8 @@ export default function Page({ params }: { params: { courseName: string } }) {
                 </h2>
                 <div className="self-end">
                   <button
-                    className={`btn btn-error btn-outline w-max ${
-                      !editMode ? "hidden" : ""
-                    }`}
+                    className={`btn btn-error btn-outline w-max ${!editMode || logs.length == 0 ? "hidden" : ""
+                      }`}
                     onClick={() => {
                       setEditMode(!editMode);
                     }}
@@ -92,9 +90,8 @@ export default function Page({ params }: { params: { courseName: string } }) {
                     Cancel
                   </button>
                   <button
-                    className={`btn btn-secondary btn-outline w-max ${
-                      editMode ? "hidden" : ""
-                    }`}
+                    className={`btn btn-secondary btn-outline w-max ${editMode || logs.length == 0 ? "hidden" : ""
+                      }`}
                     onClick={() => {
                       setEditMode(!editMode);
                     }}
@@ -129,7 +126,7 @@ export default function Page({ params }: { params: { courseName: string } }) {
                               </p>
                               <button
                                 className="btn btn-outline btn-error"
-                                onClick={async() => {
+                                onClick={async () => {
                                   await deleteLog(params.courseName, log.id);
                                   setLogs(logs.filter((l) => l.id !== log.id));
                                 }}

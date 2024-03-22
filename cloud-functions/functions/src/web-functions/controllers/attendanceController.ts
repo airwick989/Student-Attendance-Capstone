@@ -235,3 +235,21 @@ export const removeSingleAttendanceLog = async (
     throw Error("Could not remove attendance log.");
   }
 };
+
+export const removeSingleSnapshot = async (
+  courseCode: string,
+  timeStamp: string
+) => {
+  const snapshot = admin
+    .firestore()
+    .collection("course-snapshots")
+    .doc(courseCode)
+    .collection("snapshots")
+    .doc(timeStamp);
+
+  try {
+    await snapshot.delete();
+  } catch (error) {
+    throw Error("Could not remove snapshot.");
+  }
+};
