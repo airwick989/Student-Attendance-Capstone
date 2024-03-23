@@ -161,6 +161,79 @@ export const downloadLog = async (
   return {data: csvData, date: logDate};
 };
 
+export const downloadSnap = async (courseCode: string, snapshotID: string) => {
+  type RoomMap = {
+    [key: string]: string | { studentNumber: string; fullName: string };
+  };
+
+  const snapshotCollection = admin
+    .firestore()
+    .collection("course-snapshots")
+    .doc(courseCode)
+    .collection("snapshots")
+    .doc(snapshotID);
+
+  const snapshot = await snapshotCollection.get();
+
+  if (!snapshot.exists) {
+    throw Error("Snapshot not found.");
+  }
+  const snapshotData = snapshot.data();
+
+  const csvData = [];
+  let isFirstRow = true;
+  csvData.push([
+    "Snapshot Name",
+    "Time Stamp",
+    "Total Students",
+    "Student Name",
+    "Student Number",
+  ]);
+
+  const presentStudents: {
+    [key: string]: { studentNumber: string; fullName: string };
+  } = {};
+  for (const [key, value] of Object.entries<RoomMap>(
+    snapshotData?.roomMap || {}
+  )) {
+    if (!(typeof value == "string" && value == "none")) {
+      presentStudents[key] = value as {
+        studentNumber: string;
+        fullName: string;
+      };
+    }
+  }
+
+  const logDate = snapshotData?.timeStamp.toDate().toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    minute: "numeric",
+    hour: "numeric",
+  });
+
+  const snapshotName = snapshotData?.name.replace(/[/\s]/g, "_");
+
+  if (Object.keys(presentStudents).length === 0) {
+    const row = [snapshotData?.name || "", logDate || "", 0, "", ""];
+    csvData.push(row);
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    for (const [_key, value] of Object.entries(presentStudents)) {
+      const row = [
+        isFirstRow ? snapshotData?.name : "",
+        isFirstRow ? logDate : "",
+        isFirstRow ? Object.keys(presentStudents).length : "",
+        value.fullName,
+        value.studentNumber,
+      ];
+      csvData.push(row);
+      isFirstRow = false;
+    }
+  }
+  return {data: csvData, snapshotName: snapshotName};
+};
+
 export const createSnapshot = async (
   courseCode: string,
   room: string,
