@@ -21,6 +21,7 @@ import {
   downloadAttendance,
   deleteSingleAttendanceLog,
   deleteSingleSnapshot,
+  downloadSnapshot,
 } from "../userFunctions/professorFunctions";
 
 router.get("/getAllRoomNames", getAllRoomNames);
@@ -36,10 +37,8 @@ router.get(
   getSingleAttendanceLog
 );
 
-router.get(
-  "/downloadAttendance/:courseCode/:timeStamp",
-  downloadAttendance
-);
+router.get("/downloadAttendance/:courseCode/:timeStamp", downloadAttendance);
+router.get("/downloadSnapshot/:courseCode/:timeStamp", downloadSnapshot);
 
 router.post("/createRoom", createNewRoom);
 router.post("/createCourse", (req, res) => createNewCourse(req, res, false));

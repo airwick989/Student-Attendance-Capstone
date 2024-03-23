@@ -350,6 +350,36 @@ export const downloadAttendance = async (
   }
 };
 
+export const downloadSnapshot = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  const timeStamp = req.params.timeStamp;
+
+  try {
+    const snapshot = await attendanceController.downloadSnap(
+      courseCode,
+      timeStamp
+    );
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=${snapshot.snapshotName}_${timeStamp}.csv`
+    );
+    res.setHeader("Content-Type", "text/csv");
+
+    csv.stringify(snapshot.data, (error, output) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).send(output);
+    });
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};
+
 export const deleteSingleAttendanceLog = async (
   req: express.Request,
   res: express.Response

@@ -1,8 +1,40 @@
+"use client";
+
 import Loading from "@/app/dashboard/courses/loading";
 import Link from "next/link";
-import { Suspense } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import SeatComponent from "@/app/components/SeatComponent";
+import { MdDownload } from "react-icons/md";
+
+type Snapshot = {
+  name: string;
+  courseRoom: string[];
+  dimensions: {
+    columns: number;
+    rows: number;
+  };
+  roomMap: {
+    [key: string]: string | {
+      studentNumber: string;
+      fullName: string;
+    };
+  };
+  timeStamp: {
+    _seconds: number;
+  };
+
+};
+
+interface Seat {
+  fullName: string;
+  prefName: string;
+  pronouns: string;
+  studentNumber: string;
+  profilePicture: string;
+}
+
+type SeatInfo = "none" | Seat;
 
 const getSnapshot = async (courseName: string, snapshotID: string) => {
   const res = await fetch(
@@ -16,6 +48,35 @@ const getSnapshot = async (courseName: string, snapshotID: string) => {
 
   return await res.json();
 };
+
+const downloadSnapshot = async (courseName: string, snapshotID: string, snapshotName: string) => {
+  const res = await fetch(
+    `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/downloadSnapshot/${courseName}/${snapshotID}`,
+    { next: { revalidate: 300 } }
+  );
+
+  if (!res.ok) {
+    console.error("Failed to download snapshot");
+  }
+
+  const formattedName = snapshotName.replace(/ /g, "_");
+
+  const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute(
+        "download",
+        `${formattedName}_${courseName}_${snapshotID}.csv`
+    );
+    document.body.appendChild(link);
+    link.click();
+
+    if (link.parentNode) {
+        link.parentNode.removeChild(link);
+    }
+    URL.revokeObjectURL(url);
+}
 
 const dateConversion = (seconds: number) => {
   const date = new Date(seconds * 1000);
@@ -41,19 +102,30 @@ const getPresentStudents = (classList: {
   return newObj;
 };
 
-export default async function Page({
+export default function Page({
   params,
 }: {
   params: { courseName: string; timeStamp: string };
 }) {
-  const snapshot = await getSnapshot(params.courseName, params.timeStamp);
+  const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    async function fetchData() {
+      const snapshot = await getSnapshot(params.courseName, params.timeStamp);
+      setSnapshot(snapshot);
+      setLoading(false);
+    }
+    fetchData();
+  }, [params.courseName, params.timeStamp]);
   const seconds = snapshot && snapshot.timeStamp && snapshot.timeStamp._seconds;
   const date = dateConversion(seconds || 0);
-  const presentStudents = getPresentStudents(snapshot.roomMap || {});
-  const courseRoom = snapshot.courseRoom;
+  const presentStudents = getPresentStudents(snapshot?.roomMap || {});
+  const courseRoom = snapshot?.courseRoom || '';
 
   return (
     <>
+    {loading && <Loading />}
       <div className="min-h-screen bg-base-200">
         <div className="flex flex-col items-center">
           <div className="drawer drawer-end">
@@ -112,6 +184,12 @@ export default async function Page({
                     </div>
                   </div>
                 </div>
+                <button className="btn w-full text-xl font-medium text-center btn-secondary place-self-end mb-16" onClick={async()=>{
+                  await downloadSnapshot(params.courseName, params.timeStamp, snapshot?.name || "Error");
+                }}>
+                <MdDownload />
+                  Download Snapshot
+                </button>
               </div>
             </div>
           </div>
@@ -120,27 +198,21 @@ export default async function Page({
               <div className="card-body">
                 <div className="flex items-center mb-4">
                   <h2 className="card-title font-bold text-3xl  flex-grow">
-                    <Link
-                      className="mr-3"
-                      href={`../../${params.courseName}`}
-                    >
+                    <Link className="mr-3" href={`../../${params.courseName}`}>
                       <FaArrowLeft />
                     </Link>
-                    {snapshot.name || "Error"}
+                    {snapshot && snapshot.name || "Error"}
                   </h2>
                   <div className="drawer-content">
                     <label
                       htmlFor="my-drawer-4"
-                      className={`drawer-button btn btn-primary ${
-                        snapshot && snapshot.roomMap ? "" : "hidden"
-                      }`}
+                      className={`drawer-button btn btn-primary ${snapshot && snapshot.roomMap ? "" : "hidden"
+                        }`}
                     >
                       Snapshot Details
                     </label>
                   </div>
-                </div>
-
-                <Suspense fallback={<Loading />}>
+                </div>              
                   {snapshot && snapshot.roomMap ? (
                     <>
                       <div
@@ -153,7 +225,7 @@ export default async function Page({
                               <SeatComponent
                                 index={seat}
                                 key={seat}
-                                seatInfo={snapshot.roomMap[seat]}
+                                seatInfo={typeof snapshot.roomMap[seat] === 'string' ? 'none' : snapshot.roomMap[seat] as SeatInfo}
                               />
                             );
                           })}
@@ -170,7 +242,6 @@ export default async function Page({
                       </div>
                     </>
                   )}
-                </Suspense>
               </div>
             </div>
           </div>
