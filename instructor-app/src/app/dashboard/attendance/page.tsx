@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AttendancePreview from "./AttendancePreview";
+import Loading from "./loading";
 
 type MeetingTimes = {
   [key: string]: {
@@ -22,6 +23,7 @@ interface Courses {
 
 export default function Page() {
   const [courses, setCourses] = useState<Courses>({});
+  const [loading, setLoading] = useState(true);
   const [activeCourse, setActiveCourse] = useState<string>(
     typeof window !== 'undefined' ? localStorage.getItem("activeCourse") || "" : ""
   );
@@ -34,6 +36,7 @@ export default function Page() {
         );
         const data = await res.json();
         setCourses(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -41,6 +44,7 @@ export default function Page() {
   }, []);
   return (
     <>
+    {loading && <Loading/>}
       <div className="min-h-screen bg-base-200">
         <div className="flex flex-col items-center mx-8 lg:mx-64 min-w-md">
           <div className="card w-full bg-base-100 shadow-xl my-32 p-6 min-h-screen mb-6">
