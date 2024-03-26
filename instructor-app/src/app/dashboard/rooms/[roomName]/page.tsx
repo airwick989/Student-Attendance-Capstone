@@ -67,7 +67,7 @@ export default function Page({ params }: { params: { roomName: string } }) {
 
         if (classObject) {
             const response = await fetch(
-                "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/createCourseSnapshot",
+                `${process.env.NEXT_PUBLIC_API_URL}/api/professor/createCourseSnapshot`,
                 {
                     method: "POST",
                     headers: {
@@ -92,7 +92,7 @@ export default function Page({ params }: { params: { roomName: string } }) {
     const emptyClass = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         await fetch(
-            `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/resetRoom/${params.roomName}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/professor/resetRoom/${params.roomName}`,
             {
                 method: "PATCH",
                 headers: {

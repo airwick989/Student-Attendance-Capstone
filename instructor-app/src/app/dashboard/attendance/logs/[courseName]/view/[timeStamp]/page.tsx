@@ -23,7 +23,7 @@ type AttendanceLog =
 
 const getAttendanceLogs = async (courseName: string, timeStamp: string) => {
     const res = await fetch(
-        `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllAttendanceLogs/${courseName}/${timeStamp}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/professor/getAllAttendanceLogs/${courseName}/${timeStamp}`,
         { next: { revalidate: 1800 } }
     );
 
@@ -36,7 +36,7 @@ const getAttendanceLogs = async (courseName: string, timeStamp: string) => {
 
 const downloadLog = async (courseName: string, timeStamp: string, startTime: number) => {
     const res = await fetch(
-        `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/downloadAttendance/${courseName}/${timeStamp}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/professor/downloadAttendance/${courseName}/${timeStamp}`,
         { next: { revalidate: 1800 } }
     );
     if (!res.ok) {

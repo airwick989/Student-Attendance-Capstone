@@ -44,11 +44,11 @@ export default function Page() {
         (async () => {
             try {
                 const roomResponse = await fetch(
-                    "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllRoomNames",
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/professor/getAllRoomNames`,
                     { next: { revalidate: 5 } }
                 );
                 const courseResponse = await fetch(
-                    "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllClasses",
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/professor/getAllClasses`,
                     { next: { revalidate: 5 } }
                 );
                 const roomData = await roomResponse.json();
@@ -68,7 +68,7 @@ export default function Page() {
         formData.append("courseInfo", JSON.stringify(data));
         formData.append("", file as Blob);
         const response = await fetch(
-            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/createCourse",
+            `${process.env.NEXT_PUBLIC_API_URL}/api/professor/createCourse`,
             {
                 method: "POST",
                 body: formData,

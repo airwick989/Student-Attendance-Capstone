@@ -28,7 +28,7 @@ const timeConversion = (seconds: number) => {
 
 const getAttendanceLogs = async (courseName: string) => {
   const res = await fetch(
-    `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllAttendanceLogs/${courseName}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/professor/getAllAttendanceLogs/${courseName}`,
     { next: { revalidate: 300 } }
   );
 
@@ -44,7 +44,7 @@ const getAttendanceLogs = async (courseName: string) => {
 
 const deleteLog = async (courseName: string, timeStamp: string) => {
   const res = await fetch(
-    `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/deleteLog/${courseName}/${timeStamp}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/professor/deleteLog/${courseName}/${timeStamp}`,
     {
       method: "DELETE",
     }

@@ -28,7 +28,7 @@ export default function Page({ params }: { params: { roomName: string } }) {
             try {
 
                 const response = await fetch(
-                    `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/editRoom?roomName=${room}`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/professor/editRoom?roomName=${room}`,
                     {
                         method: "GET",
                     }
@@ -58,7 +58,7 @@ export default function Page({ params }: { params: { roomName: string } }) {
     //createRoom function modified to edit room instead
     const createRoom = async () => {
         const response = await fetch(
-            "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/updateRoom",
+            `${process.env.NEXT_PUBLIC_API_URL}/api/professor/updateRoom`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
