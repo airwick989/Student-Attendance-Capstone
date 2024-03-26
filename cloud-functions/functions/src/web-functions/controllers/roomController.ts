@@ -1,4 +1,5 @@
 import * as admin from "firebase-admin";
+import {updateRoomParameter} from "./courseController";
 
 export const roomNames = async () => {
   const query = admin.database().ref("Rooms");
@@ -96,11 +97,12 @@ export const editRoom = async (
     }
   } else {
     try {
-      createRoom(roomName, totalSeats, dimensions);
+      await createRoom(roomName, totalSeats, dimensions);
 
       // Remove old room node
       const oldRoomRef = admin.database().ref(`Rooms/${oldRoomName}`);
       await oldRoomRef.remove();
+      await updateRoomParameter(oldRoomName, roomName);
     } catch (error) {
       throw Error("Could not update room");
     }

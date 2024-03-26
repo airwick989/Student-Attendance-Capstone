@@ -5,6 +5,9 @@ import {removeAttendanceLogs} from "./attendanceController";
 export const courseNames = async () => {
   const query = admin.database().ref("Courses");
   const result = await query.once("value");
+  if (!result.exists()) {
+    return {};
+  }
   return result;
 };
 
@@ -103,7 +106,9 @@ export const deleteCourse = async (coursecode: string) => {
     const snapshot = await query.once("value");
     if (snapshot.exists()) {
       const room = snapshot.child("Room").val();
-      await resetActiveClass(room, coursecode);
+      if (room) {
+        await resetActiveClass(room, coursecode);
+      }
 
       await query.remove();
       await removeAttendanceLogs(coursecode);
@@ -128,3 +133,36 @@ export const addRoomtoCourse = async (coursecode: string, room: string) => {
   }
 };
 
+export const updateRoomParameter = async (
+  oldRoomCode: string,
+  newRoomCode: string
+) => {
+  if (!oldRoomCode || !newRoomCode) {
+    throw Error("Missing parameters");
+  }
+
+  const courseRef = admin.database().ref("Courses");
+  const courseSnapshot = await courseRef.once("value");
+
+  try {
+    const updates: { [key: string]: { Room: string[] } } = {};
+
+    courseSnapshot.forEach((courseSnapshot) => {
+      const courseId = courseSnapshot.key;
+      if (courseId !== null) {
+        const courseData = courseSnapshot.val();
+
+        if (courseData.Room && courseData.Room.includes(oldRoomCode)) {
+          const updatedRoom = courseData.Room.map((room: string) =>
+            room === oldRoomCode ? newRoomCode : room
+          );
+          updates[courseId] = {...courseData, Room: updatedRoom};
+        }
+      }
+    });
+
+    await courseRef.update(updates);
+  } catch (error) {
+    throw Error("Could not update course");
+  }
+};
