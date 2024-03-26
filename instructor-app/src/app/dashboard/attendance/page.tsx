@@ -23,7 +23,7 @@ interface Courses {
 export default function Page() {
   const [courses, setCourses] = useState<Courses>({});
   const [activeCourse, setActiveCourse] = useState<string>(
-    localStorage.getItem("activeCourse") || ""
+    typeof window !== 'undefined' ? localStorage.getItem("activeCourse") || "" : ""
   );
   useEffect(() => {
     (async () => {

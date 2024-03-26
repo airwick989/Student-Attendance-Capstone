@@ -78,7 +78,7 @@ export default function Page({ params }: { params: { courseName: string } }) {
             oldCourseCode: course,
             courseCode: course,
             courseName: courseDetails["courseName"],
-            room: courseDetails["courseRoom"],
+            room: courseDetails["courseRoom"] || "",
             classList: courseDetails["classList"],
             meetingTimes: courseDetails["meetingTimes"] || [
               { meetingDate: "", timeRange: ["12:00", "13:00"] },
