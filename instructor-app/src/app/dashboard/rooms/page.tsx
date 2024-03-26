@@ -16,7 +16,7 @@ export default function Page() {
         (async () => {
             try {
                 const res = await fetch(
-                    "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getAllRoomNames",
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/professor/getAllRoomNames`,
                     { next: { revalidate: 5 } }
                 );
                 const data = await res.json();

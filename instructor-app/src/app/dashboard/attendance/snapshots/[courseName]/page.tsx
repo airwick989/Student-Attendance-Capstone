@@ -14,7 +14,7 @@ type Snapshot = {
 
 async function getSnapshots(courseName: string) {
   const res = await fetch(
-    `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getCourseSnapshots/${courseName}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/professor/getCourseSnapshots/${courseName}`,
     { next: { revalidate: 300 } }
   );
 
@@ -27,7 +27,7 @@ async function getSnapshots(courseName: string) {
 
 async function deleteSnapshot(courseName: string, timeStamp: string) {
   const res = await fetch(
-    `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/deleteSnapshot/${courseName}/${timeStamp}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/professor/deleteSnapshot/${courseName}/${timeStamp}`,
     {
       method: "DELETE",
     }

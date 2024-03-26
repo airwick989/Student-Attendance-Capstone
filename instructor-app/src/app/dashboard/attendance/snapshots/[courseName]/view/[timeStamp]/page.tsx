@@ -38,7 +38,7 @@ type SeatInfo = "none" | Seat;
 
 const getSnapshot = async (courseName: string, snapshotID: string) => {
   const res = await fetch(
-    `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/getCourseSnapshots/${courseName}/${snapshotID}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/professor/getCourseSnapshots/${courseName}/${snapshotID}`,
     { next: { revalidate: 300 } }
   );
 
@@ -51,7 +51,7 @@ const getSnapshot = async (courseName: string, snapshotID: string) => {
 
 const downloadSnapshot = async (courseName: string, snapshotID: string, snapshotName: string) => {
   const res = await fetch(
-    `http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/downloadSnapshot/${courseName}/${snapshotID}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/professor/downloadSnapshot/${courseName}/${snapshotID}`,
     { next: { revalidate: 300 } }
   );
 

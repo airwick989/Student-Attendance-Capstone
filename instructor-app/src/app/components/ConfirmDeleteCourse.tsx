@@ -25,7 +25,7 @@ export default function ConfirmDeleteCourse({
     const deleteResource = async () => {
         try {
             const response = await fetch(
-                "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/deleteCourse",
+                `${process.env.NEXT_PUBLIC_API_URL}/api/professor/deleteCourse`,
                 {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },

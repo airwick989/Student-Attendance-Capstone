@@ -13,7 +13,7 @@ export default function ConfirmDeleteRoom({
     const deleteResource = async () => {
         try {
             const response = await fetch(
-                "http://localhost:5001/student-attendance-capst-7115c/us-central1/api/professor/deleteRoom",
+                `${process.env.NEXT_PUBLIC_API_URL}/api/professor/deleteRoom`,
                 {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
