@@ -326,3 +326,34 @@ export const removeSingleSnapshot = async (
     throw Error("Could not remove snapshot.");
   }
 };
+
+export const getAttendanceRates = async (courseCode: string) => {
+  type DataPoint = {name: string; students:number; rate: number};
+
+  const attendanceCollection = admin
+    .firestore()
+    .collection("attendance-logs")
+    .doc(courseCode)
+    .collection("sorted-logs");
+
+  try {
+    const querySnapshot = await attendanceCollection.get();
+
+    if (querySnapshot.empty) {
+      return [{name: "No Data", students: 0, rate: 0}];
+    }
+
+    const attendanceRates: DataPoint[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const attendance = data.attendance*100;
+      const date = data.startTime.toDate().toLocaleDateString("en-US");
+      const students = data.totalStudents;
+      attendanceRates.push({name: date, students, rate: attendance});
+    });
+
+    return attendanceRates;
+  } catch (error) {
+    throw Error("Could not retrieve attendance rates.");
+  }
+};

@@ -415,3 +415,16 @@ export const deleteSingleSnapshot = async (
     res.status(400).json({error: (e as Error).message});
   }
 };
+
+export const getAttendanceRates = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const courseCode = req.params.courseCode;
+  try {
+    const response = await attendanceController.getAttendanceRates(courseCode);
+    res.status(200).json(response);
+  } catch (e) {
+    res.status(400).json({error: (e as Error).message});
+  }
+};

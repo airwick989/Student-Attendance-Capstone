@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AttendancePreview from "./AttendancePreview";
+import { AttendanceDataProvider } from "@/app/components/attendance/AttendanceDataProvider";
 import Loading from "./loading";
 
 type MeetingTimes = {
@@ -44,7 +45,7 @@ export default function Page() {
   }, []);
   return (
     <>
-    {loading && <Loading/>}
+      {loading && <Loading />}
       <div className="min-h-screen bg-base-200">
         <div className="flex flex-col items-center mx-8 lg:mx-64 min-w-md">
           <div className="card w-full bg-base-100 shadow-xl my-32 p-6 min-h-screen mb-6">
@@ -76,10 +77,12 @@ export default function Page() {
               </div>
               <div className="divider"></div>
               {courses && courses[activeCourse] ? (
-                <AttendancePreview
-                  course={activeCourse}
-                  courseName={courses[activeCourse].courseName}
-                />
+                <AttendanceDataProvider>
+                  <AttendancePreview
+                    course={activeCourse}
+                    courseName={courses[activeCourse].courseName}
+                  />
+                </AttendanceDataProvider>
               ) : (<p className=" text-center text-lg mt-2">Select a course to view attendance.</p>)}
             </div>
           </div>

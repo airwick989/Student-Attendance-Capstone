@@ -22,6 +22,7 @@ import {
   deleteSingleAttendanceLog,
   deleteSingleSnapshot,
   downloadSnapshot,
+  getAttendanceRates,
 } from "../userFunctions/professorFunctions";
 
 router.get("/getAllRoomNames", getAllRoomNames);
@@ -39,6 +40,8 @@ router.get(
 
 router.get("/downloadAttendance/:courseCode/:timeStamp", downloadAttendance);
 router.get("/downloadSnapshot/:courseCode/:timeStamp", downloadSnapshot);
+
+router.get("/getAttendanceRates/:courseCode", getAttendanceRates);
 
 router.post("/createRoom", createNewRoom);
 router.post("/createCourse", (req, res) => createNewCourse(req, res, false));
