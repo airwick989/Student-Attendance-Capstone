@@ -7,6 +7,7 @@ import * as cors from "cors";
 import {sessionService} from "./backing-services/sessionService";
 import {attendanceLogger} from "./backing-services/attendanceLogger";
 import {processAttendance} from "./backing-services/processAttendance";
+import {QRGenerator} from "./backing-services/QRGeneratorService";
 
 const professorRoutes = require("./web-functions/routes/professorRoutes");
 const studentRoutes = require("./mobile-functions/routes/studentRoutes");
@@ -30,3 +31,4 @@ export const mobileApi = functions.https.onRequest(mobileApp);
 export const session = sessionService;
 export const attendance = attendanceLogger;
 export const attendanceSortService = processAttendance;
+export const QRGeneratorService = QRGenerator;
