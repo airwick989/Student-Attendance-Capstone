@@ -1,15 +1,10 @@
 "use client";
 
-import {
-    useState,
-    useEffect,
-    Suspense,
-    ButtonHTMLAttributes,
-    ChangeEvent,
-} from "react";
+import { useState, useEffect, Suspense, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { database } from "@/app/firebase";
 import { FaArrowLeft } from "react-icons/fa";
+import { MdOutlineRestartAlt, MdOutlineQrCodeScanner } from "react-icons/md";
 import { onValue, ref } from "firebase/database";
 import SeatComponent from "@/app/components/SeatComponent";
 import Loading from "./loading";
@@ -100,6 +95,38 @@ export default function Page({ params }: { params: { roomName: string } }) {
                 },
             }
         );
+    };
+
+    const handleGenerateQR = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/QRGeneratorService`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                roomName: params.roomName,
+            }),
+        });
+        if (!res.ok) {
+            console.error("Error:", res);
+            return;
+        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+            "download",
+            `QR_Codes_${params.roomName}.pdf`
+        );
+        document.body.appendChild(link);
+        link.click();
+    
+        if (link.parentNode) {
+            link.parentNode.removeChild(link);
+        }
+        URL.revokeObjectURL(url);
     };
 
     return (
@@ -197,9 +224,22 @@ export default function Page({ params }: { params: { roomName: string } }) {
                                         </div>
                                     </>
                                 )}
-                                <button className="btn w-full text-xl font-medium text-cente btn-error place-self-end mb-16" onClick={e=>emptyClass(e)}>
-                                    Reset Class
-                                </button>
+                                <div className="flex flex-col place-self-end w-full gap-8 mb-16">
+                                    <button
+                                        className="btn text-xl font-medium text-center btn-secondary"
+                                        onClick={(e) => handleGenerateQR(e)}
+                                    >
+                                        <MdOutlineQrCodeScanner/>
+                                        Generate QR Codes
+                                    </button>
+                                    <button
+                                        className="btn  text-xl font-medium text-center btn-error"
+                                        onClick={(e) => emptyClass(e)}
+                                    >
+                                        <MdOutlineRestartAlt />
+                                        Reset Class
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
