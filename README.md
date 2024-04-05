@@ -22,7 +22,6 @@
 </div>
 
 
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -55,9 +54,6 @@
 
 Ontario Tech University student tracking system that streamlines classroom attendance monitoring. This solution consists of a mobile application for students and a web portal for professors. Students log in through the mobile app. Inside the classroom, they scan a QR code located at their chosen seat. This action signals their presence, and the information is transmitted to a cloud database. The database updates a real-time map on the professor's web portal, displaying the students' seat locations based on the scanned QR codes. When a professor hovers over a student's marker on the map, they can access relevant student information such as name, pronouns, and student ID number.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 ### Built With
 
@@ -66,9 +62,6 @@ Ontario Tech University student tracking system that streamlines classroom atten
 * [![TailwindCSS][TailwindCSS]][tailwind-url]
 * [![Google Cloud Functions][Google Cloud]][google-cloud-url]
 * [![Firebase][Firebase]][firebase-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- GETTING STARTED -->
@@ -91,7 +84,6 @@ You will need the latest version of NPM, along with the Firebase CLI.
   ```sh
   npm install -g firebase-tools
   ```
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Installation
 
@@ -113,7 +105,6 @@ All files associated with the Cloud Functions can be found in the ```cloud-funct
    ```sh
     firebase deploy --only functions
    ```
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 #### Instructor App
 
@@ -147,7 +138,6 @@ NEXT_PUBLIC_API_URL=your_next_public_api_url
 
 4. Deploy on a platform of your choice, the easiest method would be using Vercel. Instructions can be found [here](https://vercel.com/docs/getting-started-with-vercel/import).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Additional Resources
 
@@ -157,7 +147,6 @@ https://nextjs.org/docs/app
 ### Firebase Cloud Functions
 https://firebase.google.com/docs/functions
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
