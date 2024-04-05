@@ -7,7 +7,7 @@
 <!-- PROJECT LOGO -->
 <div align="center">
   <a href="https://github.com/airwick989/Student-Attendance-Capstone">
-    <img src="https://github.com/airwick989/Student-Attendance-Capstone/blob/instructor-app/src/app/assets/Logo.svg" alt="Logo" width="400" height="300">
+    <img src="https://github.com/airwick989/Student-Attendance-Capstone/blob/main/instructor-app/src/app/assets/Logo.svg" alt="Logo" width="400" height="300">
   </a>
 
 <h3 align="center">ATTEND-OT</h3>
