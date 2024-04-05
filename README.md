@@ -114,7 +114,10 @@ All files associated with the Cloud Functions can be found in the ```cloud-funct
 
 1. In the ```instructor-app``` folder, run ```npm install``` to load project dependencies.
 2. Create an ```.env.local``` file to store the necessary environment variables. Note that these variables should never be committed to
-   a public repository. Most of these variables will be found from your Firebase project. The general format will include the following:
+   a public repository. Most of these variables will be found from your Firebase project.
+   The remaining variables are used for NextAuth.js, which can be found [here](https://next-auth.js.org/providers/google).
+
+   The general format of your file will include the following:
 ```env
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
