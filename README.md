@@ -40,6 +40,7 @@
           <ul>
             <li><a href="#cloud-functions">Cloud Functions</li>
             <li><a href="#instructor-app">Instructor App</li>
+            <li><a href="#student-mobile-application">Student Mobile App</li>
           </ul>
         </li>
       </ul>
@@ -69,9 +70,6 @@ Ontario Tech University student tracking system that streamlines classroom atten
 ## Getting Started
 
 This guide can be used to set up an instance of the attendance tracker and services. 
-Note that this repository does not include directions for setting up or deploying the 
-mobile application. 
-
 This guide assumes that you have Node.js installed on your system and an existing Firebase project.
 
 ### Prerequisites
@@ -85,6 +83,9 @@ You will need the latest version of NPM, along with the Firebase CLI.
   ```sh
   npm install -g firebase-tools
   ```
+
+For the mobile application, it is recommended that you use the [Expo Go](https://expo.dev/go) app to sideload 
+the application on your device
 
 ### Installation
 
@@ -141,6 +142,21 @@ NEXT_PUBLIC_API_URL=your_next_public_api_url
 
 4. Deploy on a platform of your choice, the easiest method would be using Vercel. Instructions can be found [here](https://vercel.com/docs/getting-started-with-vercel/import).
 
+#### Student Mobile Application
+
+Note that this component will require deployment through the [Apple](https://docs.expo.dev/submit/ios/) and [Google Play](https://docs.expo.dev/submit/android/) stores.
+
+1. Clone the repo as provided.
+      ```sh
+   git clone https://github.com/MFrackCA/React-Mobile-Student-app.git
+   ```
+2. In the project directory, run ```npm install``` to load project dependencies.
+3. Start the Expo server
+    ```sh
+    npx expo start
+    ```
+4. Refer to [further](https://docs.expo.dev/guides/local-app-development/) development instructions
+
 
 ## Additional Resources
 
@@ -149,6 +165,9 @@ https://nextjs.org/docs/app
 
 ### Firebase Cloud Functions
 https://firebase.google.com/docs/functions
+
+### Expo Go
+https://expo.dev/
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
@@ -163,8 +182,6 @@ https://firebase.google.com/docs/functions
 [issues-url]: https://github.com/airwick989/Student-Attendance-Capstone/issues
 [license-shield]: https://img.shields.io/github/license/airwick989/Student-Attendance-Capstone.svg?style=for-the-badge
 [license-url]: https://github.com/airwick989/Student-Attendance-Capstone/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
