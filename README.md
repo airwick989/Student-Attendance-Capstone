@@ -96,7 +96,9 @@ You will need the latest version of NPM, along with the Firebase CLI.
 #### Cloud Functions
 
 It should be noted that unless you have Firebase CLI emulator set up, Cloud Function services will run in production. 
-As such, you will need to have an existing Firebase project. Details on Firebase CLI emulator can be found [here](https://firebase.google.com/docs/emulator-suite/install_and_configure)
+As such, you will need to have an existing Firebase project. Details on Firebase CLI emulator can be found [here](https://firebase.google.com/docs/emulator-suite/install_and_configure). 
+
+Hosting Cloud Functions will require an active Firebase Blaze plan for your project, more details can be found [here](https://firebase.google.com/pricing).
 
 All files associated with the Cloud Functions can be found in the ```cloud-functions``` folder of this repo.
 
