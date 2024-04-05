@@ -44,6 +44,7 @@
         </li>
       </ul>
     </li>
+    <li> <a href="#additional-resources">Additional Resources</a></li>
   </ol>
 </details>
 
