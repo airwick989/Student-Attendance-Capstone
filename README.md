@@ -4,7 +4,6 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-
 <!-- PROJECT LOGO -->
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
@@ -51,7 +50,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+Ontario Tech University student tracking system that streamlines classroom attendance monitoring. This solution consists of a mobile application for students and a web portal for professors. Students log in through the mobile app. Inside the classroom, they scan a QR code located at their chosen seat. This action signals their presence, and the information is transmitted to a cloud database. The database updates a real-time map on the professor's web portal, displaying the students' seat locations based on the scanned QR codes. When the professor hovers over a student's marker on the map, they can access relevant student information such as name, pronouns, and student ID number.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -72,32 +71,73 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+This guide can be used to set up an instance of the attendance tracker and services. 
+Note that this repository does not include directions for setting up or deploying the 
+mobile application. 
+
+This guide assumes that you have Node.js installed on your system and an existing Firebase project.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+You will need the latest version of NPM, along with the Firebase CLI.
 * npm
   ```sh
   npm install npm@latest -g
   ```
-
+* firebase-tools
+  ```sh
+  npm install -g firebase-tools
+  ```
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Fork this repo [here.](https://github.com/airwick989/Student-Attendance-Capstone/fork).
+2. Clone the repo.
    ```sh
    git clone https://github.com/github_username/repo_name.git
    ```
-3. Install NPM packages
+#### Cloud Functions
+
+It should be noted that unless you have Firebase CLI emulator set up, Cloud Function services will run in production. 
+As such, you will need to have an exisitng Firebase project. Details on Firebase CLI emulator can be found [here](https://firebase.google.com/docs/emulator-suite/install_and_configure)
+
+All files associated with the Cloud Functions can be found in the ```cloud-functions``` folder of this repo.
+
+1. Follow the [instructions](https://firebase.google.com/docs/functions/get-started?gen=1st) for setting
+   up Cloud Functions using Firebase integration.
+2. Deploy your functions.
    ```sh
-   npm install
+    firebase deploy --only functions
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+
+#### Instructor App
+
+1. In the ```instructor-app``` folder, run ```npm install``` to load project dependencies.
+2. Create an ```env.local``` file to store the necessary environment variables. Note that these variables should never be committed to
+   a public repository. Most of these variables will be found from your Firebase project. The general format will include the following:
+```env
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_CLIENT_EMAIL=your_client_email
+FIREBASE_PRIVATE_KEY=your_private_key
+FIREBASE_API_KEY=your_api_key
+FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+FIREBASE_DATABASE_URL=your_firebase_db_url
+FIREBASE_PROJECT_ID=your_firebase_project_id
+FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
+FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
+FIREBASE_APP_ID=your_firebase_app_id
+FIREBASE_MEASUREMENT_ID=your_firebase_measurement_id
+
+NEXTAUTH_URL=_your_nextauth_url
+NEXTAUTH_SECRET=your_nextauth_secret
+NEXT_PUBLIC_API_URL=your_next_public_api_url
+
+```
+
+3. Refer to the [readme](https://github.com/airwick989/Student-Attendance-Capstone/tree/main/instructor-app) for instructions on
+   running the web app locally.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
