@@ -6,7 +6,7 @@
 
 <!-- PROJECT LOGO -->
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/airwick989/Student-Attendance-Capstone">
     <img src="https://github.com/airwick989/Student-Attendance-Capstone/blob/strato67-docs/instructor-app/src/app/assets/Logo.svg" alt="Logo" width="400" height="300">
   </a>
 
@@ -37,7 +37,12 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#installation">Installation</a>
+          <ul>
+            <li><a href="#cloud-functions">Cloud Functions</li>
+            <li><a href="#instructor-app">Instructor App</li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ol>
@@ -48,9 +53,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Ontario Tech University student tracking system that streamlines classroom attendance monitoring. This solution consists of a mobile application for students and a web portal for professors. Students log in through the mobile app. Inside the classroom, they scan a QR code located at their chosen seat. This action signals their presence, and the information is transmitted to a cloud database. The database updates a real-time map on the professor's web portal, displaying the students' seat locations based on the scanned QR codes. When the professor hovers over a student's marker on the map, they can access relevant student information such as name, pronouns, and student ID number.
+Ontario Tech University student tracking system that streamlines classroom attendance monitoring. This solution consists of a mobile application for students and a web portal for professors. Students log in through the mobile app. Inside the classroom, they scan a QR code located at their chosen seat. This action signals their presence, and the information is transmitted to a cloud database. The database updates a real-time map on the professor's web portal, displaying the students' seat locations based on the scanned QR codes. When a professor hovers over a student's marker on the map, they can access relevant student information such as name, pronouns, and student ID number.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -88,9 +91,11 @@ You will need the latest version of NPM, along with the Firebase CLI.
   ```sh
   npm install -g firebase-tools
   ```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Installation
 
-1. Fork this repo [here.](https://github.com/airwick989/Student-Attendance-Capstone/fork).
+1. Fork this repo [here](https://github.com/airwick989/Student-Attendance-Capstone/fork).
 2. Clone the repo.
    ```sh
    git clone https://github.com/github_username/repo_name.git
@@ -98,7 +103,7 @@ You will need the latest version of NPM, along with the Firebase CLI.
 #### Cloud Functions
 
 It should be noted that unless you have Firebase CLI emulator set up, Cloud Function services will run in production. 
-As such, you will need to have an exisitng Firebase project. Details on Firebase CLI emulator can be found [here](https://firebase.google.com/docs/emulator-suite/install_and_configure)
+As such, you will need to have an existing Firebase project. Details on Firebase CLI emulator can be found [here](https://firebase.google.com/docs/emulator-suite/install_and_configure)
 
 All files associated with the Cloud Functions can be found in the ```cloud-functions``` folder of this repo.
 
@@ -108,11 +113,12 @@ All files associated with the Cloud Functions can be found in the ```cloud-funct
    ```sh
     firebase deploy --only functions
    ```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 #### Instructor App
 
 1. In the ```instructor-app``` folder, run ```npm install``` to load project dependencies.
-2. Create an ```env.local``` file to store the necessary environment variables. Note that these variables should never be committed to
+2. Create an ```.env.local``` file to store the necessary environment variables. Note that these variables should never be committed to
    a public repository. Most of these variables will be found from your Firebase project. The general format will include the following:
 ```env
 GOOGLE_CLIENT_ID=your_google_client_id
@@ -136,18 +142,22 @@ NEXT_PUBLIC_API_URL=your_next_public_api_url
 
 ```
 
-3. Refer to the [readme](https://github.com/airwick989/Student-Attendance-Capstone/tree/main/instructor-app) for instructions on
+3. Refer to the [README.md](https://github.com/airwick989/Student-Attendance-Capstone/tree/main/instructor-app) for instructions on
    running the web app locally.
+
+4. Deploy on a platform of your choice, the easiest method would be using Vercel. Instructions can be found [here](https://vercel.com/docs/getting-started-with-vercel/import).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Additional Resources
 
+### Next.js
+https://nextjs.org/docs/app
 
+### Firebase Cloud Functions
+https://firebase.google.com/docs/functions
 
-
-
-
-
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
