@@ -184,7 +184,7 @@ https://expo.dev/
 [issues-shield]: https://img.shields.io/github/issues/airwick989/Student-Attendance-Capstone.svg?style=for-the-badge
 [issues-url]: https://github.com/airwick989/Student-Attendance-Capstone/issues
 [license-shield]: https://img.shields.io/github/license/airwick989/Student-Attendance-Capstone.svg?style=for-the-badge
-[license-url]: https://github.com/airwick989/Student-Attendance-Capstone/blob/master/LICENSE.txt
+[license-url]: https://github.com/airwick989/Student-Attendance-Capstone/blob/main/LICENSE
 [product-screenshot]: images/screenshot.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
